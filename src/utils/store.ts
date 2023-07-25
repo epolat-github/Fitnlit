@@ -1,5 +1,6 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
+import appStateReducer from "../slices/appStateSlice";
 import authReducer from "../slices/authSlice";
 // import configReducer from "../slices/configSlice";
 // import dataReducer from "../slices/dataSlice";
@@ -7,8 +8,7 @@ import authReducer from "../slices/authSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    // data: dataReducer,
-    // config: configReducer,
+    appState: appStateReducer,
   },
 });
 
