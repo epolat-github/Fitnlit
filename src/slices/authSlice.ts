@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { login, logout } from "../services/authService";
+import { getUser, login, logout } from "../services/authService";
 import { LoginBody } from "../types/auth";
 import { User } from "../types/user";
 // import { removeItem, setItem } from "../utils/localStorage";
@@ -11,6 +11,7 @@ export interface AuthState {
   user: User | null;
   isLoading: boolean;
   isLoggedIn: boolean | null;
+  token?: string;
   errors: {
     loginError: string;
   };
@@ -21,6 +22,7 @@ const initialState: AuthState = {
   user: null,
   isLoading: true,
   isLoggedIn: null,
+  token: undefined,
   errors: {
     loginError: "",
   },
@@ -31,11 +33,14 @@ const initialState: AuthState = {
 export const loginAction = createAsyncThunk(
   "auth/loginAction",
   async (body: LoginBody, thunkAPI) => {
-    const user = await login(body);
+    const response = await login(body);
+
+    const { token, user } = response;
 
     AsyncStorage.setItem("user", JSON.stringify(user));
+    AsyncStorage.setItem("token", JSON.stringify(token));
 
-    return user;
+    return response;
   },
 );
 
@@ -44,8 +49,31 @@ export const logoutAction = createAsyncThunk(
   async (_, thunkAPI) => {
     await logout();
     AsyncStorage.removeItem("user");
+    AsyncStorage.removeItem("token");
 
     return true;
+  },
+);
+
+export const getUserAction = createAsyncThunk(
+  "auth/getUserAction",
+  async (_, thunkAPI) => {
+    const user = await getUser();
+
+    return user;
+  },
+);
+
+export const restoreUserAction = createAsyncThunk(
+  "auth/restoreUserAction",
+  async (_, thunkAPI) => {
+    const token = await AsyncStorage.getItem("token");
+
+    if (token) {
+      const user = await getUser(token);
+
+      return user;
+    }
   },
 );
 
@@ -71,8 +99,9 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginAction.fulfilled, (state, action) => {
-        const user = action.payload;
+        const { token, user } = action.payload;
         state.user = user;
+        state.token = token;
       })
       .addCase(loginAction.rejected, (state, action) => {
         const error = action.error;
@@ -84,6 +113,14 @@ export const authSlice = createSlice({
       })
       .addCase(logoutAction.fulfilled, (state, action) => {
         state.user = null;
+      })
+      .addCase(getUserAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(restoreUserAction.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.user = action.payload;
+        }
       });
   },
 });
