@@ -31,14 +31,8 @@ const AuthNavigator = () => {
       }}
     >
       <AuthStack.Screen name="Onboarding" component={Onboarding} />
-      <AuthStack.Group
-        screenOptions={{
-          presentation: "modal",
-        }}
-      >
-        <AuthStack.Screen name="Login" component={Login} />
-        <AuthStack.Screen name="Register" component={Register} />
-      </AuthStack.Group>
+      <AuthStack.Screen name="Login" component={Login} />
+      <AuthStack.Screen name="Register" component={Register} />
     </AuthStack.Navigator>
   );
 };
