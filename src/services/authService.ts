@@ -1,34 +1,50 @@
 import { LoginBody } from "../types/auth";
 import { User } from "../types/user";
 
-export const login = async (body: LoginBody): Promise<User> => {
-  return {
-    email: "email@email.com",
-    firstName: "Name",
-    lastName: "Surname",
-    isPremium: true,
-    username: "username",
-  };
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => {
-  //       const user: User = {
-  //         email: "email@email.com",
-  //         firstName: "Name",
-  //         lastName: "Surname",
-  //         isPremium: true,
-  //         username: "username",
-  //       };
+export const login = async (
+  body: LoginBody,
+): Promise<{
+  user: User;
+  token: string;
+}> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const user: User = {
+        email: "email@email.com",
+        firstName: "Name",
+        lastName: "Surname",
+        isPremium: true,
+        username: "username",
+      };
 
-  //       resolve(user);
-  //     }, 2000);
-  //   });
+      resolve({
+        user,
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+      });
+    }, 1000);
+  });
 };
 
 export const logout = async (): Promise<boolean> => {
-    return true
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(true);
-//     }, 2000);
-//   });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 1000);
+  });
+};
+
+// make token parameter required after the real backend connection
+export const getUser = async (token?: string): Promise<User> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        email: "email@email.com",
+        firstName: "Name",
+        lastName: "Surname",
+        isPremium: true,
+        username: "username",
+      });
+    }, 600);
+  });
 };
