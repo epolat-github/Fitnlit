@@ -29,7 +29,7 @@ const Thumb: React.FC<ThumbType> = (props) => {
     const thumbWidth = interpolate(
       translationX.value,
       inputRange,
-      [THUMB_SIZE, THUMB_SIZE * 2, THUMB_SIZE],
+      [THUMB_SIZE, THUMB_SIZE * 2.5, THUMB_SIZE],
       Extrapolate.CLAMP,
     );
 
@@ -51,7 +51,7 @@ const Thumb: React.FC<ThumbType> = (props) => {
         {
           // width: 10,
           height: THUMB_SIZE,
-          borderRadius: 5,
+          borderRadius: THUMB_SIZE / 2,
           backgroundColor: "#fff",
         },
         thumbStyle,
@@ -74,9 +74,7 @@ const CarouselPagination: React.FC<CarouselPaginationType> = (props) => {
     <View
       style={{
         flexDirection: "row",
-        gap: 5,
-        // position: "absolute",
-        // bottom: "30%",
+        gap: 4,
         width,
         justifyContent: "center",
       }}
