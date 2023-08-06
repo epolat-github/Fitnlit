@@ -1,4 +1,6 @@
-import { Pressable, Text, View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
+
+import { colors } from "../../theme";
 
 interface AcknowledgementType {
   containerStyle?: ViewStyle;
@@ -8,20 +10,35 @@ const Acknowledgement: React.FC<AcknowledgementType> = (props) => {
   const { containerStyle } = props;
   return (
     <View style={containerStyle}>
-      <Text style={{}}>
-        By continuing, you agree to our{" "}
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text
-            style={{
-              color: "red",
-              textAlign: "center",
-              textAlignVertical: "center",
-            }}
-          >
-            Terms of Service
-          </Text>
-        </Pressable>{" "}
-        and confirm that you have read our Privacy Policy.
+      <Text
+        style={{
+          lineHeight: 20,
+          textAlign: "center",
+        }}
+      >
+        By continuing, you agree our{" "}
+        <Text
+          onPress={() => console.log("pressed")}
+          style={{
+            color: colors.primary,
+            textDecorationLine: "underline",
+          }}
+          suppressHighlighting
+        >
+          Terms of Service
+        </Text>{" "}
+        and confirm that you have read our{" "}
+        <Text
+          onPress={() => console.log("pressed")}
+          style={{
+            color: colors.primary,
+            textDecorationLine: "underline",
+          }}
+          suppressHighlighting
+        >
+          Privacy Policy
+        </Text>
+        .
       </Text>
     </View>
   );
