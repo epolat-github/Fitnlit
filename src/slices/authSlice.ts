@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { getUser, login, logout } from "../services/authService";
-import { LoginBody } from "../types/auth";
+import { getUser, login, logout, register } from "../services/authService";
+import { LoginBody, RegisterBody } from "../types/auth";
 import { User } from "../types/user";
 // import { removeItem, setItem } from "../utils/localStorage";
 import { RootState } from "../utils/store";
@@ -39,6 +39,15 @@ export const loginAction = createAsyncThunk(
 
     AsyncStorage.setItem("user", JSON.stringify(user));
     AsyncStorage.setItem("token", JSON.stringify(token));
+
+    return response;
+  },
+);
+
+export const registerAction = createAsyncThunk(
+  "auth/registerAction",
+  async (body: RegisterBody, thunkAPI) => {
+    const response = await register(body);
 
     return response;
   },

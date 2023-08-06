@@ -1,4 +1,4 @@
-import { LoginBody } from "../types/auth";
+import { LoginBody, RegisterBody } from "../types/auth";
 import { User } from "../types/user";
 
 export const login = async (
@@ -22,6 +22,14 @@ export const login = async (
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
       });
+    }, 1000);
+  });
+};
+
+export const register = async (body: RegisterBody) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
     }, 1000);
   });
 };
