@@ -166,7 +166,13 @@ const SetupPassword = () => {
       <StatusBar style="dark" />
 
       {/* HEADER */}
-      <View style={{ flex: 0.2, gap: 15 }}>
+      <View
+        style={{
+          flex: 0.2,
+          gap: spacing.medium,
+          paddingHorizontal: spacing.medium,
+        }}
+      >
         <Text
           style={{
             fontSize: 32,
@@ -181,10 +187,10 @@ const SetupPassword = () => {
           style={{
             textAlign: "center",
             color: "#1E232C",
+            lineHeight: 22,
           }}
         >
-          Please create a secure password including the following criteria
-          below.
+          {`Welcome aboard, ${firstName}! Please create a secure password including the following criteria below.`}
         </Text>
       </View>
 
@@ -258,10 +264,6 @@ const SetupPassword = () => {
         }}
       >
         <Button text="Finish registration" onPress={register} />
-
-        <View style={{ flexDirection: "row", gap: 4 }}>
-          <Acknowledgement />
-        </View>
       </View>
     </View>
   );
