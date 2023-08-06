@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import {
   Pressable,
   PressableProps,
@@ -8,7 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 
-import { spacing } from "../../theme";
+import { colors, spacing } from "../../theme";
 
 interface ButtonProps extends PressableProps {
   textStyle?: TextStyle;
@@ -23,7 +22,7 @@ const Button = (props: ButtonProps) => {
     <Pressable
       style={({ pressed }) => [
         {
-          backgroundColor: "#5500FF",
+          backgroundColor: colors.primary,
           height: 50,
           borderRadius: spacing.medium,
           width: "100%",
