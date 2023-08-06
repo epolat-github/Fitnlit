@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Pressable, Text, View, useWindowDimensions } from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -10,6 +10,7 @@ import CarouselPage from "./CarouselPage";
 import CarouselPagination from "./CarouselPagination";
 import { useHaptics } from "../../../hooks/useHaptics";
 import { AuthStackNavigationType } from "../../../navigation/AuthNavigator";
+import Button from "../../Button";
 
 interface CarouselType {
   data: {
@@ -72,7 +73,7 @@ const Carousel: React.FC<CarouselType> = (props) => {
           paddingBottom: insets.bottom,
           paddingRight: 15,
           paddingLeft: 15,
-          gap: 10,
+          gap: 20,
           flexDirection: "column",
           alignItems: "center",
         }}
@@ -82,26 +83,7 @@ const Carousel: React.FC<CarouselType> = (props) => {
           pageCount={data.length}
         />
 
-        <Pressable
-          onPress={navigateToLogin}
-          style={{
-            backgroundColor: "#fff",
-            height: 50,
-            borderRadius: 10,
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: "500",
-            }}
-          >
-            JOIN US!
-          </Text>
-        </Pressable>
+        <Button text="Login" onPress={navigateToLogin} />
       </View>
     </View>
   );
