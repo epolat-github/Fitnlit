@@ -8,6 +8,7 @@ import Button from "../../../components/Button";
 import TextInput, { TextInputRef } from "../../../components/TextInput";
 import { useHaptics } from "../../../hooks/useHaptics";
 import { AuthStackNavigationType } from "../../../navigation/AuthNavigator";
+import { spacing } from "../../../theme";
 
 const Register = () => {
   const haptics = useHaptics();
@@ -49,7 +50,7 @@ const Register = () => {
       <StatusBar style="dark" />
 
       {/* HEADER */}
-      <View style={{ flex: 0.2, gap: 15 }}>
+      <View style={{ flex: 0.2, gap: spacing.medium }}>
         <Text
           style={{
             fontSize: 32,
@@ -74,9 +75,8 @@ const Register = () => {
       <View
         style={{
           flex: 0.3,
-          paddingHorizontal: 20,
-          paddingVertical: 20,
-          gap: 20,
+          padding: spacing.medium,
+          gap: spacing.medium,
         }}
       >
         {/* first name */}
@@ -113,16 +113,13 @@ const Register = () => {
       <View
         style={{
           flex: 0.5,
-          padding: 20,
-          gap: 10,
-          alignItems: "center",
+          padding: spacing.medium,
+          gap: spacing.huge,
         }}
       >
         <Button text="Next" onPress={navigateToSetupPassword} />
 
-        <View style={{ flexDirection: "row", gap: 4 }}>
-          <Acknowledgement />
-        </View>
+        <Acknowledgement />
       </View>
     </View>
   );
