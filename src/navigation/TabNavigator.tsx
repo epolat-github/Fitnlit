@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeStackNavigator from "./HomeStackNavigator";
+import WorkoutsStackNavigator from "./WorkoutsStackNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,6 +17,11 @@ const TabNavigator = () => {
         name="HomeStack"
         component={HomeStackNavigator}
         options={{ title: "Home" }}
+      />
+      <Tab.Screen
+        name="WorkoutsStack"
+        component={WorkoutsStackNavigator}
+        options={{ title: "Workouts" }}
       />
     </Tab.Navigator>
   );
