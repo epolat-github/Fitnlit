@@ -11,10 +11,10 @@ export const login = async (
     setTimeout(() => {
       const user: User = {
         email: "email@email.com",
-        firstName: "Name",
-        lastName: "Surname",
+        firstName: "John",
+        lastName: "Doe",
         isPremium: true,
-        username: "username",
+        username: "johndoe",
       };
 
       resolve({
@@ -48,10 +48,10 @@ export const getUser = async (token?: string): Promise<User> => {
     setTimeout(() => {
       resolve({
         email: "email@email.com",
-        firstName: "Name",
-        lastName: "Surname",
+        firstName: "John",
+        lastName: "Doe",
         isPremium: true,
-        username: "username",
+        username: "johndoe",
       });
     }, 600);
   });
