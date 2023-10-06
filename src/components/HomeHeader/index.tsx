@@ -1,15 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { Image } from "expo-image";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { logoutAction } from "../../slices/authSlice";
 import { colors, spacing } from "../../theme";
 
 const HomeHeader = (props: NativeStackHeaderProps) => {
   const { options } = props;
 
+  const dispatch = useAppDispatch();
+
   const { top } = useSafeAreaInsets();
+
+  const logoutHandler = () => {
+    dispatch(logoutAction());
+  };
 
   return (
     <View
@@ -59,15 +67,17 @@ const HomeHeader = (props: NativeStackHeaderProps) => {
       </View>
 
       {/* AVATAR */}
-      <Image
-        source={require("../../../assets/images/profile-pictures/profile-picture.png")}
-        contentFit="cover"
-        style={{
-          borderRadius: 30,
-          width: 60,
-          height: 60,
-        }}
-      />
+      <Pressable onPress={logoutHandler}>
+        <Image
+          source={require("../../../assets/images/profile-pictures/profile-picture.png")}
+          contentFit="cover"
+          style={{
+            borderRadius: 30,
+            width: 60,
+            height: 60,
+          }}
+        />
+      </Pressable>
     </View>
   );
 };
