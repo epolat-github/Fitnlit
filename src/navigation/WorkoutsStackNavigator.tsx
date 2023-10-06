@@ -13,6 +13,8 @@ const WorkoutsStackNavigator = () => {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
+        headerTransparent: true,
+        headerTintColor: "#fff",
       }}
     >
       <WorkoutsStack.Screen name="Workouts" component={Workouts} />
