@@ -6,8 +6,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { spacing } from "../../theme";
-
-const DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+import { DAYS_SHORT_EN } from "../../utils/date";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -108,6 +107,8 @@ const DaySelector: React.FC<DaySelectorType> = (props) => {
     changeSelectedDayIndex,
   } = props;
 
+  const mondayDate = moment().startOf("isoWeek");
+
   return (
     <View
       style={{
@@ -116,11 +117,11 @@ const DaySelector: React.FC<DaySelectorType> = (props) => {
         paddingHorizontal: spacing.medium,
       }}
     >
-      {DAYS.map((day, index) => (
+      {DAYS_SHORT_EN.map((day, index) => (
         <DayButton
           key={`day-${index}`}
           day={day}
-          date={startDate.clone().add(index, "day").get("date")}
+          date={mondayDate.clone().add(index, "day").get("date")}
           isActiveDay={index === 2 || index === 5}
           isSelected={selectedDayIndex === index}
           onPress={() => changeSelectedDayIndex(index)}
