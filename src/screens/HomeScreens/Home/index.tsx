@@ -5,6 +5,7 @@ import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 
 import DonutChart from "../../../components/DonutChart";
 import ActiveWorkoutCard from "../../../components/Home/ActiveWorkoutCard";
+import GoalTrackingSection from "../../../components/Home/GoalTrackingSection";
 import NumberOverviewSection from "../../../components/Home/NumberOverviewSection";
 import ProgressBar from "../../../components/ProgressBar";
 import { useAppSelector } from "../../../hooks/useAppSelector";
@@ -62,6 +63,7 @@ const Home = () => {
       <NumberOverviewSection />
       <ActiveWorkoutCard />
 
+      {/* Nutrition Goals Section */}
       <View
         style={{
           marginVertical: spacing.large,
@@ -110,7 +112,12 @@ const Home = () => {
                 color={data.color}
                 strokeWidth={6}
               >
-                <View style={{ gap: spacing.tiny, alignItems: "center" }}>
+                <View
+                  style={{
+                    gap: spacing.tiny,
+                    alignItems: "center",
+                  }}
+                >
                   <Text
                     style={{
                       textAlign: "center",
@@ -129,7 +136,11 @@ const Home = () => {
                     }}
                   />
                   <Text
-                    style={{ textAlign: "center", color: "gray", fontSize: 14 }}
+                    style={{
+                      textAlign: "center",
+                      color: "gray",
+                      fontSize: 14,
+                    }}
                   >
                     {`${data.target}g`}
                   </Text>
@@ -138,6 +149,23 @@ const Home = () => {
             </View>
           ))}
         </View>
+      </View>
+
+      <View
+        style={{
+          gap: spacing.large,
+        }}
+      >
+        <Text
+          style={{
+            color: "#2E3342",
+            fontWeight: "bold",
+            fontSize: 18,
+          }}
+        >
+          Goal Tracking
+        </Text>
+        <GoalTrackingSection />
       </View>
     </ScrollView>
   );
