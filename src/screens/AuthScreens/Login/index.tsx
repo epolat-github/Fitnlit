@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
+import Button from "../../../components/Button";
 import TextInput, { TextInputRef } from "../../../components/TextInput";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useHaptics } from "../../../hooks/useHaptics";
@@ -117,27 +118,7 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Pressable
-          onPress={login}
-          style={{
-            backgroundColor: "#5500FF",
-            height: 50,
-            borderRadius: 10,
-            justifyContent: "center",
-            width: "100%",
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: "500",
-              color: "#fff",
-            }}
-          >
-            Login
-          </Text>
-        </Pressable>
+        <Button text="Login" onPress={login} />
 
         <View style={{ flexDirection: "row", gap: 4 }}>
           <Text>No account?</Text>
