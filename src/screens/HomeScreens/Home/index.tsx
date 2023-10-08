@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 
 import DonutChart from "../../../components/DonutChart";
+import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import ActiveWorkoutCard from "../../../components/Home/ActiveWorkoutCard";
 import GoalTrackingSection from "../../../components/Home/GoalTrackingSection";
 import NumberOverviewSection from "../../../components/Home/NumberOverviewSection";
@@ -59,7 +59,7 @@ const Home = () => {
         paddingHorizontal: spacing.medium,
       }}
     >
-      <StatusBar style="dark" />
+      <FocusAwareStatusBar style="dark" />
       <NumberOverviewSection />
       <ActiveWorkoutCard />
 

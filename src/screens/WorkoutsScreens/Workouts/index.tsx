@@ -1,10 +1,10 @@
 import { useHeaderHeight } from "@react-navigation/elements";
-import { StatusBar } from "expo-status-bar";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import DaySelector from "../../../components/DaySelector";
+import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import WorkoutList from "../../../components/Workouts/WorkoutList";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { selectDayItemsYPosition } from "../../../slices/workoutsSlice";
@@ -37,7 +37,7 @@ const Workouts = () => {
         backgroundColor: "#8B80F8",
       }}
     >
-      <StatusBar style="light" />
+      <FocusAwareStatusBar style="light" animated />
       <View
         style={{
           backgroundColor: "#8B80F8",
@@ -62,7 +62,6 @@ const Workouts = () => {
         }}
         contentContainerStyle={{
           paddingVertical: spacing.large,
-          // backgroundColor: "#F9F9FA",
         }}
         showsVerticalScrollIndicator={false}
       >
