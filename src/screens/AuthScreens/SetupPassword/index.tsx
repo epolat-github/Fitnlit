@@ -126,7 +126,7 @@ const SetupPassword = () => {
     const uppercaseLetters = /[A-Z]/.test(passwordValue);
     const minCharacters = passwordValue.length >= 8;
     const numbers = /\d/.test(passwordValue);
-    const specialCharacters = /[@_*!/-]/.test(passwordValue);
+    const specialCharacters = /[@,_*!./-]/.test(passwordValue);
 
     const matchingPasswords =
       passwordValue.length === 0 || confirmPasswordValue.length === 0
@@ -245,7 +245,7 @@ const SetupPassword = () => {
         />
         <Badge text="Numbers" isSuccess={criteriaStatus.numbers} />
         <Badge
-          text="Special characters (@,_*!/-)"
+          text="Special characters (@,_*!./-)"
           isSuccess={criteriaStatus.specialCharacters}
         />
         <Badge
