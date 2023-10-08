@@ -1,12 +1,16 @@
 import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import { useMemo } from "react";
-import { LayoutChangeEvent, Text, View } from "react-native";
+import { useCallback, useMemo } from "react";
+import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { useAppDispatch } from "../../../../hooks/useAppDispatch";
+import { WorkoutsStackNavigationType } from "../../../../navigation/WorkoutsStackNavigator";
 import { setDayItemsYPosition } from "../../../../slices/workoutsSlice";
 import { spacing } from "../../../../theme";
+import { Exercise } from "../../../../types/exercise.type";
 import { toFirstLetterCapital } from "../../../../utils/text";
 
 interface DayItemType {
@@ -15,23 +19,37 @@ interface DayItemType {
   isRestDay?: boolean;
 }
 
-const EXERCISE_LIST = [
+const EXERCISE_LIST: Exercise[] = [
   {
+    id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
     name: "Dumbell Curl",
+    description:
+      "Eu proident velit esse ea qui commodo est dolor reprehenderit nisi veniam do aliqua.",
     isCompleted: false,
+    equipments: ["Foam Roller", "Yoga Mat", "Booty Band", "Bench"],
   },
   {
+    id: "17e3b188-9418-42a6-afd9-1cbd1552229f",
     name: "Barbell Curl",
+    description:
+      "Eu proident velit esse ea qui commodo est dolor reprehenderit nisi veniam do aliqua.",
     isCompleted: true,
+    equipments: ["Foam Roller", "Yoga Mat", "Booty Band", "Bench"],
   },
   {
+    id: "a1d8fee0-5c9b-4cc1-b025-56e42379d570",
     name: "Barbell Chest Press",
+    description:
+      "Eu proident velit esse ea qui commodo est dolor reprehenderit nisi veniam do aliqua.",
     isCompleted: false,
+    equipments: ["Foam Roller", "Yoga Mat", "Booty Band", "Bench"],
   },
 ];
 
 const DayItem: React.FC<DayItemType> = (props) => {
   const { day, index, isRestDay = false } = props;
+
+  const navigation = useNavigation<WorkoutsStackNavigationType<"Workouts">>();
 
   const dispatch = useAppDispatch();
 
@@ -46,6 +64,15 @@ const DayItem: React.FC<DayItemType> = (props) => {
     );
   };
 
+  const navigateToExerciseDetails = useCallback(
+    (exercise: Exercise) => {
+      navigation.navigate("ExerciseDetails", {
+        exercise,
+      });
+    },
+    [navigation],
+  );
+
   return (
     <Animated.View
       entering={FadeInDown.delay(index * 100)}
@@ -59,15 +86,23 @@ const DayItem: React.FC<DayItemType> = (props) => {
       }}
       onLayout={onLayout}
     >
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 20,
-          color: isCurrentDay ? "#8B80F8" : "#000",
-        }}
-      >
-        {`${toFirstLetterCapital(day)}${isCurrentDay ? " - current day" : ""}`}
-      </Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 20,
+            color: isCurrentDay ? "#8B80F8" : "#000",
+          }}
+        >
+          {`${toFirstLetterCapital(day)}${
+            isCurrentDay ? " - current day" : ""
+          }`}
+        </Text>
+
+        <Pressable>
+          <Ionicons name="ios-add-circle-outline" size={25} />
+        </Pressable>
+      </View>
 
       {isRestDay && (
         <View>
@@ -92,24 +127,28 @@ const DayItem: React.FC<DayItemType> = (props) => {
           }}
         >
           {EXERCISE_LIST.map((exercise, index) => (
-            <View
+            <Pressable
               key={`exercise-item-${index}`}
-              style={{
-                backgroundColor: "#f1f1f1",
-                borderRadius: 8,
-                paddingHorizontal: spacing.medium,
-                paddingVertical: spacing.tiny,
-                flexDirection: "row",
-                alignItems: "center",
-                gap: spacing.tiny,
-              }}
+              onPress={() => navigateToExerciseDetails(exercise)}
             >
-              {exercise.isCompleted && (
-                <Feather name="check" size={16} color="black" />
-              )}
+              <View
+                style={{
+                  backgroundColor: "#f1f1f1",
+                  borderRadius: 8,
+                  paddingHorizontal: spacing.medium,
+                  paddingVertical: spacing.tiny,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: spacing.tiny,
+                }}
+              >
+                {exercise.isCompleted && (
+                  <Feather name="check" size={16} color="black" />
+                )}
 
-              <Text>{exercise.name}</Text>
-            </View>
+                <Text>{exercise.name}</Text>
+              </View>
+            </Pressable>
           ))}
         </View>
       )}
