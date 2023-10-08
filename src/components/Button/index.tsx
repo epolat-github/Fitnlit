@@ -6,8 +6,15 @@ import {
   StyleProp,
   ViewStyle,
 } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 import { colors, spacing } from "../../theme";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface ButtonProps extends PressableProps {
   textStyle?: TextStyle;
@@ -18,9 +25,31 @@ interface ButtonProps extends PressableProps {
 const Button = (props: ButtonProps) => {
   const { containerStyle, textStyle, text, ...rest } = props;
 
+  const scale = useSharedValue(1);
+
+  const onPressIn = () => {
+    scale.value = withTiming(0.95);
+  };
+
+  const onPressOut = () => {
+    scale.value = withTiming(1);
+  };
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: scale.value,
+        },
+      ],
+    };
+  });
+
   return (
-    <Pressable
-      style={({ pressed }) => [
+    <AnimatedPressable
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+      style={[
         {
           backgroundColor: colors.primary,
           height: 50,
@@ -30,6 +59,7 @@ const Button = (props: ButtonProps) => {
           alignItems: "center",
         },
         containerStyle,
+        animatedStyle,
       ]}
       {...rest}
     >
@@ -45,7 +75,7 @@ const Button = (props: ButtonProps) => {
       >
         {text}
       </Text>
-    </Pressable>
+    </AnimatedPressable>
   );
 };
 
