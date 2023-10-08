@@ -16,12 +16,17 @@ const Workouts = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const headerHeight = useHeaderHeight();
 
-  const [selectedDayIndex, setSelectedDayIndex] = useState(moment().day() - 1);
+  // moment starts from sunday
+  const [selectedDayIndex, setSelectedDayIndex] = useState(
+    (moment().day() + 6) % 7,
+  );
 
   useEffect(() => {
-    const currentDayIndex = moment().day() - 1; // moment starts from sunday
-
-    if (scrollViewRef.current && dayItemsYPosition[currentDayIndex]) {
+    if (
+      scrollViewRef.current &&
+      (dayItemsYPosition[selectedDayIndex] ||
+        dayItemsYPosition[selectedDayIndex] === 0)
+    ) {
       scrollViewRef?.current?.scrollTo({
         x: 0,
         y: dayItemsYPosition[selectedDayIndex],
