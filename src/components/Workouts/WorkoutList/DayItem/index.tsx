@@ -20,10 +20,11 @@ interface DayItemType {
   index: number;
   isRestDay?: boolean;
   data?: Exercise[];
+  isEditEnabled: boolean;
 }
 
 const DayItem: React.FC<DayItemType> = (props) => {
-  const { day, index, data } = props;
+  const { day, index, data, isEditEnabled } = props;
 
   const isRestDay = !data;
 
@@ -60,9 +61,13 @@ const DayItem: React.FC<DayItemType> = (props) => {
     });
   }, [data, day, navigation]);
 
+  const navigateToExerciseList = useCallback(() => {
+    navigation.navigate("ExerciseList");
+  }, [navigation]);
+
   return (
     <AnimatedPressable
-      onPress={navigateToWorkoutDayDetails}
+      onPress={isRestDay ? navigateToExerciseList : navigateToWorkoutDayDetails}
       entering={FadeInDown.delay(index * 100)}
       style={{
         paddingHorizontal: spacing.medium,
@@ -87,7 +92,7 @@ const DayItem: React.FC<DayItemType> = (props) => {
           }`}
         </Text>
 
-        <Pressable>
+        <Pressable onPress={navigateToExerciseList}>
           <Ionicons name="ios-add-circle-outline" size={25} />
         </Pressable>
       </View>
@@ -121,7 +126,7 @@ const DayItem: React.FC<DayItemType> = (props) => {
             >
               <View
                 style={{
-                  backgroundColor: "#f1f1f1",
+                  backgroundColor: isEditEnabled ? "red" : "#f1f1f1",
                   borderRadius: 8,
                   paddingHorizontal: spacing.medium,
                   paddingVertical: spacing.tiny,
