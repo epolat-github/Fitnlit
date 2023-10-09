@@ -2,9 +2,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRoute } from "@react-navigation/native";
 import { ResizeMode, Video, VideoFullscreenUpdateEvent } from "expo-av";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
+import EquipmentItem from "../../../components/Workouts/EquipmentItem";
 import { WorkoutsStackNavigationRouteProp } from "../../../navigation/WorkoutsStackNavigator";
 import { spacing } from "../../../theme";
 
@@ -30,14 +31,15 @@ const ExerciseDetails = () => {
   };
 
   return (
-    <View>
+    <ScrollView contentInsetAdjustmentBehavior="always">
       <FocusAwareStatusBar style="dark" />
+
       <Video
         // ref={video}
         style={{
           alignSelf: "center",
           width: "100%",
-          height: 250,
+          height: 220,
         }}
         source={require("../../../../assets/videos/dumbell-curl-video.mp4")}
         shouldPlay
@@ -96,24 +98,16 @@ const ExerciseDetails = () => {
             }}
           >
             {exercise.equipments.map((equipment, index) => (
-              <View
+              <EquipmentItem
                 key={`equipment-${index}`}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: spacing.small,
-                  flexBasis: "50%",
-                  flex: 0.5,
-                }}
-              >
-                <Ionicons name="barbell-outline" size={24} />
-                <Text>{equipment}</Text>
-              </View>
+                text={equipment}
+                icon={<Ionicons name="barbell-outline" size={24} />}
+              />
             ))}
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

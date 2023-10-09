@@ -3,8 +3,10 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
+import { Platform } from "react-native";
 
 import ExerciseDetails from "../screens/WorkoutsScreens/ExerciseDetails";
+import WorkoutDayDetails from "../screens/WorkoutsScreens/WorkoutDayDetails";
 import Workouts from "../screens/WorkoutsScreens/Workouts";
 import { Exercise } from "../types/exercise.type";
 
@@ -12,6 +14,10 @@ export type WorkoutsStackParamList = {
   Workouts: undefined;
   ExerciseDetails: {
     exercise: Exercise;
+  };
+  WorkoutDayDetails: {
+    dayName: string;
+    dayDetails: Exercise[];
   };
 };
 
@@ -49,7 +55,22 @@ const WorkoutsStackNavigator = () => {
         name="ExerciseDetails"
         component={ExerciseDetails}
         options={{
+          animation: "fade",
           title: "Exercise Details",
+          headerBackTitleVisible: false,
+          headerBlurEffect: "light",
+          headerTransparent: Platform.OS !== "android",
+        }}
+      />
+      <WorkoutsStack.Screen
+        name="WorkoutDayDetails"
+        component={WorkoutDayDetails}
+        options={{
+          animation: "fade",
+          title: "",
+          headerBackTitleVisible: false,
+          headerBlurEffect: "light",
+          headerTransparent: Platform.OS !== "android",
         }}
       />
     </WorkoutsStack.Navigator>
