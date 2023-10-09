@@ -6,6 +6,7 @@ import {
 import { Platform } from "react-native";
 
 import ExerciseDetails from "../screens/WorkoutsScreens/ExerciseDetails";
+import ExerciseList from "../screens/WorkoutsScreens/ExerciseList";
 import WorkoutDayDetails from "../screens/WorkoutsScreens/WorkoutDayDetails";
 import Workouts from "../screens/WorkoutsScreens/Workouts";
 import { Exercise } from "../types/exercise.type";
@@ -19,6 +20,7 @@ export type WorkoutsStackParamList = {
     dayName: string;
     dayDetails: Exercise[];
   };
+  ExerciseList: undefined;
 };
 
 export type WorkoutsStackNavigationType<
@@ -67,6 +69,17 @@ const WorkoutsStackNavigator = () => {
         component={WorkoutDayDetails}
         options={{
           animation: "fade",
+          title: "",
+          headerBackTitleVisible: false,
+          headerBlurEffect: "light",
+          headerTransparent: Platform.OS !== "android",
+        }}
+      />
+      <WorkoutsStack.Screen
+        name="ExerciseList"
+        component={ExerciseList}
+        options={{
+          presentation: "modal",
           title: "",
           headerBackTitleVisible: false,
           headerBlurEffect: "light",
