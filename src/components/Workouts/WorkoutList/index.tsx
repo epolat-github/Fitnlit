@@ -1,6 +1,7 @@
 import { View } from "react-native";
 
 import DayItem from "./DayItem";
+import { WEEKLY_PROGRAM } from "../../../mockupData";
 import { spacing } from "../../../theme";
 import { DAYS_LONG_EN } from "../../../utils/date";
 
@@ -19,7 +20,7 @@ const WorkoutList = () => {
             key={`day-${index}`}
             day={day}
             index={index}
-            isRestDay={index === 2}
+            data={WEEKLY_PROGRAM[index]}
           />
         );
       })}
