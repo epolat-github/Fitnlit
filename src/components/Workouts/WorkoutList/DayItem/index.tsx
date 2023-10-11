@@ -2,7 +2,7 @@ import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { LayoutChangeEvent, Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
@@ -12,17 +12,20 @@ import { setDayItemsYPosition } from "../../../../slices/workoutsSlice";
 import { spacing } from "../../../../theme";
 import { Exercise } from "../../../../types/exercise.type";
 import { toFirstLetterCapital } from "../../../../utils/text";
+import AnimatedBottomSheet from "../../../AnimatedBottomSheet";
+import Button from "../../../Button";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface ExerciseItemType {
   onPress: () => unknown;
+  onDelete: () => unknown;
   isEditEnabled: boolean;
   exercise: Exercise;
 }
 
 const ExerciseItem: React.FC<ExerciseItemType> = (props) => {
-  const { exercise, isEditEnabled, onPress } = props;
+  const { exercise, isEditEnabled, onPress, onDelete } = props;
 
   return (
     <AnimatedPressable onPress={onPress}>
@@ -45,7 +48,7 @@ const ExerciseItem: React.FC<ExerciseItemType> = (props) => {
         <Text>{exercise.name}</Text>
 
         {isEditEnabled && (
-          <AnimatedPressable>
+          <AnimatedPressable onPress={onDelete}>
             <Feather name="x" size={16} color="tomato" />
           </AnimatedPressable>
         )}
@@ -72,6 +75,8 @@ const DayItem: React.FC<DayItemType> = (props) => {
   const dispatch = useAppDispatch();
 
   const isCurrentDay = useMemo(() => moment().day() - 1 === index, [index]); // moment starts from sunday
+
+  const [exerciseToDelete, setExerciseToDelete] = useState<Exercise>();
 
   const onLayout = (event: LayoutChangeEvent) => {
     dispatch(
@@ -103,6 +108,10 @@ const DayItem: React.FC<DayItemType> = (props) => {
   const navigateToExerciseList = useCallback(() => {
     navigation.navigate("ExerciseList");
   }, [navigation]);
+
+  const onDeleteExercise = useCallback(async (exercise: Exercise) => {
+    setExerciseToDelete(exercise);
+  }, []);
 
   return (
     <AnimatedPressable
@@ -164,10 +173,57 @@ const DayItem: React.FC<DayItemType> = (props) => {
               onPress={() => navigateToExerciseDetails(exercise)}
               exercise={exercise}
               isEditEnabled={isEditEnabled}
+              onDelete={() => onDeleteExercise(exercise)}
             />
           ))}
         </View>
       )}
+
+      <AnimatedBottomSheet
+        open={!!exerciseToDelete}
+        closeModal={() => setExerciseToDelete(undefined)}
+      >
+        <View
+          style={{
+            paddingHorizontal: spacing.medium,
+            paddingVertical: spacing.medium,
+            alignItems: "center",
+            gap: spacing.large,
+          }}
+        >
+          <View
+            style={{
+              gap: spacing.small,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              Delete Exercise
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                lineHeight: 22,
+              }}
+            >
+              Are you sure you want to remove this exercise from the day?
+            </Text>
+          </View>
+
+          <Button
+            text="Remove"
+            containerStyle={{
+              backgroundColor: "red",
+            }}
+            onPress={() => setExerciseToDelete(undefined)}
+          />
+        </View>
+      </AnimatedBottomSheet>
     </AnimatedPressable>
   );
 };
