@@ -8,7 +8,7 @@ import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import WorkoutList from "../../../components/Workouts/WorkoutList";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { selectDayItemsYPosition } from "../../../slices/workoutsSlice";
-import { spacing } from "../../../theme";
+import { colors, spacing } from "../../../theme";
 
 const Workouts = () => {
   const dayItemsYPosition = useAppSelector(selectDayItemsYPosition);
@@ -39,13 +39,13 @@ const Workouts = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: "#8B80F8",
+        backgroundColor: colors.secondary,
       }}
     >
       <FocusAwareStatusBar style="light" animated />
       <View
         style={{
-          backgroundColor: "#8B80F8",
+          backgroundColor: colors.secondary,
           flex: 0.2,
           paddingTop: headerHeight,
           justifyContent: "center",
