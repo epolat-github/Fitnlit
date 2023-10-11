@@ -1,9 +1,10 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useMemo } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 import Button from "../../../components/Button";
+import ExerciseCard from "../../../components/ExerciseCard";
 import EquipmentItem from "../../../components/Workouts/EquipmentItem";
 import {
   WorkoutsStackNavigationRouteProp,
@@ -108,46 +109,10 @@ const WorkoutDayDetails = () => {
       >
         {dayDetails.map((detail, index) => (
           <View key={`detail-${index}`}>
-            <Pressable
+            <ExerciseCard
               onPress={() => navigateToExerciseDetails(detail)}
-              style={{
-                paddingHorizontal: spacing.medium,
-                paddingVertical: spacing.medium,
-                backgroundColor: "#fff",
-                borderRadius: 10,
-                width: "100%",
-                gap: spacing.large,
-                borderStyle: "solid",
-                borderColor: "lightgray",
-                borderWidth: 1,
-              }}
-            >
-              <Text
-                style={{
-                  fontWeight: "600",
-                  fontSize: 18,
-                }}
-              >
-                {detail.name}
-              </Text>
-              <Text>{detail.description}</Text>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  rowGap: spacing.small,
-                }}
-              >
-                {detail.equipments.map((equipment, index) => (
-                  <EquipmentItem
-                    key={`equipment-${index}`}
-                    text={equipment}
-                    icon={<Ionicons name="barbell-outline" size={24} />}
-                  />
-                ))}
-              </View>
-            </Pressable>
+              exercise={detail}
+            />
 
             {/* rest notifier and complete the day button */}
             <View
