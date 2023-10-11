@@ -15,6 +15,45 @@ import { toFirstLetterCapital } from "../../../../utils/text";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
+interface ExerciseItemType {
+  onPress: () => unknown;
+  isEditEnabled: boolean;
+  exercise: Exercise;
+}
+
+const ExerciseItem: React.FC<ExerciseItemType> = (props) => {
+  const { exercise, isEditEnabled, onPress } = props;
+
+  return (
+    <AnimatedPressable onPress={onPress}>
+      <View
+        style={{
+          backgroundColor: "#f1f1f1",
+          borderRadius: 8,
+          paddingHorizontal: spacing.medium,
+          paddingVertical: spacing.tiny,
+          flexDirection: "row",
+          alignItems: "center",
+          gap: spacing.tiny,
+          overflow: "hidden",
+        }}
+      >
+        {exercise.isCompleted && (
+          <Feather name="check" size={16} color="black" />
+        )}
+
+        <Text>{exercise.name}</Text>
+
+        {isEditEnabled && (
+          <AnimatedPressable>
+            <Feather name="x" size={16} color="tomato" />
+          </AnimatedPressable>
+        )}
+      </View>
+    </AnimatedPressable>
+  );
+};
+
 interface DayItemType {
   day: string;
   index: number;
@@ -120,28 +159,12 @@ const DayItem: React.FC<DayItemType> = (props) => {
           }}
         >
           {data.map((exercise, index) => (
-            <Pressable
+            <ExerciseItem
               key={`exercise-item-${index}`}
               onPress={() => navigateToExerciseDetails(exercise)}
-            >
-              <View
-                style={{
-                  backgroundColor: isEditEnabled ? "red" : "#f1f1f1",
-                  borderRadius: 8,
-                  paddingHorizontal: spacing.medium,
-                  paddingVertical: spacing.tiny,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: spacing.tiny,
-                }}
-              >
-                {exercise.isCompleted && (
-                  <Feather name="check" size={16} color="black" />
-                )}
-
-                <Text>{exercise.name}</Text>
-              </View>
-            </Pressable>
+              exercise={exercise}
+              isEditEnabled={isEditEnabled}
+            />
           ))}
         </View>
       )}
