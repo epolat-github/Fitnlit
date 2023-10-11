@@ -80,7 +80,7 @@ const WorkoutsStackNavigator = () => {
         component={ExerciseList}
         options={{
           presentation: "modal",
-          title: "",
+          title: "Exercise List",
           headerBackTitleVisible: false,
           headerBlurEffect: "light",
           headerTransparent: Platform.OS !== "android",
