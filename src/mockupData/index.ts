@@ -1,4 +1,6 @@
+import { colors } from "../theme";
 import { Exercise } from "../types/exercise.type";
+import { WeeklyMealProgram } from "../types/meals.type";
 
 export const WEEKLY_PROGRAM: (Exercise[] | undefined)[] = [
   [
@@ -135,4 +137,406 @@ export const ALL_EXERCISES = [
     isCompleted: false,
     equipments: ["Foam Roller", "Yoga Mat", "Booty Band", "Bench"],
   },
+];
+
+export const NUTRITION_GOALS_DATA = [
+  {
+    title: "Carbohydrates",
+    color: "tomato",
+    value: 66,
+    target: 150,
+  },
+  {
+    title: "Fat",
+    color: "#7EE3EF",
+    value: 32,
+    target: 100,
+  },
+  {
+    title: "Protein",
+    color: "#1F87FE",
+    value: 120,
+    target: 360,
+  },
+  {
+    title: "Fibre",
+    color: colors.primary,
+    value: 400,
+    target: 430,
+  },
+];
+
+export const WEEKLY_MEALS: WeeklyMealProgram = [
+  [
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Schnitzel, Salad&Fries",
+      calorie: 732,
+      fat: 42,
+      fibre: 1,
+      protein: 30,
+      carb: 58,
+      image:
+        "https://img.taste.com.au/Nwmqo5Pz/taste/2016/11/chicken-schnitzel-and-avocado-salad-92094-1.jpeg",
+      isEaten: true,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Chicken Schnitzel",
+          gr: 150,
+        },
+        {
+          name: "Aioli",
+          gr: 25,
+        },
+        {
+          name: "Salad Mix",
+          gr: 100,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Schnitzel, Salad&Fries",
+      calorie: 732,
+      fat: 42,
+      fibre: 1,
+      protein: 30,
+      carb: 58,
+      image:
+        "https://img.taste.com.au/Nwmqo5Pz/taste/2016/11/chicken-schnitzel-and-avocado-salad-92094-1.jpeg",
+      isEaten: true,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Chicken Schnitzel",
+          gr: 150,
+        },
+        {
+          name: "Aioli",
+          gr: 25,
+        },
+        {
+          name: "Salad Mix",
+          gr: 100,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+  ],
+  [],
+  [],
+  [
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+    {
+      id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
+      name: "Chinese Beef Stir Fry",
+      calorie: 549,
+      fat: 4,
+      fibre: 13,
+      protein: 46,
+      carb: 81,
+      image:
+        "https://cdn.yemek.com/mncrop/940/625/uploads/2017/04/smoothie-bowl-tarifi.jpg",
+      isEaten: false,
+      isFavorite: false,
+      ingredients: [
+        {
+          name: "Mixed Vegetables",
+          gr: 180,
+        },
+        {
+          name: "Rice",
+          gr: 200,
+        },
+        {
+          name: "Sauce",
+          gr: 40,
+        },
+      ],
+      recipe: [
+        "Sint mollit elit minim incididunt duis cillum est elit non eu ad ut. Do id ex mollit culpa.",
+        "Enim dolore nisi exercitation mollit reprehenderit nulla in laboris ex est consequat.",
+        "Ut voluptate Lorem sunt irure sint ut eu minim Lorem.",
+        "Sunt proident eiusmod ea velit duis reprehenderit ullamco. Amet elit mollit esse voluptate esse officia est aute. Quis id consectetur duis deserunt consequat ullamco.",
+      ],
+    },
+  ],
+  [],
+  [],
+  [],
 ];
