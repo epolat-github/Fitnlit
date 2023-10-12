@@ -1,49 +1,21 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
-import { ScrollView, Text, View, useWindowDimensions } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
-import DonutChart from "../../../components/DonutChart";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import ActiveWorkoutCard from "../../../components/Home/ActiveWorkoutCard";
 import GoalTrackingSection from "../../../components/Home/GoalTrackingSection";
 import NumberOverviewSection from "../../../components/Home/NumberOverviewSection";
-import ProgressBar from "../../../components/ProgressBar";
+import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
 import { useAppSelector } from "../../../hooks/useAppSelector";
+import { NUTRITION_GOALS_DATA } from "../../../mockupData";
 import { HomeStackNavigationType } from "../../../navigation/HomeStackNavigator";
 import { selectUser } from "../../../slices/authSlice";
-import { colors, spacing } from "../../../theme";
-
-const DATA = [
-  {
-    title: "Carbohydrates",
-    color: "tomato",
-    value: 66,
-    target: 150,
-  },
-  {
-    title: "Fat",
-    color: "#7EE3EF",
-    value: 32,
-    target: 100,
-  },
-  {
-    title: "Protein",
-    color: "#1F87FE",
-    value: 120,
-    target: 360,
-  },
-  {
-    title: "Fibre",
-    color: colors.primary,
-    value: 400,
-    target: 430,
-  },
-];
+import { spacing } from "../../../theme";
 
 const Home = () => {
   const user = useAppSelector(selectUser);
   const navigation = useNavigation<HomeStackNavigationType<"Home">>();
-  const { width } = useWindowDimensions();
 
   useEffect(() => {
     if (!user) return;
@@ -80,75 +52,7 @@ const Home = () => {
           Nutrition Goals
         </Text>
 
-        <ProgressBar
-          value={70}
-          maxValue={100}
-          containerStyle={{
-            width: "100%",
-          }}
-          title="Calorie Goal"
-        />
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            rowGap: spacing.large,
-          }}
-        >
-          {DATA.map((data, index) => (
-            <View
-              key={`nutrition-data-${index}`}
-              style={{
-                alignItems: "center",
-                gap: spacing.medium,
-              }}
-            >
-              <Text style={{ color: data.color }}>{data.title}</Text>
-              <DonutChart
-                radius={width * 0.1}
-                value={data.value}
-                maxValue={data.target}
-                color={data.color}
-                strokeWidth={6}
-              >
-                <View
-                  style={{
-                    gap: spacing.tiny,
-                    alignItems: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      fontSize: 14,
-                    }}
-                  >
-                    {data.value}
-                  </Text>
-                  <View
-                    style={{
-                      width: 35,
-                      height: 1,
-                      opacity: 0.5,
-                      backgroundColor: data.color,
-                    }}
-                  />
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      color: "gray",
-                      fontSize: 14,
-                    }}
-                  >
-                    {`${data.target}g`}
-                  </Text>
-                </View>
-              </DonutChart>
-            </View>
-          ))}
-        </View>
+        <NutritionGoalsSection data={NUTRITION_GOALS_DATA} />
       </View>
 
       <View
