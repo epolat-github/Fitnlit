@@ -4,11 +4,10 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
-import HomeHeader from "../components/HomeHeader";
-import Home from "../screens/HomeScreens/Home";
+import Meals from "../screens/Meals";
 
 export type MealsStackParamList = {
-  Home: undefined;
+  Meals: undefined;
 };
 
 export type MealsStackNavigationType<T extends keyof MealsStackParamList> =
@@ -22,16 +21,22 @@ const MealsStack = createNativeStackNavigator<MealsStackParamList>();
 const MealsStackNavigator = () => {
   return (
     <MealsStack.Navigator
-      initialRouteName="Home"
+      initialRouteName="Meals"
       screenOptions={{
         contentStyle: {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
-        header: (props) => <HomeHeader {...props} />,
       }}
     >
-      <MealsStack.Screen name="Home" component={Home} />
+      <MealsStack.Screen
+        name="Meals"
+        component={Meals}
+        options={{
+          headerTransparent: true,
+          headerTintColor: "#fff",
+        }}
+      />
     </MealsStack.Navigator>
   );
 };
