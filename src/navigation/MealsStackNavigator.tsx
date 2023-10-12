@@ -4,7 +4,7 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
-import Meals from "../screens/Meals";
+import Meals from "../screens/MealsScreens/Meals";
 
 export type MealsStackParamList = {
   Meals: undefined;

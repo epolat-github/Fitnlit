@@ -3,12 +3,12 @@ import moment from "moment";
 import { useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 
-import DaySelector from "../../components/DaySelector";
-import FocusAwareStatusBar from "../../components/FocusAwareStatusBar";
-import MealItem from "../../components/Meals/MealItem";
-import NutritionGoalsSection from "../../components/NutritionGoalsSection";
-import { NUTRITION_GOALS_DATA, WEEKLY_MEALS } from "../../mockupData";
-import { colors, spacing } from "../../theme";
+import DaySelector from "../../../components/DaySelector";
+import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
+import MealItem from "../../../components/Meals/MealItem";
+import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
+import { NUTRITION_GOALS_DATA, WEEKLY_MEALS } from "../../../mockupData";
+import { colors, spacing } from "../../../theme";
 
 const Meals = () => {
   const headerHeight = useHeaderHeight();
