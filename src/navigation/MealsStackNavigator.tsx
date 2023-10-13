@@ -52,6 +52,7 @@ const MealsStackNavigator = () => {
           headerBackTitleVisible: false,
           headerBlurEffect: "light",
           headerTransparent: Platform.OS !== "android",
+          headerShown: false,
         }}
       />
     </MealsStack.Navigator>
