@@ -1,8 +1,10 @@
+import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { memo } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
+import { MealsStackNavigationType } from "../../../navigation/MealsStackNavigator";
 import { spacing } from "../../../theme";
 import { Meal } from "../../../types/meals.type";
 import Checkbox from "../../Checkbox";
@@ -17,9 +19,17 @@ interface MealItemType {
 const MealItem: React.FC<MealItemType> = (props) => {
   const { meal, index } = props;
 
+  const navigation = useNavigation<MealsStackNavigationType<"Meals">>();
+
+  const navigateToMealDetails = () => {
+    navigation.navigate("MealDetails", {
+      meal,
+    });
+  };
+
   return (
     <AnimatedPressable
-      onPress={() => alert("press")}
+      onPress={navigateToMealDetails}
       entering={FadeInDown.delay(index * 100)}
       style={{
         backgroundColor: "#fff",

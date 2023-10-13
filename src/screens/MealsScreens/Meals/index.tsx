@@ -18,10 +18,7 @@ const Meals = () => {
     (moment().day() + 6) % 7,
   );
 
-  const mealListofSelectedDay = useMemo(
-    () => WEEKLY_MEALS[selectedDayIndex],
-    [selectedDayIndex],
-  );
+  const mealListofSelectedDay = WEEKLY_MEALS[selectedDayIndex];
 
   return (
     <View

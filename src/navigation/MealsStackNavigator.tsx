@@ -3,11 +3,17 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
+import { Platform } from "react-native";
 
+import MealDetails from "../screens/MealsScreens/MealDetails";
 import Meals from "../screens/MealsScreens/Meals";
+import { Meal } from "../types/meals.type";
 
 export type MealsStackParamList = {
   Meals: undefined;
+  MealDetails: {
+    meal: Meal;
+  };
 };
 
 export type MealsStackNavigationType<T extends keyof MealsStackParamList> =
@@ -35,6 +41,17 @@ const MealsStackNavigator = () => {
         options={{
           headerTransparent: true,
           headerTintColor: "#fff",
+        }}
+      />
+      <MealsStack.Screen
+        name="MealDetails"
+        component={MealDetails}
+        options={{
+          presentation: "modal",
+          title: "Meal Details",
+          headerBackTitleVisible: false,
+          headerBlurEffect: "light",
+          headerTransparent: Platform.OS !== "android",
         }}
       />
     </MealsStack.Navigator>
