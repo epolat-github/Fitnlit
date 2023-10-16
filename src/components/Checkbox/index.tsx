@@ -7,7 +7,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 interface CheckboxType {
   isChecked: boolean;
   color?: ColorValue;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const Checkbox: React.FC<CheckboxType> = (props) => {
