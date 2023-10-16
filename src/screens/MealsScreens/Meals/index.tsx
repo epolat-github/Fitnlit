@@ -1,17 +1,21 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import { useMemo, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Pressable, ScrollView, View } from "react-native";
 
 import DaySelector from "../../../components/DaySelector";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import MealItem from "../../../components/Meals/MealItem";
 import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
 import { NUTRITION_GOALS_DATA, WEEKLY_MEALS } from "../../../mockupData";
+import { MealsStackNavigationType } from "../../../navigation/MealsStackNavigator";
 import { colors, spacing } from "../../../theme";
 
 const Meals = () => {
   const headerHeight = useHeaderHeight();
+  const navigation = useNavigation<MealsStackNavigationType<"Meals">>();
 
   // moment starts from sunday
   const [selectedDayIndex, setSelectedDayIndex] = useState(
@@ -19,6 +23,16 @@ const Meals = () => {
   );
 
   const mealListofSelectedDay = WEEKLY_MEALS[selectedDayIndex];
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable onPress={() => navigation.navigate("MealList")}>
+          <Ionicons name="add" color="#fff" size={24} />
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View
@@ -73,6 +87,12 @@ const Meals = () => {
               key={`meal-${index}-${selectedDayIndex}`}
               meal={meal}
               index={index}
+              showIsEatenCheckbox
+              onPress={() =>
+                navigation.navigate("MealDetails", {
+                  meal,
+                })
+              }
             />
           ))}
         </View>

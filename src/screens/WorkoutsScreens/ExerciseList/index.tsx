@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useMemo, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
+import AnimatedBottomSheet from "../../../components/AnimatedBottomSheet";
 import ExerciseCard from "../../../components/ExerciseCard";
 import FilterPanel from "../../../components/FilterPanel";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
@@ -15,6 +16,7 @@ const ExerciseList = () => {
     useNavigation<WorkoutsStackNavigationType<"WorkoutDayDetails">>();
 
   const [searchValue, setSearchValue] = useState("");
+  const [showAddWarning, setShowAddWarning] = useState(false);
 
   const filteredExercises = useMemo(() => {
     let newFilteredExercises = ALL_EXERCISES;
@@ -72,10 +74,17 @@ const ExerciseList = () => {
           <ExerciseCard
             key={exercise.id}
             exercise={exercise}
-            onPress={() => alert("added")}
+            onPress={() => setShowAddWarning(true)}
           />
         ))}
       </View>
+
+      <AnimatedBottomSheet
+        open={showAddWarning}
+        closeModal={() => setShowAddWarning(false)}
+      >
+        <Text>Test</Text>
+      </AnimatedBottomSheet>
     </ScrollView>
   );
 };

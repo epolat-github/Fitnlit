@@ -20,6 +20,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import Button from "../../../components/Button";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
 import { NUTRITION_GOALS_DATA } from "../../../mockupData";
@@ -36,7 +37,7 @@ const IMAGE_HEIGHT = Dimensions.get("window").height * 0.4;
 
 const MealDetails = () => {
   const {
-    params: { meal },
+    params: { meal, showAddButton },
   } = useRoute<MealsStackNavigationRouteProp<"MealDetails">>();
   const navigation = useNavigation<MealsStackNavigationType<"MealDetails">>();
 
@@ -132,15 +133,6 @@ const MealDetails = () => {
         onScroll={scrollHandler}
         contentContainerStyle={{
           paddingTop: IMAGE_HEIGHT - 30,
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 11,
-          },
-          shadowOpacity: 0.57,
-          shadowRadius: 15.19,
-
-          elevation: 23,
         }}
         showsVerticalScrollIndicator={false}
         bounces={false}
@@ -152,6 +144,16 @@ const MealDetails = () => {
             borderTopRightRadius: 30,
             padding: spacing.medium,
             gap: spacing.large,
+
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 11,
+            },
+            shadowOpacity: 0.57,
+            shadowRadius: 15.19,
+
+            elevation: 23,
 
             paddingBottom: bottom || 20,
           }}
@@ -168,6 +170,10 @@ const MealDetails = () => {
           </View>
 
           <NutritionGoalsSection data={NUTRITION_GOALS_DATA} />
+
+          {showAddButton && (
+            <Button text="Add to my Meals" onPress={() => {}} />
+          )}
 
           {/* SERVINGS */}
           <View

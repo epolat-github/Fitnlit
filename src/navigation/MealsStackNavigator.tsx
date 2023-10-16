@@ -1,18 +1,22 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { RouteProp } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import { Platform } from "react-native";
+import { Platform, Pressable } from "react-native";
 
 import MealDetails from "../screens/MealsScreens/MealDetails";
+import MealList from "../screens/MealsScreens/MealList";
 import Meals from "../screens/MealsScreens/Meals";
 import { Meal } from "../types/meals.type";
 
 export type MealsStackParamList = {
   Meals: undefined;
+  MealList: undefined;
   MealDetails: {
     meal: Meal;
+    showAddButton?: boolean;
   };
 };
 
@@ -41,6 +45,11 @@ const MealsStackNavigator = () => {
         options={{
           headerTransparent: true,
           headerTintColor: "#fff",
+          headerRight: () => (
+            <Pressable>
+              <Ionicons name="add" color="#fff" size={24} />
+            </Pressable>
+          ),
         }}
       />
       <MealsStack.Screen
@@ -53,6 +62,17 @@ const MealsStackNavigator = () => {
           headerBlurEffect: "light",
           headerTransparent: Platform.OS !== "android",
           headerShown: false,
+        }}
+      />
+      <MealsStack.Screen
+        name="MealList"
+        component={MealList}
+        options={{
+          presentation: "modal",
+          title: "Meal List",
+          headerBackTitleVisible: false,
+          headerBlurEffect: "light",
+          headerTransparent: Platform.OS !== "android",
         }}
       />
     </MealsStack.Navigator>

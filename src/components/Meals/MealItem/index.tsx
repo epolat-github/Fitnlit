@@ -1,10 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { memo } from "react";
 import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
-import { MealsStackNavigationType } from "../../../navigation/MealsStackNavigator";
 import { spacing } from "../../../theme";
 import { Meal } from "../../../types/meals.type";
 import Checkbox from "../../Checkbox";
@@ -14,22 +12,16 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 interface MealItemType {
   meal: Meal;
   index: number;
+  showIsEatenCheckbox?: boolean;
+  onPress: () => void;
 }
 
 const MealItem: React.FC<MealItemType> = (props) => {
-  const { meal, index } = props;
-
-  const navigation = useNavigation<MealsStackNavigationType<"Meals">>();
-
-  const navigateToMealDetails = () => {
-    navigation.navigate("MealDetails", {
-      meal,
-    });
-  };
+  const { meal, index, showIsEatenCheckbox, onPress } = props;
 
   return (
     <AnimatedPressable
-      onPress={navigateToMealDetails}
+      onPress={onPress}
       entering={FadeInDown.delay(index * 100)}
       style={{
         backgroundColor: "#fff",
@@ -103,13 +95,15 @@ const MealItem: React.FC<MealItemType> = (props) => {
         </View>
 
         {/* isEaten checkbox */}
-        <View
-          style={{
-            flex: 0.1,
-          }}
-        >
-          <Checkbox isChecked={meal.isEaten} onPress={() => alert("eaten")} />
-        </View>
+        {showIsEatenCheckbox && (
+          <View
+            style={{
+              flex: 0.1,
+            }}
+          >
+            <Checkbox isChecked={meal.isEaten} onPress={() => alert("eaten")} />
+          </View>
+        )}
       </View>
     </AnimatedPressable>
   );
