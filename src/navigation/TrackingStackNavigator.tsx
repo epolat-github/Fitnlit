@@ -4,15 +4,15 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
-import HomeHeader from "../components/HomeHeader";
-import Home from "../screens/HomeScreens/Home";
+import Trackings from "../screens/TrackingScreens/Trackings";
 
 export type TrackingStackParamList = {
-  Home: undefined;
+  Trackings: undefined;
 };
 
-export type TrackingStackNavigationType<T extends keyof TrackingStackParamList> =
-  NativeStackNavigationProp<TrackingStackParamList, T>;
+export type TrackingStackNavigationType<
+  T extends keyof TrackingStackParamList,
+> = NativeStackNavigationProp<TrackingStackParamList, T>;
 
 export type TrackingStackNavigationRouteProp<
   T extends keyof TrackingStackParamList,
@@ -23,16 +23,16 @@ const TrackingStack = createNativeStackNavigator<TrackingStackParamList>();
 const TrackingStackNavigator = () => {
   return (
     <TrackingStack.Navigator
-      initialRouteName="Home"
+      initialRouteName="Trackings"
       screenOptions={{
         contentStyle: {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
-        header: (props) => <HomeHeader {...props} />,
+        // header: (props) => <HomeHeader {...props} />,
       }}
     >
-      <TrackingStack.Screen name="Home" component={Home} />
+      <TrackingStack.Screen name="Trackings" component={Trackings} />
     </TrackingStack.Navigator>
   );
 };
