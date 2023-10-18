@@ -54,9 +54,11 @@ const ProgressBar: React.FC<ProgressBarType> = (props) => {
   return (
     <View style={[{ gap: spacing.small }, containerStyle]}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{ width: 50 }}>{value}</Text>
-        <Text>{title}</Text>
-        <Text style={{ width: 50, textAlign: "right" }}>{maxValue}</Text>
+        <Text style={{ width: 50, color: "gray" }}>{value}</Text>
+        <Text style={{ fontWeight: "500" }}>{title}</Text>
+        <Text style={{ width: 50, textAlign: "right", color: "gray" }}>
+          {maxValue}
+        </Text>
       </View>
       <View
         style={{
