@@ -83,7 +83,7 @@ const WaterGoalDetail = () => {
             value={Number(consumptionOfTheDay)}
             maxValue={TARGET_WATER_CONSUMPTION}
             progressHeight={25}
-            title="Weekly target"
+            title="Daily target"
           />
 
           <View
@@ -110,6 +110,8 @@ const WaterGoalDetail = () => {
                   value={consumptionOfTheDay}
                   placeholder="ml"
                   keyboardType="numeric"
+                  returnKeyType="done"
+                  returnKeyLabel="Done"
                   maxLength={4}
                   style={{
                     width: 200,
