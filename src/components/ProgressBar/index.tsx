@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { ColorValue, Text, View, ViewStyle } from "react-native";
 import Animated, {
   Easing,
+  interpolateColor,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withDelay,
   withTiming,
@@ -32,9 +34,18 @@ const ProgressBar: React.FC<ProgressBarType> = (props) => {
   } = props;
 
   const innerWidthPercentage = useSharedValue(0);
+  const calculatedBackgroundColor = useDerivedValue(() => {
+    const isFull = value >= maxValue;
+
+    return isFull
+      ? withTiming(1, { duration: 300, easing: Easing.inOut(Easing.ease) })
+      : withTiming(0, { duration: 300, easing: Easing.inOut(Easing.ease) });
+  });
 
   useEffect(() => {
-    const targetPercentage = (value / maxValue) * 100;
+    let targetPercentage = (value / maxValue) * 100;
+
+    targetPercentage = targetPercentage >= 100 ? 100 : targetPercentage;
 
     innerWidthPercentage.value = withDelay(
       150,
@@ -48,6 +59,11 @@ const ProgressBar: React.FC<ProgressBarType> = (props) => {
   const innerWidthStyle = useAnimatedStyle(() => {
     return {
       width: `${innerWidthPercentage.value}%`,
+      backgroundColor: interpolateColor(
+        calculatedBackgroundColor.value,
+        [0, 1],
+        [progressColor.toString(), "green"],
+      ),
     };
   });
 
@@ -75,7 +91,6 @@ const ProgressBar: React.FC<ProgressBarType> = (props) => {
         <Animated.View
           style={[
             {
-              backgroundColor: progressColor,
               height: "100%",
               borderRadius: 10,
             },
