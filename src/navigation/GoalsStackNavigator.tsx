@@ -4,11 +4,12 @@ import {
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
 
-import HomeHeader from "../components/HomeHeader";
-import Home from "../screens/HomeScreens/Home";
+import Goals from "../screens/GoalsScreens/Goals";
+import WaterGoalDetail from "../screens/GoalsScreens/WaterGoalDetail";
 
 export type GoalsStackParamList = {
-  Home: undefined;
+  Goals: undefined;
+  WaterGoalDetail: undefined;
 };
 
 export type GoalsStackNavigationType<T extends keyof GoalsStackParamList> =
@@ -22,16 +23,31 @@ const GoalsStack = createNativeStackNavigator<GoalsStackParamList>();
 const GoalsStackNavigator = () => {
   return (
     <GoalsStack.Navigator
-      initialRouteName="Home"
+      initialRouteName="Goals"
       screenOptions={{
         contentStyle: {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
-        header: (props) => <HomeHeader {...props} />,
       }}
     >
-      <GoalsStack.Screen name="Home" component={Home} />
+      <GoalsStack.Screen name="Goals" component={Goals} />
+
+      <GoalsStack.Group
+        screenOptions={{
+          presentation: "modal",
+          headerTransparent: true,
+          headerTintColor: "#fff",
+        }}
+      >
+        <GoalsStack.Screen
+          name="WaterGoalDetail"
+          component={WaterGoalDetail}
+          options={{
+            title: "Water Goal",
+          }}
+        />
+      </GoalsStack.Group>
     </GoalsStack.Navigator>
   );
 };
