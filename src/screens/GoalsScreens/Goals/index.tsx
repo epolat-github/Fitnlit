@@ -75,6 +75,7 @@ const Goals = () => {
           index={3}
           title="Nutrition"
           image={require("../../../../assets/images/shared/bed.png")}
+          onPress={() => navigation.navigate("NutritionGoalDetail")}
         />
         <GoalItem
           index={4}

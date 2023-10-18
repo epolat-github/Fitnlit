@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/native-stack";
 
 import Goals from "../screens/GoalsScreens/Goals";
+import NutritionGoalDetail from "../screens/GoalsScreens/NutritionGoalDetail";
 import StepGoalDetail from "../screens/GoalsScreens/StepGoalDetail";
 import WaterGoalDetail from "../screens/GoalsScreens/WaterGoalDetail";
 
@@ -12,6 +13,7 @@ export type GoalsStackParamList = {
   Goals: undefined;
   WaterGoalDetail: undefined;
   StepGoalDetail: undefined;
+  NutritionGoalDetail: undefined;
 };
 
 export type GoalsStackNavigationType<T extends keyof GoalsStackParamList> =
@@ -54,6 +56,13 @@ const GoalsStackNavigator = () => {
           component={StepGoalDetail}
           options={{
             title: "Step Goal",
+          }}
+        />
+        <GoalsStack.Screen
+          name="NutritionGoalDetail"
+          component={NutritionGoalDetail}
+          options={{
+            title: "Nutrition Goal",
           }}
         />
       </GoalsStack.Group>
