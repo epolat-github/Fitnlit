@@ -6,6 +6,7 @@ import {
 
 import Goals from "../screens/GoalsScreens/Goals";
 import NutritionGoalDetail from "../screens/GoalsScreens/NutritionGoalDetail";
+import SleepGoalDetail from "../screens/GoalsScreens/SleepGoalDetail";
 import StepGoalDetail from "../screens/GoalsScreens/StepGoalDetail";
 import WaterGoalDetail from "../screens/GoalsScreens/WaterGoalDetail";
 
@@ -14,6 +15,7 @@ export type GoalsStackParamList = {
   WaterGoalDetail: undefined;
   StepGoalDetail: undefined;
   NutritionGoalDetail: undefined;
+  SleepGoalDetail: undefined;
 };
 
 export type GoalsStackNavigationType<T extends keyof GoalsStackParamList> =
@@ -63,6 +65,13 @@ const GoalsStackNavigator = () => {
           component={NutritionGoalDetail}
           options={{
             title: "Nutrition Goal",
+          }}
+        />
+        <GoalsStack.Screen
+          name="SleepGoalDetail"
+          component={SleepGoalDetail}
+          options={{
+            title: "Sleep Goal",
           }}
         />
       </GoalsStack.Group>

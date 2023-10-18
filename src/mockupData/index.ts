@@ -683,3 +683,5 @@ export const WEEKLY_WATER_CONSUMPTION = [
 export const WEEKLY_STEP_COUNT = [
   12000, 10000, 3000, 3500, 13000, 13000, 15000,
 ];
+
+export const WEEKLY_SLEEP_HOURS = [6, 7, 8.5, 9, 8, 7, 6];

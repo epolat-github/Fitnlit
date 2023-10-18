@@ -56,32 +56,49 @@ const Goals = () => {
       >
         <GoalItem
           index={0}
-          title="Water"
+          title="Water Consumption"
           image={require("../../../../assets/images/shared/water-with-lemon.png")}
           onPress={() => navigation.navigate("WaterGoalDetail")}
+          titleStyle={{
+            fontSize: 20,
+            fontWeight: "500",
+          }}
         />
         <GoalItem
           index={1}
-          title="Steps"
+          title="Step Count Monitor"
           image={require("../../../../assets/images/shared/step-count.png")}
           onPress={() => navigation.navigate("StepGoalDetail")}
+          titleStyle={{
+            fontSize: 20,
+            fontWeight: "500",
+          }}
         />
         <GoalItem
           index={2}
-          title="Sleep"
+          title="Sleep Tracker"
           image={require("../../../../assets/images/shared/bed.png")}
+          onPress={() => navigation.navigate("SleepGoalDetail")}
+          titleStyle={{
+            fontSize: 20,
+            fontWeight: "500",
+          }}
         />
         <GoalItem
           index={3}
-          title="Nutrition"
-          image={require("../../../../assets/images/shared/bed.png")}
+          title="Nutrition Data"
+          image={require("../../../../assets/images/shared/nutrition.png")}
           onPress={() => navigation.navigate("NutritionGoalDetail")}
+          titleStyle={{
+            fontSize: 20,
+            fontWeight: "500",
+          }}
         />
-        <GoalItem
+        {/* <GoalItem
           index={4}
           title="Daily Goals"
           image={require("../../../../assets/images/shared/bed.png")}
-        />
+        /> */}
       </ScrollView>
     </View>
   );
