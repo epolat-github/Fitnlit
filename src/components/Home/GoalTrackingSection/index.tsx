@@ -1,57 +1,10 @@
-import { ImageBackground, ImageSourcePropType, Text, View } from "react-native";
+import { View } from "react-native";
 
-import { spacing } from "../../../theme";
+import GoalItem from "../../GoalItem";
 
 const WATER_USAGE = 1500;
 const STEP_COUNT = 13000;
 const SLEEP_HOURS = 8;
-
-interface ItemType {
-  value: number | string;
-  title: string;
-  image: ImageSourcePropType;
-}
-
-const Item: React.FC<ItemType> = (props) => {
-  const { title, image, value } = props;
-
-  return (
-    <ImageBackground
-      source={image}
-      resizeMode="cover"
-      style={{
-        height: 120,
-        flex: 0.3,
-        borderRadius: spacing.medium,
-        overflow: "hidden",
-      }}
-    >
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 1,
-          backgroundColor: "rgba(0,0,0, 0.4)",
-        }}
-      >
-        <Text
-          style={{
-            color: "#fff",
-          }}
-        >
-          {value}
-        </Text>
-        <Text
-          style={{
-            color: "#fff",
-          }}
-        >
-          {title}
-        </Text>
-      </View>
-    </ImageBackground>
-  );
-};
 
 const GoalTrackingSection = () => {
   return (
@@ -61,20 +14,23 @@ const GoalTrackingSection = () => {
         justifyContent: "space-between",
       }}
     >
-      <Item
+      <GoalItem
         title="Water"
         value={`${WATER_USAGE} ml`}
         image={require("../../../../assets/images/shared/water-with-lemon.png")}
+        index={0}
       />
-      <Item
+      <GoalItem
         title="Steps"
         value={STEP_COUNT}
         image={require("../../../../assets/images/shared/step-count.png")}
+        index={1}
       />
-      <Item
+      <GoalItem
         title="Sleep"
         value={`${SLEEP_HOURS} hours`}
         image={require("../../../../assets/images/shared/bed.png")}
+        index={2}
       />
     </View>
   );
