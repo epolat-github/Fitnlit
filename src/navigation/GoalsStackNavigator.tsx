@@ -1,8 +1,10 @@
+import Feather from "@expo/vector-icons/Feather";
 import { RouteProp } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
+import { Pressable } from "react-native";
 
 import Goals from "../screens/GoalsScreens/Goals";
 import NutritionGoalDetail from "../screens/GoalsScreens/NutritionGoalDetail";
@@ -40,11 +42,16 @@ const GoalsStackNavigator = () => {
       <GoalsStack.Screen name="Goals" component={Goals} />
 
       <GoalsStack.Group
-        screenOptions={{
+        screenOptions={({ navigation }) => ({
           presentation: "modal",
           headerTransparent: true,
           headerTintColor: "#fff",
-        }}
+          headerRight: () => (
+            <Pressable onPress={navigation.goBack}>
+              <Feather name="x" color="#fff" size={22} />
+            </Pressable>
+          ),
+        })}
       >
         <GoalsStack.Screen
           name="WaterGoalDetail"
