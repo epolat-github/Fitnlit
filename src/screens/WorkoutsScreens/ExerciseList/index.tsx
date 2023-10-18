@@ -1,8 +1,10 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { useMemo, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import AnimatedBottomSheet from "../../../components/AnimatedBottomSheet";
+import Button from "../../../components/Button";
 import ExerciseCard from "../../../components/ExerciseCard";
 import FilterPanel from "../../../components/FilterPanel";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
@@ -39,53 +41,93 @@ const ExerciseList = () => {
     return newFilteredExercises;
   }, [searchValue]);
 
+  const addExercise = () => {
+    setShowAddWarning(false);
+    navigation.goBack();
+  };
+
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="always"
-      contentContainerStyle={{
-        paddingVertical: spacing.medium,
-        gap: spacing.large,
-      }}
-      showsVerticalScrollIndicator={false}
-      keyboardDismissMode="on-drag"
-    >
-      <FocusAwareStatusBar style="light" />
-
-      <View
-        style={{
-          width: "100%",
-        }}
-      >
-        <FilterPanel
-          value={searchValue}
-          setValue={setSearchValue}
-          onClear={() => setSearchValue("")}
-          placeholder="Search for an exercise"
-        />
-      </View>
-
-      <View
-        style={{
-          paddingHorizontal: spacing.medium,
+    <BottomSheetModalProvider>
+      <ScrollView
+        contentInsetAdjustmentBehavior="always"
+        contentContainerStyle={{
+          paddingVertical: spacing.medium,
           gap: spacing.large,
         }}
+        showsVerticalScrollIndicator={false}
+        keyboardDismissMode="on-drag"
       >
-        {filteredExercises.map((exercise, index) => (
-          <ExerciseCard
-            key={exercise.id}
-            exercise={exercise}
-            onPress={() => setShowAddWarning(true)}
-          />
-        ))}
-      </View>
+        <FocusAwareStatusBar style="light" />
 
-      <AnimatedBottomSheet
-        open={showAddWarning}
-        closeModal={() => setShowAddWarning(false)}
-      >
-        <Text>Test</Text>
-      </AnimatedBottomSheet>
-    </ScrollView>
+        <View
+          style={{
+            width: "100%",
+          }}
+        >
+          <FilterPanel
+            value={searchValue}
+            setValue={setSearchValue}
+            onClear={() => setSearchValue("")}
+            placeholder="Search for an exercise"
+          />
+        </View>
+
+        <View
+          style={{
+            paddingHorizontal: spacing.medium,
+            gap: spacing.large,
+          }}
+        >
+          {filteredExercises.map((exercise, index) => (
+            <ExerciseCard
+              key={exercise.id}
+              exercise={exercise}
+              onPress={() => setShowAddWarning(true)}
+            />
+          ))}
+        </View>
+
+        <AnimatedBottomSheet
+          open={showAddWarning}
+          closeModal={() => setShowAddWarning(false)}
+        >
+          <View
+            style={{
+              paddingHorizontal: spacing.medium,
+              paddingVertical: spacing.medium,
+              alignItems: "center",
+              gap: spacing.large,
+            }}
+          >
+            <View
+              style={{
+                gap: spacing.small,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  textAlign: "center",
+                }}
+              >
+                Add Exercise
+              </Text>
+              <Text
+                style={{
+                  textAlign: "center",
+                  lineHeight: 22,
+                }}
+              >
+                Are you sure you want to add this exercise to the current day?
+              </Text>
+            </View>
+
+            <Button text="Add Exercise" onPress={addExercise} />
+          </View>
+        </AnimatedBottomSheet>
+      </ScrollView>
+    </BottomSheetModalProvider>
   );
 };
 
