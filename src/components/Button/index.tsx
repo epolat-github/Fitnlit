@@ -67,7 +67,7 @@ const Button = (props: ButtonProps) => {
     <AnimatedPressable
       onPressIn={onPressIn}
       onPressOut={onPressOut}
-      disabled={disabled ?? isLoading}
+      disabled={disabled || isLoading}
       style={[
         {
           height: 50,
