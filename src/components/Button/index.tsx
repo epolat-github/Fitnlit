@@ -1,12 +1,14 @@
 import {
+  ActivityIndicator,
   Pressable,
   PressableProps,
-  Text,
   TextStyle,
   ViewStyle,
 } from "react-native";
 import Animated, {
   Easing,
+  FadeInDown,
+  FadeOutUp,
   interpolateColor,
   useAnimatedStyle,
   useDerivedValue,
@@ -23,14 +25,16 @@ interface ButtonProps extends PressableProps {
   containerStyle?: ViewStyle;
   text: string;
   disabled?: boolean;
+  isLoading?: boolean;
 }
 
 const Button = (props: ButtonProps) => {
-  const { containerStyle, textStyle, text, disabled, ...rest } = props;
+  const { containerStyle, textStyle, text, disabled, isLoading, ...rest } =
+    props;
 
   const scale = useSharedValue(1);
   const backgroundColor = useDerivedValue(() => {
-    return disabled
+    return disabled || isLoading
       ? withTiming(0, { duration: 300, easing: Easing.inOut(Easing.ease) })
       : withTiming(1, { duration: 300, easing: Easing.inOut(Easing.ease) });
   });
@@ -63,7 +67,7 @@ const Button = (props: ButtonProps) => {
     <AnimatedPressable
       onPressIn={onPressIn}
       onPressOut={onPressOut}
-      disabled={disabled}
+      disabled={disabled ?? isLoading}
       style={[
         {
           height: 50,
@@ -77,18 +81,26 @@ const Button = (props: ButtonProps) => {
       ]}
       {...rest}
     >
-      <Text
-        style={[
-          {
-            fontSize: 14,
-            fontWeight: "500",
-            color: "#fff",
-          },
-          textStyle,
-        ]}
-      >
-        {text}
-      </Text>
+      {isLoading ? (
+        <Animated.View entering={FadeInDown} exiting={FadeOutUp}>
+          <ActivityIndicator color="#fff" />
+        </Animated.View>
+      ) : (
+        <Animated.Text
+          entering={FadeInDown}
+          exiting={FadeOutUp}
+          style={[
+            {
+              fontSize: 14,
+              fontWeight: "500",
+              color: "#fff",
+            },
+            textStyle,
+          ]}
+        >
+          {text}
+        </Animated.Text>
+      )}
     </AnimatedPressable>
   );
 };
