@@ -675,3 +675,7 @@ export const WEEKLY_MEALS: WeeklyMealProgram = [
   [],
   [],
 ];
+
+export const WEEKLY_WATER_CONSUMPTION = [
+  1200, 1000, 300, 350, 1300, 1300, 1300,
+];
