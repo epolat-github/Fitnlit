@@ -679,3 +679,7 @@ export const WEEKLY_MEALS: WeeklyMealProgram = [
 export const WEEKLY_WATER_CONSUMPTION = [
   1200, 1000, 300, 350, 1300, 1300, 1300,
 ];
+
+export const WEEKLY_STEP_COUNT = [
+  12000, 10000, 3000, 3500, 13000, 13000, 15000,
+];
