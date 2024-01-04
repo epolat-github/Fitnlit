@@ -3,11 +3,16 @@ import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
+import { Platform } from "react-native";
 
+import EntryDetails from "../screens/TrackingScreens/EntryDetails";
 import Trackings from "../screens/TrackingScreens/Trackings";
 
 export type TrackingStackParamList = {
   Trackings: undefined;
+  EntryDetails: {
+    entryId: string;
+  };
 };
 
 export type TrackingStackNavigationType<
@@ -29,10 +34,21 @@ const TrackingStackNavigator = () => {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
+        headerBlurEffect: "light",
+        headerTransparent: Platform.OS !== "android",
         // header: (props) => <HomeHeader {...props} />,
       }}
     >
       <TrackingStack.Screen name="Trackings" component={Trackings} />
+      <TrackingStack.Screen
+        name="EntryDetails"
+        component={EntryDetails}
+        options={{
+          headerBackTitleVisible: false,
+          title: "",
+          headerTransparent: false,
+        }}
+      />
     </TrackingStack.Navigator>
   );
 };
