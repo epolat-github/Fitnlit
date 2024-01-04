@@ -8,6 +8,7 @@ import React from "react";
 /**
  * Screen Imports
  */
+import ForgotPassword from "../screens/AuthScreens/ForgotPassword";
 import Login from "../screens/AuthScreens/Login";
 import Onboarding from "../screens/AuthScreens/Onboarding";
 import Register from "../screens/AuthScreens/Register";
@@ -18,6 +19,7 @@ export type AuthStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   Register: undefined;
+  ForgotPassword: undefined;
   SetupPassword: {
     firstName: string;
     lastName: string;
@@ -72,6 +74,13 @@ const AuthNavigator = () => {
       <AuthStack.Screen
         name="SetupPassword"
         component={SetupPassword}
+        options={{
+          title: "",
+        }}
+      />
+      <AuthStack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
         options={{
           title: "",
         }}

@@ -45,6 +45,10 @@ const Login = () => {
     navigation.navigate("Register");
   };
 
+  const navigateToForgotPassword = () => {
+    navigation.navigate("ForgotPassword");
+  };
+
   return (
     <View
       style={{
@@ -104,7 +108,10 @@ const Login = () => {
           maxLength={50}
         />
 
-        <Pressable style={{ alignSelf: "flex-start" }}>
+        <Pressable
+          style={{ alignSelf: "flex-start" }}
+          onPress={navigateToForgotPassword}
+        >
           <Text style={{ color: "blue" }}>Forgot password?</Text>
         </Pressable>
       </View>
