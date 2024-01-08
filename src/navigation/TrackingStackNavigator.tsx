@@ -7,12 +7,14 @@ import { Platform } from "react-native";
 
 import EntryDetails from "../screens/TrackingScreens/EntryDetails";
 import Trackings from "../screens/TrackingScreens/Trackings";
+import UpdateMeasurements from "../screens/TrackingScreens/UpdateMeasurements";
 
 export type TrackingStackParamList = {
   Trackings: undefined;
   EntryDetails: {
     entryId: string;
   };
+  UpdateMeasurements: undefined;
 };
 
 export type TrackingStackNavigationType<
@@ -40,6 +42,15 @@ const TrackingStackNavigator = () => {
       }}
     >
       <TrackingStack.Screen name="Trackings" component={Trackings} />
+      <TrackingStack.Screen
+        name="UpdateMeasurements"
+        component={UpdateMeasurements}
+        options={{
+          headerBackTitleVisible: false,
+          title: "Update Measurements",
+          presentation: "modal",
+        }}
+      />
       <TrackingStack.Screen
         name="EntryDetails"
         component={EntryDetails}

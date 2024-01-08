@@ -158,6 +158,10 @@ const Trackings = () => {
     });
   };
 
+  const navigateToUpdateMeasurements = () => {
+    navigation.navigate("UpdateMeasurements");
+  };
+
   return (
     <ScrollView contentInsetAdjustmentBehavior="always">
       <View
@@ -202,7 +206,10 @@ const Trackings = () => {
         {/* Values Section */}
         <ValuesSection />
 
-        <Button text="Update my Measurements" />
+        <Button
+          text="Update my Measurements"
+          onPress={navigateToUpdateMeasurements}
+        />
 
         {/* Detailed stats section */}
         <View style={{ gap: spacing.large }}>
