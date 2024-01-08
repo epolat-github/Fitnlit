@@ -20,6 +20,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("transitionEnd", () => {
       if (emailRef.current) {
@@ -31,6 +33,7 @@ const Login = () => {
   }, [navigation]);
 
   const login = async () => {
+    setIsLoading(true);
     await dispatch(
       loginAction({
         email: "email@email.com",
@@ -39,6 +42,8 @@ const Login = () => {
     ).unwrap();
 
     haptics.runNavigateHaptic();
+
+    setIsLoading(false);
   };
 
   const navigateToRegister = () => {
@@ -125,7 +130,7 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Button text="Login" onPress={login} />
+        <Button text="Login" onPress={login} isLoading={isLoading} />
 
         <View style={{ flexDirection: "row", gap: 4 }}>
           <Text>No account?</Text>
