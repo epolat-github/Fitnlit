@@ -13,18 +13,18 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   return (
-    <PortalProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <SnackbarContextProvider>
-          <BottomSheetModalProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PortalProvider>
+        <BottomSheetModalProvider>
+          <SnackbarContextProvider>
             <SafeAreaProvider>
               <ReduxProvider store={store}>
                 <MainNavigationContainer />
               </ReduxProvider>
             </SafeAreaProvider>
-          </BottomSheetModalProvider>
-        </SnackbarContextProvider>
-      </GestureHandlerRootView>
-    </PortalProvider>
+          </SnackbarContextProvider>
+        </BottomSheetModalProvider>
+      </PortalProvider>
+    </GestureHandlerRootView>
   );
 }
