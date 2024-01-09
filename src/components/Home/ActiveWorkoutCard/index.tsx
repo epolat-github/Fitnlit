@@ -1,10 +1,18 @@
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, View } from "react-native";
 
+import { TabNavigatorNavigationType } from "../../../navigation/TabNavigator";
 import { colors, spacing } from "../../../theme";
 import Button from "../../Button";
 
 const ActiveWorkoutCard = () => {
+  const navigation = useNavigation<TabNavigatorNavigationType<"HomeStack">>();
+
+  const navigateToWorkouts = () => {
+    navigation.jumpTo("WorkoutsStack");
+  };
+
   return (
     <View
       style={{
@@ -46,6 +54,7 @@ const ActiveWorkoutCard = () => {
       </Text>
 
       <Button
+        onPress={navigateToWorkouts}
         text="Continue"
         containerStyle={{
           backgroundColor: "#fff",
