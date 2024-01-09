@@ -1,15 +1,19 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
 import { Image } from "expo-image";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { HomeStackNavigationType } from "../../navigation/HomeStackNavigator";
 import { logoutAction } from "../../slices/authSlice";
 import { colors, spacing } from "../../theme";
 
 const HomeHeader = (props: NativeStackHeaderProps) => {
   const { options } = props;
+
+  const navigation = useNavigation<HomeStackNavigationType<"Home">>();
 
   const dispatch = useAppDispatch();
 
@@ -17,6 +21,10 @@ const HomeHeader = (props: NativeStackHeaderProps) => {
 
   const logoutHandler = () => {
     dispatch(logoutAction());
+  };
+
+  const navigateToPreferences = () => {
+    navigation.navigate("PreferencesStack");
   };
 
   return (
@@ -67,7 +75,7 @@ const HomeHeader = (props: NativeStackHeaderProps) => {
       </View>
 
       {/* AVATAR */}
-      <Pressable onPress={logoutHandler}>
+      <Pressable onPress={navigateToPreferences}>
         <Image
           source={require("../../../assets/images/profile-pictures/profile-picture.png")}
           contentFit="cover"
