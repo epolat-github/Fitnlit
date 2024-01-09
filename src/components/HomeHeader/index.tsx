@@ -5,9 +5,7 @@ import { Image } from "expo-image";
 import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { HomeStackNavigationType } from "../../navigation/HomeStackNavigator";
-import { logoutAction } from "../../slices/authSlice";
 import { colors, spacing } from "../../theme";
 
 const HomeHeader = (props: NativeStackHeaderProps) => {
@@ -15,13 +13,7 @@ const HomeHeader = (props: NativeStackHeaderProps) => {
 
   const navigation = useNavigation<HomeStackNavigationType<"Home">>();
 
-  const dispatch = useAppDispatch();
-
   const { top } = useSafeAreaInsets();
-
-  const logoutHandler = () => {
-    dispatch(logoutAction());
-  };
 
   const navigateToPreferences = () => {
     navigation.navigate("PreferencesStack");

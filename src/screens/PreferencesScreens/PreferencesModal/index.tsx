@@ -5,7 +5,9 @@ import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import Divider from "../../../components/Divider";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { PreferencesStackNavigationType } from "../../../navigation/PreferencesStackNavigator";
+import { logoutAction } from "../../../slices/authSlice";
 import { spacing } from "../../../theme";
 
 interface MenuItemType {
@@ -49,8 +51,14 @@ const MenuItem: React.FC<MenuItemType> = (props) => {
 };
 
 const PreferencesModal = () => {
+  const dispatch = useAppDispatch();
+
   const navigation =
     useNavigation<PreferencesStackNavigationType<"PreferencesModal">>();
+
+  const logoutHandler = () => {
+    dispatch(logoutAction());
+  };
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -137,7 +145,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Log out"
             subtitle="Log out from the application"
-            onPress={() => alert("Sign out")}
+            onPress={logoutHandler}
             icon={<Ionicons name="log-out-outline" size={24} color="black" />}
           />
 
