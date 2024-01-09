@@ -1,10 +1,8 @@
-import { Entypo } from "@expo/vector-icons";
 import { RouteProp } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import { Pressable } from "react-native";
 
 import PreferencesStackNavigator from "./PreferencesStackNavigator";
 import HomeHeader from "../components/HomeHeader";
@@ -39,23 +37,10 @@ const HomeStackNavigator = () => {
       <HomeStack.Screen
         name="PreferencesStack"
         component={PreferencesStackNavigator}
-        options={({
-          navigation,
-        }: {
-          navigation: HomeStackNavigationType<"PreferencesStack">;
-        }) => ({
+        options={{
+          headerShown: false,
           presentation: "fullScreenModal",
-          // headerShown: false,
-          title: "",
-          headerTransparent: true,
-          headerBlurEffect: "light",
-          header: undefined,
-          headerRight: () => (
-            <Pressable onPress={() => navigation.goBack()}>
-              <Entypo name="cross" size={24} color="black" />
-            </Pressable>
-          ),
-        })}
+        }}
       />
     </HomeStack.Navigator>
   );

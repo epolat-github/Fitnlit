@@ -1,9 +1,11 @@
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import React from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 import Divider from "../../../components/Divider";
+import { PreferencesStackNavigationType } from "../../../navigation/PreferencesStackNavigator";
 import { spacing } from "../../../theme";
 
 interface MenuItemType {
@@ -47,6 +49,9 @@ const MenuItem: React.FC<MenuItemType> = (props) => {
 };
 
 const PreferencesModal = () => {
+  const navigation =
+    useNavigation<PreferencesStackNavigationType<"PreferencesModal">>();
+
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <View
@@ -78,7 +83,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="My Account"
             subtitle="Update your personal information"
-            onPress={() => alert("My Account")}
+            onPress={() => navigation.navigate("MyAccount")}
             icon={<Ionicons name="person-outline" size={24} color="black" />}
           />
 
@@ -88,7 +93,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Help and Support"
             subtitle="Contact us to get help"
-            onPress={() => alert("Help and Support")}
+            onPress={() => navigation.navigate("HelpAndSupport")}
             icon={
               <Ionicons name="help-circle-outline" size={24} color="black" />
             }
@@ -100,7 +105,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Terms and Conditions"
             subtitle="Look into our terms and conditions"
-            onPress={() => alert("Terms & Conditions")}
+            onPress={() => navigation.navigate("TermsAndConditions")}
             icon={<Ionicons name="document-outline" size={24} color="black" />}
           />
 
@@ -110,7 +115,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Privacy Policy"
             subtitle="Look into our privacy policy"
-            onPress={() => alert("Privacy Policy")}
+            onPress={() => navigation.navigate("PrivacyPolicy")}
             icon={
               <Ionicons name="document-text-outline" size={24} color="black" />
             }
@@ -122,7 +127,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Delete Account"
             subtitle="Delete your data and records"
-            onPress={() => alert("Delete account")}
+            onPress={() => navigation.navigate("DeleteAccount")}
             icon={<Ionicons name="trash-outline" size={24} color="black" />}
           />
 
