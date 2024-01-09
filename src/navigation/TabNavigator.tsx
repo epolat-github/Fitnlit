@@ -2,7 +2,10 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  BottomTabNavigationProp,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 
 import GoalsStackNavigator from "./GoalsStackNavigator";
 import HomeStackNavigator from "./HomeStackNavigator";
@@ -10,12 +13,23 @@ import MealsStackNavigator from "./MealsStackNavigator";
 import TrackingStackNavigator from "./TrackingStackNavigator";
 import WorkoutsStackNavigator from "./WorkoutsStackNavigator";
 
-const Tab = createBottomTabNavigator();
+export type TabNavigatorParamList = {
+  HomeStack: undefined;
+  WorkoutsStack: undefined;
+  MealsStack: undefined;
+  TrackingStack: undefined;
+  GoalsStack: undefined;
+};
+
+export type TabNavigatorNavigationType<T extends keyof TabNavigatorParamList> =
+  BottomTabNavigationProp<TabNavigatorParamList, T>;
+
+const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       screenOptions={{
         headerShown: false,
       }}
