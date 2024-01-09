@@ -42,7 +42,6 @@ const PreferencesStackNavigator = () => {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
-        // headerShown: false,
       }}
     >
       <PreferencesStack.Screen
@@ -53,7 +52,6 @@ const PreferencesStackNavigator = () => {
         }: {
           navigation: PreferencesStackNavigationType<"PreferencesModal">;
         }) => ({
-          presentation: "fullScreenModal",
           title: "",
           headerTransparent: true,
           headerBlurEffect: "light",
