@@ -39,6 +39,10 @@ const WorkoutDayDetails = () => {
     });
   };
 
+  const navigateToWorkoutHelper = () => {
+    navigation.navigate("WorkoutHelper");
+  };
+
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="always"
@@ -80,13 +84,7 @@ const WorkoutDayDetails = () => {
           ))}
         </View>
       </View>
-      {/* <BlurView
-        intensity={15}
-        tint="default"
-        style={{
-          width: "100%",
-        }}
-      > */}
+
       <View
         style={{
           paddingHorizontal: spacing.medium,
@@ -98,9 +96,9 @@ const WorkoutDayDetails = () => {
           textStyle={{
             fontWeight: "bold",
           }}
+          onPress={navigateToWorkoutHelper}
         />
       </View>
-      {/* </BlurView> */}
 
       <View
         style={{

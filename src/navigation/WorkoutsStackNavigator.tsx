@@ -1,18 +1,21 @@
+import Feather from "@expo/vector-icons/Feather";
 import { RouteProp } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import { Platform } from "react-native";
+import { Platform, Pressable } from "react-native";
 
 import ExerciseDetails from "../screens/WorkoutsScreens/ExerciseDetails";
 import ExerciseList from "../screens/WorkoutsScreens/ExerciseList";
 import WorkoutDayDetails from "../screens/WorkoutsScreens/WorkoutDayDetails";
+import WorkoutHelper from "../screens/WorkoutsScreens/WorkoutHelper";
 import Workouts from "../screens/WorkoutsScreens/Workouts";
 import { Exercise } from "../types/exercise.type";
 
 export type WorkoutsStackParamList = {
   Workouts: undefined;
+  WorkoutHelper: undefined;
   ExerciseDetails: {
     exercise: Exercise;
   };
@@ -85,6 +88,19 @@ const WorkoutsStackNavigator = () => {
           headerBlurEffect: "light",
           headerTransparent: Platform.OS !== "android",
         }}
+      />
+      <WorkoutsStack.Screen
+        name="WorkoutHelper"
+        component={WorkoutHelper}
+        options={({ navigation }) => ({
+          presentation: "fullScreenModal",
+          headerShown: false,
+          headerRight: () => (
+            <Pressable onPress={navigation.goBack}>
+              <Feather name="x" color="#000" size={22} />
+            </Pressable>
+          ),
+        })}
       />
     </WorkoutsStack.Navigator>
   );
