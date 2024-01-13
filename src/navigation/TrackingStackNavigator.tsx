@@ -1,9 +1,10 @@
+import Feather from "@expo/vector-icons/Feather";
 import { RouteProp } from "@react-navigation/native";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
 } from "@react-navigation/native-stack";
-import { Platform } from "react-native";
+import { Platform, Pressable } from "react-native";
 
 import EntryDetails from "../screens/TrackingScreens/EntryDetails";
 import Trackings from "../screens/TrackingScreens/Trackings";
@@ -38,18 +39,22 @@ const TrackingStackNavigator = () => {
         headerShadowVisible: false,
         headerBlurEffect: "light",
         headerTransparent: Platform.OS !== "android",
-        // header: (props) => <HomeHeader {...props} />,
       }}
     >
       <TrackingStack.Screen name="Trackings" component={Trackings} />
       <TrackingStack.Screen
         name="UpdateMeasurements"
         component={UpdateMeasurements}
-        options={{
+        options={({ navigation }) => ({
           headerBackTitleVisible: false,
           title: "Update Measurements",
           presentation: "modal",
-        }}
+          headerRight: () => (
+            <Pressable onPress={navigation.goBack}>
+              <Feather name="x" color="#000" size={22} />
+            </Pressable>
+          ),
+        })}
       />
       <TrackingStack.Screen
         name="EntryDetails"
