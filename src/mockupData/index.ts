@@ -715,3 +715,26 @@ export const WEEKLY_STEP_COUNT = [
 ];
 
 export const WEEKLY_SLEEP_HOURS = [6, 7, 8.5, 9, 8, 7, 6];
+
+export const EQUIPMENT_LIST = [
+  "Dumbbell",
+  "Barbell",
+  "Yoga mat",
+  "Exercise ball",
+  "Resistance band",
+  "Kettlebell",
+  "Weight belt",
+  "Exercise band",
+  "Jump rope",
+  "Exercise mat",
+  "Water bottle",
+  "Workout gloves",
+  "Exercise step",
+  "Treadmill",
+  "Exercise bike",
+  "Medicine ball",
+  "Fitness band",
+  "TRX straps",
+  "Pull-up bar",
+  "Foam roller",
+];
