@@ -19,18 +19,18 @@ const Onboarding = () => {
 
   const data = [
     {
-      header: "Exercitation laborum velit",
-      text: "Non ex ullamco elit veniam incididunt quis. Et nisi nostrud nulla velit cupidatat in.",
+      header: "Become fit with us",
+      text: "With Fit&Lit, you can achieve the body that you have always wanted",
       image: require("../../../../assets/images/onboarding/image-1.jpeg"),
     },
     {
-      header: "Exercitation laborum velit",
-      text: "Non ex ullamco elit veniam incididunt quis. Irure anim do amet fugiat amet aute laboris sint anim labore officia.",
+      header: "Train with a tailored workout",
+      text: "We will prepare a workout plan just for you to work on yourself in your own preferences",
       image: require("../../../../assets/images/onboarding/image-2.jpeg"),
     },
     {
-      header: "Exercitation laborum velit",
-      text: "Non ex ullamco elit veniam incididunt quis. Irure anim do amet fugiat amet aute laboris sint anim labore officia.",
+      header: "Eat well, feel well",
+      text: "We will prepare a mealing program just for you needs and meal preferences.",
       image: require("../../../../assets/images/onboarding/image-3.jpeg"),
     },
     {
