@@ -6,6 +6,7 @@ import { ScrollView, Text, View } from "react-native";
 import Button from "../../../components/Button";
 import ExerciseCard from "../../../components/ExerciseCard";
 import EquipmentItem from "../../../components/Workouts/EquipmentItem";
+import { EQUIPMENT_LIST } from "../../../mockupData";
 import {
   WorkoutsStackNavigationRouteProp,
   WorkoutsStackNavigationType,
@@ -78,7 +79,7 @@ const WorkoutDayDetails = () => {
           {equipments.map((equipment, index) => (
             <EquipmentItem
               key={`equipment-${index}`}
-              text="Barbell"
+              text={EQUIPMENT_LIST[index]}
               icon={<Ionicons name="barbell-outline" size={24} />}
             />
           ))}
