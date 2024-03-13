@@ -137,7 +137,7 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
             top: 0,
             bottom: 0,
           }}
-          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.9)"]}
+          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.3)"]}
         />
       </AnimatedImage>
 
@@ -169,6 +169,7 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
             {
               fontWeight: "500",
               fontSize: 16,
+              width: "80%",
               textAlign: "center",
               color: "#fff",
             },
