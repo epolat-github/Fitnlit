@@ -40,7 +40,7 @@ export const register = async (body: RegisterBody) => {
   });
 };
 
-export const logout = async (body: LogoutBody) => {
+export const logout = async (body: LogoutBody, token: string) => {
   const url = `${API_URL}/AuthMobile/LogoutMobile`;
 
   const response = await fetch(url, {
@@ -48,6 +48,7 @@ export const logout = async (body: LogoutBody) => {
     body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
