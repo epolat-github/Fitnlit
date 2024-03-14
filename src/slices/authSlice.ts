@@ -1,9 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { getUser, login, logout, register } from "../services/authService";
-import { LoginBody, RegisterBody } from "../types/auth";
-import { User } from "../types/user";
+import { getUser, login, logout, register } from "../services/auth.service";
+import { LoginBody, RegisterBody } from "../types/auth.type";
+import { User } from "../types/user.type";
 // import { removeItem, setItem } from "../utils/localStorage";
 import { RootState } from "../utils/store";
 
