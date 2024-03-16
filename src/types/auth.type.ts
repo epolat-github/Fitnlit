@@ -1,5 +1,3 @@
-import { User } from "./user.type";
-
 export interface LoginBody {
   phoneNotifToken?: string;
   userNameOrEmail: string;
@@ -8,8 +6,16 @@ export interface LoginBody {
 }
 
 export interface LoginResponse {
-  user: User;
-  token: string;
+  mobileUserDTO: {
+    token: {
+      acessToken: string;
+      refreshToken: string;
+      expirationDate: string;
+    };
+    isFirstLogin: boolean;
+    userGroupName: string | null;
+  };
+  message: string;
 }
 
 export interface RegisterBody {

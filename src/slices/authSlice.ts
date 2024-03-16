@@ -35,10 +35,16 @@ export const loginAction = createAsyncThunk(
   async (body: LoginBody, thunkAPI) => {
     const response = await login(body);
 
-    const { token, user } = response;
+    const {
+      mobileUserDTO: {
+        token: { acessToken },
+      },
+    } = response;
 
-    AsyncStorage.setItem("user", JSON.stringify(user));
-    AsyncStorage.setItem("token", JSON.stringify(token));
+    thunkAPI.dispatch(getUserAction());
+
+    // AsyncStorage.setItem("user", JSON.stringify(user));
+    AsyncStorage.setItem("token", acessToken);
 
     return response;
   },
@@ -56,7 +62,10 @@ export const registerAction = createAsyncThunk(
 export const logoutAction = createAsyncThunk(
   "auth/logout",
   async (_, thunkAPI) => {
-    await logout();
+    // await logout();
+
+    thunkAPI.dispatch(resetState());
+
     AsyncStorage.removeItem("user");
     AsyncStorage.removeItem("token");
 

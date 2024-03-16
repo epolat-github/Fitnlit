@@ -2,9 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import base64 from "react-native-base64";
 
 import Button from "../../../components/Button";
 import TextInput, { TextInputRef } from "../../../components/TextInput";
+import { useSnackbarContext } from "../../../context/SnackbarContext";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useHaptics } from "../../../hooks/useHaptics";
 import { AuthStackNavigationType } from "../../../navigation/AuthNavigator";
@@ -14,6 +16,7 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const haptics = useHaptics();
   const navigation = useNavigation<AuthStackNavigationType<"Login">>();
+  const { showSnackbar } = useSnackbarContext();
 
   const emailRef = useRef<TextInputRef>(null);
 
@@ -33,11 +36,26 @@ const Login = () => {
   }, [navigation]);
 
   const login = async () => {
+    if (email === "") {
+      showSnackbar("Please enter your email first.", {
+        variant: "error",
+      });
+      return;
+    }
+
+    if (password === "") {
+      showSnackbar("Please enter your password first.", {
+        variant: "error",
+      });
+      return;
+    }
+
     setIsLoading(true);
     await dispatch(
       loginAction({
-        email: "email@email.com",
-        password: "password",
+        userNameOrEmail: email,
+        password: base64.encode(password),
+        rememberMe: true,
       }),
     ).unwrap();
 
