@@ -5,6 +5,7 @@ import { Text, View } from "react-native";
 import Button from "../../../components/Button";
 import TextInput from "../../../components/TextInput";
 import { AuthStackNavigationType } from "../../../navigation/AuthNavigator";
+import { generateForgotPasswordKey } from "../../../services/auth.service";
 import { spacing } from "../../../theme";
 
 const ForgotPassword = () => {
@@ -16,12 +17,14 @@ const ForgotPassword = () => {
   const sendPasswordResetCode = async () => {
     setIsLoading(true);
 
+    await generateForgotPasswordKey({
+      email,
+    });
+
     setTimeout(() => {
       setIsLoading(false);
-      navigation.navigate("SetupPassword", {
-        firstName: "adwa",
-        lastName: "adaw",
-        email: "adwada",
+      navigation.navigate("CheckForgotPasswordKey", {
+        email,
       });
     }, 2000);
   };

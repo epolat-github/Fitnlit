@@ -1,26 +1,26 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
 import Acknowledgement from "../../../components/Acknowledgement";
 import Badge from "../../../components/Badge";
 import Button from "../../../components/Button";
-import TextInput, { TextInputRef } from "../../../components/TextInput";
-import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import TextInput from "../../../components/TextInput";
+import { useSnackbarContext } from "../../../context/SnackbarContext";
 import {
   AuthStackNavigationRouteProp,
   AuthStackNavigationType,
 } from "../../../navigation/AuthNavigator";
-import { registerAction } from "../../../slices/authSlice";
+import { resetPasswordByEmail } from "../../../services/auth.service";
 import { spacing } from "../../../theme";
 
-const SetupPassword = () => {
-  const route = useRoute<AuthStackNavigationRouteProp<"SetupPassword">>();
-  const navigation = useNavigation<AuthStackNavigationType<"Register">>();
-  const dispatch = useAppDispatch();
+const SetupNewPassword = () => {
+  const route = useRoute<AuthStackNavigationRouteProp<"SetupNewPassword">>();
+  const navigation =
+    useNavigation<AuthStackNavigationType<"SetupNewPassword">>();
 
-  const firstNameRef = useRef<TextInputRef>(null);
+  const { showSnackbar } = useSnackbarContext();
 
   const [passwordValue, setPasswordValue] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
@@ -34,17 +34,7 @@ const SetupPassword = () => {
     matchingPasswords: false,
   });
 
-  const { email, firstName, lastName } = route.params;
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("transitionEnd", () => {
-      if (firstNameRef.current) {
-        firstNameRef.current.focus();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+  const { email } = route.params;
 
   useEffect(() => {
     const lowercaseLetters = /[a-z]/.test(passwordValue);
@@ -68,17 +58,18 @@ const SetupPassword = () => {
     });
   }, [confirmPasswordValue, passwordValue]);
 
-  const register = async () => {
-    await dispatch(
-      registerAction({
-        email,
-        password: passwordValue,
-        firstName,
-        lastName,
-      }),
-    ).unwrap();
+  const resetPassword = async () => {
+    await resetPasswordByEmail({
+      email,
+      password: passwordValue,
+      passwordConfirm: confirmPasswordValue,
+    });
 
-    navigation.navigate("SuccessfulRegistration");
+    showSnackbar("Password reset is successful", {
+      variant: "success",
+    });
+
+    navigation.replace("Login");
   };
 
   return (
@@ -106,7 +97,7 @@ const SetupPassword = () => {
             textAlign: "center",
           }}
         >
-          Set up a password
+          Set up a new password
         </Text>
         <Text
           style={{
@@ -115,7 +106,8 @@ const SetupPassword = () => {
             lineHeight: 22,
           }}
         >
-          {`Welcome aboard, ${firstName}! Please create a secure password including the following criteria below.`}
+          Please create a new and secure password including the following
+          criteria below.
         </Text>
       </View>
 
@@ -131,7 +123,7 @@ const SetupPassword = () => {
         <TextInput
           onChangeText={setPasswordValue}
           value={passwordValue}
-          placeholder="Enter your password"
+          placeholder="Enter your new password"
           autoComplete="new-password"
           secureTextEntry
           maxLength={50}
@@ -141,7 +133,7 @@ const SetupPassword = () => {
         <TextInput
           onChangeText={setConfirmPasswordValue}
           value={confirmPasswordValue}
-          placeholder="Confirm your password"
+          placeholder="Confirm your new password"
           secureTextEntry
           maxLength={50}
         />
@@ -188,10 +180,10 @@ const SetupPassword = () => {
           alignItems: "center",
         }}
       >
-        <Button text="Finish registration" onPress={register} />
+        <Button text="Reset Password" onPress={resetPassword} />
       </View>
     </View>
   );
 };
 
-export default SetupPassword;
+export default SetupNewPassword;
