@@ -9,6 +9,7 @@ import { Platform, Pressable } from "react-native";
 import EntryDetails from "../screens/TrackingScreens/EntryDetails";
 import Trackings from "../screens/TrackingScreens/Trackings";
 import UpdateMeasurements from "../screens/TrackingScreens/UpdateMeasurements";
+import { colors } from "../theme";
 
 export type TrackingStackParamList = {
   Trackings: undefined;
@@ -36,6 +37,10 @@ const TrackingStackNavigator = () => {
         contentStyle: {
           backgroundColor: "#fff",
         },
+        headerStyle: {
+          backgroundColor: colors.secondary,
+        },
+        headerTintColor: "#fff",
         headerShadowVisible: false,
         headerBlurEffect: "light",
         headerTransparent: Platform.OS !== "android",

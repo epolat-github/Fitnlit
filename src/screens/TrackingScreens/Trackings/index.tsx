@@ -1,5 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import moment from "moment";
 import React, { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -164,12 +165,14 @@ const Trackings = () => {
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="always">
+      <StatusBar style="light" />
       <View
         style={{
           flex: 1,
           gap: spacing.large,
           paddingHorizontal: spacing.medium,
           paddingBottom: spacing.large,
+          paddingTop: spacing.large,
         }}
       >
         {/* Chart Section */}
