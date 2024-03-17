@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Text, View } from "react-native";
 
 import Acknowledgement from "../../../components/Acknowledgement";
@@ -19,6 +19,11 @@ const Register = () => {
   const [emailValue, setEmailValue] = useState("");
   const [firstNameValue, setFirstNameValue] = useState("");
   const [lastNameValue, setLastNameValue] = useState("");
+
+  const isFormValid = useMemo(
+    () => emailValue !== "" && firstNameValue !== "" && lastNameValue !== "",
+    [emailValue, firstNameValue, lastNameValue],
+  );
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("transitionEnd", () => {
@@ -117,7 +122,11 @@ const Register = () => {
           gap: spacing.huge,
         }}
       >
-        <Button text="Next" onPress={navigateToSetupPassword} />
+        <Button
+          text="Next"
+          disabled={!isFormValid}
+          onPress={navigateToSetupPassword}
+        />
 
         <Acknowledgement />
       </View>
