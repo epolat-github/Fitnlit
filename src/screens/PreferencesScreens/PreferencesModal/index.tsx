@@ -2,7 +2,7 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image } from "expo-image";
 import React from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
 import Divider from "../../../components/Divider";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
@@ -57,7 +57,17 @@ const PreferencesModal = () => {
     useNavigation<PreferencesStackNavigationType<"PreferencesModal">>();
 
   const logoutHandler = () => {
-    dispatch(logoutAction());
+    Alert.alert("Log out", "You will log out from the Fit&Lit", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Log out",
+        style: "destructive",
+        onPress: () => dispatch(logoutAction()),
+      },
+    ]);
   };
 
   return (
