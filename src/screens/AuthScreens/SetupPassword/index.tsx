@@ -1,12 +1,12 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { Text, View } from "react-native";
 
 import Acknowledgement from "../../../components/Acknowledgement";
 import Badge from "../../../components/Badge";
 import Button from "../../../components/Button";
-import TextInput, { TextInputRef } from "../../../components/TextInput";
+import TextInput from "../../../components/TextInput";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import {
   AuthStackNavigationRouteProp,
@@ -20,33 +20,12 @@ const SetupPassword = () => {
   const navigation = useNavigation<AuthStackNavigationType<"Register">>();
   const dispatch = useAppDispatch();
 
-  const firstNameRef = useRef<TextInputRef>(null);
-
   const [passwordValue, setPasswordValue] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
 
-  const [criteriaStatus, setCriteriaStatus] = useState({
-    lowercaseLetters: false,
-    uppercaseLetters: false,
-    minCharacters: false,
-    numbers: false,
-    specialCharacters: false,
-    matchingPasswords: false,
-  });
-
   const { email, firstName, lastName } = route.params;
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("transitionEnd", () => {
-      if (firstNameRef.current) {
-        firstNameRef.current.focus();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
-  useEffect(() => {
+  const criteriaStatus = useMemo(() => {
     const lowercaseLetters = /[a-z]/.test(passwordValue);
     const uppercaseLetters = /[A-Z]/.test(passwordValue);
     const minCharacters = passwordValue.length >= 8;
@@ -58,14 +37,23 @@ const SetupPassword = () => {
         ? false
         : passwordValue === confirmPasswordValue;
 
-    setCriteriaStatus({
+    const isFormValid =
+      lowercaseLetters &&
+      minCharacters &&
+      numbers &&
+      specialCharacters &&
+      uppercaseLetters &&
+      matchingPasswords;
+
+    return {
       lowercaseLetters,
       minCharacters,
       numbers,
       specialCharacters,
       uppercaseLetters,
       matchingPasswords,
-    });
+      isFormValid,
+    };
   }, [confirmPasswordValue, passwordValue]);
 
   const register = async () => {
@@ -188,7 +176,11 @@ const SetupPassword = () => {
           alignItems: "center",
         }}
       >
-        <Button text="Finish registration" onPress={register} />
+        <Button
+          text="Finish registration"
+          onPress={register}
+          disabled={!criteriaStatus.isFormValid}
+        />
       </View>
     </View>
   );

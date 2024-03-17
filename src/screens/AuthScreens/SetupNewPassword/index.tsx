@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Text, View } from "react-native";
 
 import Acknowledgement from "../../../components/Acknowledgement";
@@ -25,18 +25,9 @@ const SetupNewPassword = () => {
   const [passwordValue, setPasswordValue] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
 
-  const [criteriaStatus, setCriteriaStatus] = useState({
-    lowercaseLetters: false,
-    uppercaseLetters: false,
-    minCharacters: false,
-    numbers: false,
-    specialCharacters: false,
-    matchingPasswords: false,
-  });
-
   const { email } = route.params;
 
-  useEffect(() => {
+  const criteriaStatus = useMemo(() => {
     const lowercaseLetters = /[a-z]/.test(passwordValue);
     const uppercaseLetters = /[A-Z]/.test(passwordValue);
     const minCharacters = passwordValue.length >= 8;
@@ -48,14 +39,23 @@ const SetupNewPassword = () => {
         ? false
         : passwordValue === confirmPasswordValue;
 
-    setCriteriaStatus({
+    const isFormValid =
+      lowercaseLetters &&
+      minCharacters &&
+      numbers &&
+      specialCharacters &&
+      uppercaseLetters &&
+      matchingPasswords;
+
+    return {
       lowercaseLetters,
       minCharacters,
       numbers,
       specialCharacters,
       uppercaseLetters,
       matchingPasswords,
-    });
+      isFormValid,
+    };
   }, [confirmPasswordValue, passwordValue]);
 
   const resetPassword = async () => {
@@ -181,7 +181,11 @@ const SetupNewPassword = () => {
           alignItems: "center",
         }}
       >
-        <Button text="Reset Password" onPress={resetPassword} />
+        <Button
+          text="Reset Password"
+          onPress={resetPassword}
+          disabled={!criteriaStatus.isFormValid}
+        />
       </View>
     </View>
   );
