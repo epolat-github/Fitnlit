@@ -107,7 +107,8 @@ const SetupNewPassword = () => {
           }}
         >
           Please create a new and secure password including the following
-          criteria below.
+          criteria below. This new password should be different from the
+          previous password.
         </Text>
       </View>
 

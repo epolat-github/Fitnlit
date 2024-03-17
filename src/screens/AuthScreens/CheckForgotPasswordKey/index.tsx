@@ -82,8 +82,7 @@ const CheckForgotPasswordKey = () => {
             color: "#1E232C",
           }}
         >
-          We sent an email for you to reset your password. In the email you'll
-          receive, there should be a six digit code to put here.
+          {`We have sent the confirmation code to ${email}. In the email you'll receive, there should be a six digit code to put here.`}
         </Text>
       </View>
 
