@@ -37,16 +37,21 @@ const TrackingStackNavigator = () => {
         contentStyle: {
           backgroundColor: "#fff",
         },
-        headerStyle: {
-          backgroundColor: colors.secondary,
-        },
-        headerTintColor: "#fff",
         headerShadowVisible: false,
         headerBlurEffect: "light",
         headerTransparent: Platform.OS !== "android",
       }}
     >
-      <TrackingStack.Screen name="Trackings" component={Trackings} />
+      <TrackingStack.Screen
+        name="Trackings"
+        component={Trackings}
+        options={{
+          headerStyle: {
+            backgroundColor: colors.secondary,
+          },
+          headerTintColor: "#fff",
+        }}
+      />
       <TrackingStack.Screen
         name="UpdateMeasurements"
         component={UpdateMeasurements}
