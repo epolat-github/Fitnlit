@@ -20,8 +20,8 @@ const Login = () => {
 
   const emailRef = useRef<TextInputRef>(null);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("account@fitnlit.com");
+  const [password, setPassword] = useState("123456");
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,7 +53,7 @@ const Login = () => {
     setIsLoading(true);
     await dispatch(
       loginAction({
-        userNameOrEmail: email,
+        userNameOrEmail: "bkulle@kullerian.net",
         password: base64.encode(password),
         rememberMe: true,
       }),
