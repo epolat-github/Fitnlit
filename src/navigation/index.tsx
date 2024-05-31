@@ -76,8 +76,6 @@ const MainNavigationContainer = () => {
     //   linking={linking}
     // fallback={<Text>Loading...</Text>}
     >
-      {/* CRUCIAL!!! root status bar. Overried it in the inner components, if necessary */}
-      {/* <FocusAwareStatusBar style="dark" /> */}
 
       {user ? <TabNavigator /> : <AuthNavigator />}
     </NavigationContainer>
