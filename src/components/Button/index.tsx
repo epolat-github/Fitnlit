@@ -47,7 +47,7 @@ const Button = (props: ButtonProps) => {
     scale.value = withTiming(1);
   };
 
-  const animatedStyle = useAnimatedStyle(() => {
+  const buttonAnimatedStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: interpolateColor(
         backgroundColor.value,
@@ -77,7 +77,7 @@ const Button = (props: ButtonProps) => {
           alignItems: "center",
         },
         containerStyle,
-        animatedStyle,
+        buttonAnimatedStyle,
       ]}
       {...rest}
     >

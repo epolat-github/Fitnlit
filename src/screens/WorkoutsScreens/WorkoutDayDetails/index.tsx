@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useMemo } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -54,6 +55,7 @@ const WorkoutDayDetails = () => {
       }}
       showsVerticalScrollIndicator={false}
     >
+      <StatusBar style="dark" />
       {/* EQUIPMENTS */}
       <View
         style={{

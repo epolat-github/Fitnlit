@@ -62,62 +62,63 @@ const GoalItem: React.FC<GoalItemType> = (props) => {
   });
 
   return (
-    <AnimatedPressable
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
-      disabled={!onPress}
-      entering={FadeInDown.delay(index * 100)}
-      onPress={onPress}
-      style={[
-        {
-          flex: 0.3,
-        },
-        animatedStyle,
-      ]}
+    <Animated.View
+      entering={FadeInDown.delay(index * 100 + 200)}
+      style={{
+        flex: 0.3,
+      }}
     >
-      <ImageBackground
-        source={image}
-        contentFit="cover"
-        style={[
-          {
-            height: 120,
-            borderRadius: spacing.medium,
-            overflow: "hidden",
-          },
-          containerStyle,
-        ]}
+      <AnimatedPressable
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        disabled={!onPress}
+        onPress={onPress}
+        style={[animatedStyle]}
       >
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            flex: 1,
-            backgroundColor: "rgba(0,0,0, 0.4)",
-          }}
+        <ImageBackground
+          source={image}
+          contentFit="cover"
+          style={[
+            {
+              height: 120,
+              borderRadius: spacing.medium,
+              overflow: "hidden",
+            },
+            containerStyle,
+          ]}
         >
-          <Text
-            style={[
-              {
-                color: "#fff",
-              },
-              valueStyle,
-            ]}
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+              backgroundColor: "rgba(0,0,0, 0.4)",
+            }}
           >
-            {value}
-          </Text>
-          <Text
-            style={[
-              {
-                color: "#fff",
-              },
-              titleStyle,
-            ]}
-          >
-            {title}
-          </Text>
-        </View>
-      </ImageBackground>
-    </AnimatedPressable>
+            <Text
+              style={[
+                {
+                  color: "#fff",
+                },
+                valueStyle,
+              ]}
+            >
+              {value}
+            </Text>
+            <Text
+              style={[
+                {
+                  color: "#fff",
+                },
+                titleStyle,
+              ]}
+            >
+              {title}
+            </Text>
+          </View>
+        </ImageBackground>
+      </AnimatedPressable>
+    </Animated.View>
   );
 };
 

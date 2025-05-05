@@ -90,7 +90,7 @@ const Register = () => {
           onChangeText={setFirstNameValue}
           value={firstNameValue}
           placeholder="Enter your first name"
-          autoComplete="name"
+          // autoComplete="name"
           maxLength={50}
         />
 
@@ -99,7 +99,7 @@ const Register = () => {
           onChangeText={setLastNameValue}
           value={lastNameValue}
           placeholder="Enter your last name"
-          autoComplete="name-family"
+          // autoComplete="name-family"
           maxLength={50}
         />
 
@@ -108,7 +108,7 @@ const Register = () => {
           onChangeText={setEmailValue}
           value={emailValue}
           placeholder="Enter email address"
-          autoComplete="email"
+          // autoComplete="email"
           keyboardType="email-address"
           maxLength={50}
         />

@@ -59,7 +59,7 @@ const Onboarding = () => {
       <StatusBar style="light" backgroundColor="#ecf0f1" />
 
       {/* LOGO */}
-      <Image
+      {/*<Image
         source={require("../../../../assets/images/logo/logo.png")}
         style={{
           position: "absolute",
@@ -69,7 +69,7 @@ const Onboarding = () => {
           height: 40,
         }}
         contentFit="contain"
-      />
+      />*/}
 
       <Carousel data={data} />
     </View>

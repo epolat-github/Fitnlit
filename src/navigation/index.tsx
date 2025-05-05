@@ -76,7 +76,6 @@ const MainNavigationContainer = () => {
     //   linking={linking}
     // fallback={<Text>Loading...</Text>}
     >
-
       {user ? <TabNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );

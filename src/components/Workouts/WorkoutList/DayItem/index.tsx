@@ -141,7 +141,7 @@ const DayItem: React.FC<DayItemType> = (props) => {
         </Text>
 
         <Pressable onPress={navigateToExerciseList}>
-          <Ionicons name="ios-add-circle-outline" size={25} />
+          <Ionicons name="add-circle-outline" size={25} />
         </Pressable>
       </View>
 

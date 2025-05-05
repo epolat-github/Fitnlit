@@ -14,22 +14,23 @@ const Checkbox: React.FC<CheckboxType> = (props) => {
   const { onPress, isChecked, color = "green" } = props;
 
   return (
-    <AnimatedPressable
-      key={String(isChecked)}
-      entering={ZoomIn}
-      onPress={onPress}
-      style={{
-        width: 25,
-        height: 25,
-        borderRadius: 13,
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: color,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {isChecked && <AntDesign name="checkcircle" size={25} color={color} />}
-    </AnimatedPressable>
+    <Animated.View entering={ZoomIn}>
+      <AnimatedPressable
+        key={String(isChecked)}
+        onPress={onPress}
+        style={{
+          width: 25,
+          height: 25,
+          borderRadius: 13,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: color,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {isChecked && <AntDesign name="checkcircle" size={25} color={color} />}
+      </AnimatedPressable>
+    </Animated.View>
   );
 };
 

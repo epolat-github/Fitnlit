@@ -18,7 +18,10 @@ const Home = () => {
   const navigation = useNavigation<HomeStackNavigationType<"Home">>();
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      navigation.setOptions({ title: `Hello, Millie!` });
+      return;
+    }
 
     const { firstName } = user;
 

@@ -120,7 +120,7 @@ const SetupPassword = () => {
           onChangeText={setPasswordValue}
           value={passwordValue}
           placeholder="Enter your password"
-          autoComplete="new-password"
+          // autoComplete="new-password"
           secureTextEntry
           maxLength={50}
         />

@@ -70,6 +70,7 @@ const AuthNavigator = () => {
         component={Login}
         options={{
           title: "",
+          headerBackTitleVisible: false,
         }}
       />
       <AuthStack.Screen

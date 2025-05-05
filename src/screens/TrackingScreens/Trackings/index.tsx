@@ -3,9 +3,16 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import moment from "moment";
 import React, { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { LineChart as NewLineChart } from "react-native-chart-kit";
 import { Circle, Svg } from "react-native-svg";
-import { LineChart, Grid, YAxis } from "react-native-svg-charts";
 
 import Button from "../../../components/Button";
 import ValuesSection from "../../../components/Trackings/ValuesSection";
@@ -169,8 +176,7 @@ const Trackings = () => {
       <View
         style={{
           flex: 1,
-          gap: spacing.large,
-          paddingHorizontal: spacing.medium,
+          // gap: spacing.large,
           paddingBottom: spacing.large,
           paddingTop: spacing.large,
         }}
@@ -180,10 +186,10 @@ const Trackings = () => {
           style={{
             height: 250,
             flexDirection: "row",
-            paddingHorizontal: spacing.small,
+            // paddingHorizontal: spacing.small,
           }}
         >
-          <YAxis
+          {/* <YAxis
             data={[10, 15, 20, 25, 30, 35]}
             contentInset={contentInset}
             svg={{
@@ -193,8 +199,56 @@ const Trackings = () => {
             }}
             numberOfTicks={7}
             // formatLabel={(value) => `${value}ºC`}
+          /> */}
+          <NewLineChart
+            data={{
+              labels: ["Entry 1", "Entry 2", "Entry 3", "Entry 4", "Entry 5"],
+              datasets: [
+                {
+                  data: [40, 50, 60, 40, 55],
+                  // strokeWidth: 3,
+                  color: (opacity = 1) => `rgba(97, 170, 181, ${opacity})`,
+                },
+                {
+                  data: [30, 80, 25, 25, 35],
+                  color: (opacity = 1) => `rgba(105, 23, 131, ${opacity})`,
+                },
+                {
+                  data: [15, 40, 75, 80, 68],
+                  color: (opacity = 1) => `rgba(6, 109, 166, ${opacity})`,
+                },
+              ],
+            }}
+            fromZero
+            width={Dimensions.get("window").width + 30} // from react-native
+            height={230}
+            // yAxisLabel="$"
+            // yAxisSuffix="k"
+            chartConfig={{
+              backgroundColor: "#fff",
+              backgroundGradientFrom: "#fff",
+              backgroundGradientTo: "#fff",
+              color: (opacity = 1) => `rgba(85, 0, 255, ${opacity})`,
+              // labelColor: (opacity = 1) => `rgba(211, 211, 211, ${opacity})`,
+              labelColor: (opacity = 1) => "gray",
+              // useShadowColorFromDataset: true,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                // stroke: colors.secondary,
+              },
+            }}
+            bezier
+            style={{
+              // marginVertical: 8,
+              // paddingVertical: 10,
+              borderRadius: 16,
+            }}
           />
-          <LineChart
+          {/* <LineChart
             style={{ flex: 1, marginLeft: 16 }}
             data={data}
             svg={{ stroke: "rgb(134, 65, 244)" }}
@@ -203,121 +257,128 @@ const Trackings = () => {
           >
             <Grid />
             <MultipleLinesChartDecorator combinedData={data} />
-          </LineChart>
+          </LineChart> */}
         </View>
 
-        {/* Values Section */}
-        <ValuesSection />
+        <View
+          style={{
+            paddingHorizontal: spacing.medium,
+            gap: spacing.large,
+          }}
+        >
+          {/* Values Section */}
+          <ValuesSection />
 
-        <Button
-          text="Update my Measurements"
-          onPress={navigateToUpdateMeasurements}
-        />
+          <Button
+            text="Update my Measurements"
+            onPress={navigateToUpdateMeasurements}
+          />
 
-        {/* Detailed stats section */}
-        <View style={{ gap: spacing.large }}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              padding: 2,
-              backgroundColor: "lightgray",
-              borderRadius: spacing.small,
-              height: 30,
-            }}
-          >
-            <Pressable
-              onPress={() => setSelectedTab("MY_STATS")}
+          {/* Detailed stats section */}
+          <View style={{ gap: spacing.large }}>
+            <View
               style={{
-                backgroundColor:
-                  selectedTab === "MY_STATS" ? "#fff" : "transparent",
-                flex: 1,
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+                padding: 2,
+                backgroundColor: "lightgray",
                 borderRadius: spacing.small,
-                justifyContent: "center",
-                alignItems: "center",
+                height: 30,
               }}
             >
-              <Text>My Stats</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => setSelectedTab("MY_ENTRIES")}
-              style={{
-                backgroundColor:
-                  selectedTab === "MY_ENTRIES" ? "#fff" : "transparent",
-                flex: 1,
-                borderRadius: spacing.small,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text>My Entries</Text>
-            </Pressable>
-          </View>
-
-          {selectedTab === "MY_STATS" &&
-            MY_STATS.map((stat) => (
-              <View
-                key={stat.name}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingHorizontal: spacing.small,
-                }}
-              >
-                <Text>{stat.name}</Text>
-                <Text>{stat.value}</Text>
-              </View>
-            ))}
-
-          {selectedTab === "MY_ENTRIES" &&
-            MY_ENTRIES.map((entry, index) => (
               <Pressable
-                key={entry.id}
-                onPress={() => navigateToEntryDetails(entry.id)}
+                onPress={() => setSelectedTab("MY_STATS")}
                 style={{
-                  flexDirection: "row",
+                  backgroundColor:
+                    selectedTab === "MY_STATS" ? "#fff" : "transparent",
+                  flex: 1,
+                  borderRadius: spacing.small,
+                  justifyContent: "center",
                   alignItems: "center",
-                  justifyContent: "space-between",
-                  borderBottomColor: "gray",
-                  borderBottomWidth: StyleSheet.hairlineWidth,
-                  paddingBottom: spacing.medium,
                 }}
               >
+                <Text>My Stats</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setSelectedTab("MY_ENTRIES")}
+                style={{
+                  backgroundColor:
+                    selectedTab === "MY_ENTRIES" ? "#fff" : "transparent",
+                  flex: 1,
+                  borderRadius: spacing.small,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text>My Entries</Text>
+              </Pressable>
+            </View>
+
+            {selectedTab === "MY_STATS" &&
+              MY_STATS.map((stat) => (
                 <View
+                  key={stat.name}
                   style={{
-                    flexDirection: "column",
-                    alignItems: "flex-start",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                     paddingHorizontal: spacing.small,
-                    gap: spacing.tiny,
+                  }}
+                >
+                  <Text>{stat.name}</Text>
+                  <Text>{stat.value}</Text>
+                </View>
+              ))}
+
+            {selectedTab === "MY_ENTRIES" &&
+              MY_ENTRIES.map((entry, index) => (
+                <Pressable
+                  key={entry.id}
+                  onPress={() => navigateToEntryDetails(entry.id)}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderBottomColor: "gray",
+                    borderBottomWidth: StyleSheet.hairlineWidth,
+                    paddingBottom: spacing.medium,
                   }}
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      gap: spacing.medium,
-                      alignItems: "center",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      paddingHorizontal: spacing.small,
+                      gap: spacing.tiny,
                     }}
                   >
-                    <Text style={{ fontSize: 16 }}>{entry.weight}</Text>
-                    {index === 0 && (
-                      <View
-                        style={{
-                          backgroundColor: "#C4D6B0",
-                          padding: spacing.tiny,
-                          borderRadius: spacing.medium,
-                        }}
-                      >
-                        <Text style={{ fontSize: 10 }}>Onboarding</Text>
-                      </View>
-                    )}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: spacing.medium,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text style={{ fontSize: 16 }}>{entry.weight}</Text>
+                      {index === 0 && (
+                        <View
+                          style={{
+                            backgroundColor: "#C4D6B0",
+                            padding: spacing.tiny,
+                            borderRadius: spacing.medium,
+                          }}
+                        >
+                          <Text style={{ fontSize: 10 }}>Onboarding</Text>
+                        </View>
+                      )}
+                    </View>
+                    <Text style={{ color: "gray" }}>{entry.date}</Text>
                   </View>
-                  <Text style={{ color: "gray" }}>{entry.date}</Text>
-                </View>
 
-                <AntDesign name="caretright" size={18} color="lightgray" />
-              </Pressable>
-            ))}
+                  <AntDesign name="caretright" size={18} color="lightgray" />
+                </Pressable>
+              ))}
+          </View>
         </View>
       </View>
     </ScrollView>
