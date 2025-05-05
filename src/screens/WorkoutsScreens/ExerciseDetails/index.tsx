@@ -1,7 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRoute } from "@react-navigation/native";
-import { ResizeMode, Video, VideoFullscreenUpdateEvent } from "expo-av";
-import * as ScreenOrientation from "expo-screen-orientation";
+import { useVideoPlayer, VideoSource, VideoView } from "expo-video";
 import { ScrollView, Text, View } from "react-native";
 
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
@@ -14,43 +13,43 @@ const ExerciseDetails = () => {
     params: { exercise },
   } = useRoute<WorkoutsStackNavigationRouteProp<"ExerciseDetails">>();
 
-  const onFullscreenUpdate = async (e: VideoFullscreenUpdateEvent) => {
-    if (e.fullscreenUpdate === 1) {
-      console.log("fullscreen opened");
+  // const videoSource =
+  //   "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.LANDSCAPE_LEFT,
-      );
-    } else if (e.fullscreenUpdate === 3) {
-      console.log("fullscreen dismissed");
+  const assetId = require("../../../../assets/videos/dumbell-curl-video.mp4");
 
-      await ScreenOrientation.lockAsync(
-        ScreenOrientation.OrientationLock.PORTRAIT_UP,
-      );
-    }
+  const videoSource: VideoSource = {
+    assetId,
+    metadata: {
+      title: exercise.name,
+      artist: "Fitnlit",
+    },
   };
 
+  const player = useVideoPlayer(videoSource, (player) => {
+    player.loop = true;
+    player.play();
+  });
+
   return (
-    <ScrollView contentInsetAdjustmentBehavior="always">
+    <ScrollView
+      contentInsetAdjustmentBehavior="always"
+      style={{
+        flex: 1,
+      }}
+    >
       <FocusAwareStatusBar style="dark" />
 
-      <Video
-        // ref={video}
+      <VideoView
         style={{
-          alignSelf: "center",
           width: "100%",
-          height: 220,
+          alignSelf: "center",
+          height: 250,
         }}
-        source={require("../../../../assets/videos/dumbell-curl-video.mp4")}
-        shouldPlay
-        // onFullscreenUpdate={onFullscreenUpdate}
-        // source={{
-        //   uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-        // }}
-        useNativeControls
-        resizeMode={ResizeMode.CONTAIN}
-        // isLooping
-        // onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+        contentFit="contain"
+        player={player}
+        allowsFullscreen
+        allowsPictureInPicture
       />
 
       <View

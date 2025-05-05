@@ -1,7 +1,13 @@
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { AVPlaybackStatus, ResizeMode, Video } from "expo-av";
-import { useRef, useState } from "react";
+import { useEventListener } from "expo";
+import {
+  useVideoPlayer,
+  VideoPlayerStatus,
+  VideoSource,
+  VideoView,
+} from "expo-video";
+import { useState } from "react";
 import { Pressable, SafeAreaView, Text, View } from "react-native";
 
 import Button from "../../../components/Button";
@@ -9,13 +15,17 @@ import { WORKOUT } from "../../../mockupData";
 import { WorkoutsStackNavigationType } from "../../../navigation/WorkoutsStackNavigator";
 import { colors, spacing } from "../../../theme";
 
+const assetId = require("../../../../assets/videos/dumbell-curl-video.mp4");
+
 const WorkoutHelper = () => {
   const navigation =
     useNavigation<WorkoutsStackNavigationType<"WorkoutHelper">>();
 
-  const videoRef = useRef<Video | null>(null);
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
-  const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus | null>(null);
+  const [playerStatus, setPlayerStatus] = useState<VideoPlayerStatus | null>(
+    null,
+  );
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const currentMove = WORKOUT[currentMoveIndex];
   const nextMove = WORKOUT[currentMoveIndex + 1];
@@ -23,22 +33,42 @@ const WorkoutHelper = () => {
   const isPreviousMoveAvailable = currentMoveIndex !== 0;
   const isNextMoveAvailable = currentMoveIndex !== WORKOUT.length - 1;
 
+  const videoSource: VideoSource = {
+    assetId,
+    metadata: {
+      title: currentMove.name,
+      artist: "Fitnlit",
+    },
+  };
+
+  const player = useVideoPlayer(videoSource, (player) => {
+    player.loop = true;
+    player.play();
+  });
+
+  useEventListener(player, "statusChange", ({ status, error }) => {
+    setPlayerStatus(status);
+  });
+
+  useEventListener(player, "playingChange", ({ isPlaying }) => {
+    setIsPlaying(isPlaying);
+  });
+
   const toggleVideo = async () => {
-    if (!videoRef?.current || !videoStatus) return;
+    if (!playerStatus) return;
 
-    if (!videoStatus.isLoaded) return;
-
-    if (videoStatus.isPlaying) {
-      videoRef.current.pauseAsync();
+    if (isPlaying) {
+      player.pause();
     } else {
-      videoRef.current.playAsync();
+      player.play();
     }
   };
 
   const renderCentralButton = () => {
-    if (!videoStatus?.isLoaded) {
-      return <Text>Loading</Text>;
-    }
+    // console.log(playerStatus);
+    // if (playerStatus === "loading") {
+    //   return <Text>Loading</Text>;
+    // }
 
     return (
       <Pressable onPress={toggleVideo}>
@@ -51,7 +81,7 @@ const WorkoutHelper = () => {
             alignItems: "center",
           }}
         >
-          {videoStatus.isPlaying ? (
+          {isPlaying ? (
             <Feather name="pause" size={22} color="#fff" />
           ) : (
             <Feather name="play" size={22} color="#fff" />
@@ -92,18 +122,16 @@ const WorkoutHelper = () => {
         {currentMove.name}
       </Text>
 
-      <Video
-        ref={videoRef}
+      <VideoView
         style={{
-          alignSelf: "center",
           width: "100%",
-          height: 220,
+          alignSelf: "center",
+          height: 250,
         }}
-        source={require("../../../../assets/videos/dumbell-curl-video.mp4")}
-        shouldPlay={false}
-        useNativeControls
-        resizeMode={ResizeMode.CONTAIN}
-        onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
+        contentFit="contain"
+        player={player}
+        allowsFullscreen
+        allowsPictureInPicture
       />
 
       <View
