@@ -16,6 +16,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import useIsInitialRender from "../../hooks/useIsInitialRender";
 import { colors, spacing } from "../../theme";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -31,6 +32,8 @@ interface ButtonProps extends PressableProps {
 const Button = (props: ButtonProps) => {
   const { containerStyle, textStyle, text, disabled, isLoading, ...rest } =
     props;
+
+  const isInitialRender = useIsInitialRender();
 
   const scale = useSharedValue(1);
   const backgroundColor = useDerivedValue(() => {
@@ -87,7 +90,7 @@ const Button = (props: ButtonProps) => {
         </Animated.View>
       ) : (
         <Animated.Text
-          entering={FadeInDown}
+          entering={isInitialRender ? undefined : FadeInDown}
           exiting={FadeOutUp}
           style={[
             {
