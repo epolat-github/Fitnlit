@@ -1,15 +1,15 @@
-import { ImageBackground } from "expo-image";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useMemo } from "react";
 import { View, useWindowDimensions } from "react-native";
 import Animated, {
-  Extrapolate,
+  Extrapolation,
   SharedValue,
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
 
 interface CarouselPageType {
@@ -35,14 +35,14 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
       translationX.value,
       inputRange,
       [1.05, 1, 1.05],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     const translateX = interpolate(
       translationX.value,
       inputRange,
       [-width * 0.7, 0, width * 0.7],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     return {
@@ -62,7 +62,7 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
       translationX.value,
       inputRange,
       [0, 1, 0],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     const translateX = interpolate(
@@ -70,7 +70,7 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
       inputRange,
       [-width * 0.7 * 2, 0, width * 0.7 * 2],
 
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     return {
@@ -88,14 +88,14 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
       translationX.value,
       inputRange,
       [0, 1, 0],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     const translateX = interpolate(
       translationX.value,
       inputRange,
       [-width * 0.7 * 1.9, 0, width * 0.7 * 1.9],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     return {
@@ -128,18 +128,17 @@ const CarouselPage: React.FC<CarouselPageType> = (props) => {
         ]}
         source={image}
         contentFit="cover"
-      >
-        <AnimatedLinearGradient
-          style={{
-            position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-          }}
-          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.3)"]}
-        />
-      </AnimatedImage>
+      />
+      <AnimatedLinearGradient
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+        }}
+        colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.3)"]}
+      />
 
       {/* bottom section */}
       <View

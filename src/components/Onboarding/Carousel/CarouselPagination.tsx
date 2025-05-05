@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { View, useWindowDimensions } from "react-native";
 import Animated, {
-  Extrapolate,
+  Extrapolation,
   SharedValue,
   interpolate,
   interpolateColor,
@@ -30,7 +30,7 @@ const Thumb: React.FC<ThumbType> = (props) => {
       translationX.value,
       inputRange,
       [THUMB_SIZE, THUMB_SIZE * 2.5, THUMB_SIZE],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     const color = interpolateColor(translationX.value, inputRange, [

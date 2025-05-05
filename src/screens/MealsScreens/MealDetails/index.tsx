@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import Animated, {
-  Extrapolate,
+  Extrapolation,
   FadeInDown,
   FadeOutUp,
   interpolate,
@@ -68,7 +68,7 @@ const MealDetails = () => {
       translateY.value,
       [0, IMAGE_HEIGHT / 2, IMAGE_HEIGHT],
       [0, -20, -30],
-      Extrapolate.CLAMP,
+      Extrapolation.CLAMP,
     );
 
     return {
@@ -82,7 +82,7 @@ const MealDetails = () => {
         translateY.value,
         [0, IMAGE_HEIGHT - 100],
         [1, 0],
-        Extrapolate.CLAMP,
+        Extrapolation.CLAMP,
       ),
       transform: [
         {
@@ -90,7 +90,7 @@ const MealDetails = () => {
             translateY.value,
             [0, IMAGE_HEIGHT],
             [0, 5],
-            Extrapolate.CLAMP,
+            Extrapolation.CLAMP,
           ),
         },
       ],
