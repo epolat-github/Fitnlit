@@ -1,7 +1,14 @@
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Alert, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Alert,
+  Linking,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 import Avatar from "../../../components/Avatar";
 import Divider from "../../../components/Divider";
@@ -10,6 +17,7 @@ import useProfile from "../../../hooks/useProfile";
 import { PreferencesStackNavigationType } from "../../../navigation/PreferencesStackNavigator";
 import { deleteAccountAction, logoutAction } from "../../../slices/authSlice";
 import { spacing } from "../../../theme";
+import { SUPPORT_MAIL } from "../../../utils/config";
 
 interface MenuItemType {
   icon: React.ReactNode;
@@ -90,6 +98,14 @@ const PreferencesModal = () => {
     );
   };
 
+  const openHelpAndSupport = async () => {
+    const url = `mailto:${SUPPORT_MAIL}`;
+
+    if (await Linking.canOpenURL(url)) {
+      Linking.openURL(url);
+    }
+  };
+
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <View
@@ -125,7 +141,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Help and Support"
             subtitle="Contact us to get help"
-            onPress={() => navigation.navigate("HelpAndSupport")}
+            onPress={openHelpAndSupport}
             icon={
               <Ionicons name="help-circle-outline" size={24} color="black" />
             }
