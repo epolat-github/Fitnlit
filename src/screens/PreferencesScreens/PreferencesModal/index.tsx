@@ -4,6 +4,7 @@ import { Image } from "expo-image";
 import React from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
+import Avatar from "../../../components/Avatar";
 import Divider from "../../../components/Divider";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { PreferencesStackNavigationType } from "../../../navigation/PreferencesStackNavigator";
@@ -83,7 +84,7 @@ const PreferencesModal = () => {
             gap: spacing.medium,
           }}
         >
-          <Image
+          {/* <Image
             source={require("../../../../assets/images/profile-pictures/profile-picture.png")}
             contentFit="cover"
             style={{
@@ -91,7 +92,8 @@ const PreferencesModal = () => {
               width: 120,
               height: 120,
             }}
-          />
+          /> */}
+          <Avatar size="large" />
           <Text style={{ fontSize: 24 }}>John Doe</Text>
         </View>
 

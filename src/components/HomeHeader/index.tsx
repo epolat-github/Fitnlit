@@ -1,12 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { Image } from "expo-image";
-import { Pressable, Text, View } from "react-native";
+import moment from "moment";
+import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HomeStackNavigationType } from "../../navigation/HomeStackNavigator";
 import { colors, spacing } from "../../theme";
+import Avatar from "../Avatar";
 
 const HomeHeader = (props: NativeStackHeaderProps) => {
   const { options } = props;
@@ -51,7 +52,7 @@ const HomeHeader = (props: NativeStackHeaderProps) => {
               color: colors.primary,
             }}
           >
-            08 Aug, Tuesday
+            {moment().format("DD MMMM, dddd")}
           </Text>
         </View>
 
@@ -67,17 +68,7 @@ const HomeHeader = (props: NativeStackHeaderProps) => {
       </View>
 
       {/* AVATAR */}
-      <Pressable onPress={navigateToPreferences}>
-        <Image
-          source={require("../../../assets/images/profile-pictures/profile-picture.png")}
-          contentFit="cover"
-          style={{
-            borderRadius: 30,
-            width: 60,
-            height: 60,
-          }}
-        />
-      </Pressable>
+      <Avatar onPress={navigateToPreferences} />
     </View>
   );
 };

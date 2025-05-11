@@ -1,27 +1,51 @@
-import { useNavigation } from "@react-navigation/native";
-import { Image } from "expo-image";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Controller, useForm } from "react-hook-form";
+import { Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as yup from "yup";
 
+import Avatar from "../../../components/Avatar";
 import Button from "../../../components/Button";
 import TextInput from "../../../components/TextInput";
 import { useSnackbarContext } from "../../../context/SnackbarContext";
-import { HomeStackNavigationType } from "../../../navigation/HomeStackNavigator";
+import useProfile from "../../../hooks/useProfile";
+import useToken from "../../../hooks/useToken";
 import { spacing } from "../../../theme";
+import { decodeAccessToken } from "../../../utils/auth";
 
-const ORIGINAL_NAME = "John Doe";
+const schema = yup
+  .object({
+    userId: yup.string().required(),
+    firstName: yup.string().max(50).required("İsim zorunlu bir alandır"),
+    lastName: yup.string().max(30).required("Soyisim zorunlu bir alandır"),
+    birthDate: yup.string().required().nullable(),
+  })
+  .required();
+
+type Schema = yup.InferType<typeof schema>;
 
 const MyAccount = () => {
-  const navigation =
-    useNavigation<HomeStackNavigationType<"PreferencesStack">>();
   const { showSnackbar } = useSnackbarContext();
 
-  const [profile, setProfile] = useState({
-    name: "John Doe",
-    birthDate: "1998-01-04",
-    height: "178",
-    email: "test@fitnlit.com",
+  const profile = useProfile();
+  const token = useToken();
+
+  const fullName = [profile.firstName, profile.lastName].join(" ");
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<Schema>({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      birthDate: null,
+      userId: decodeAccessToken(token || "").id,
+    },
   });
 
   const [newProfilePicture, setNewProfilePicture] =
@@ -31,7 +55,7 @@ const MyAccount = () => {
 
   const changeProfilePicture = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: "images",
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.5,
@@ -44,36 +68,29 @@ const MyAccount = () => {
     }
   };
 
-  const changeProfileData = (
-    value: string,
-    type: "name" | "birthDate" | "height" | "email",
-  ) => {
-    setProfile((prev) => {
-      const newPrev = { ...prev };
-
-      newPrev[type] = value;
-
-      return newPrev;
-    });
-  };
-
-  const updateAccountHandler = () => {
+  const updateProfileHandler = (data: Schema) => {
     setIsLoading(true);
 
     setTimeout(() => {
-      showSnackbar("Account updated.", {
+      showSnackbar("Profile updated.", {
         variant: "success",
         duration: 5000,
       });
-
-      navigation.navigate("Home");
 
       setIsLoading(false);
     }, 1000);
   };
 
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
+    <KeyboardAwareScrollView
+      style={{
+        flex: 1,
+      }}
+      contentContainerStyle={{
+        flex: 1,
+      }}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <View
         style={{
           paddingTop: spacing.large,
@@ -87,45 +104,18 @@ const MyAccount = () => {
             gap: spacing.medium,
           }}
         >
-          <Pressable
+          <Avatar
+            mode="picker"
             onPress={changeProfilePicture}
-            style={{
-              borderRadius: 50,
-              width: 100,
-              height: 100,
-              overflow: "hidden",
-              position: "relative",
-            }}
-          >
-            <Image
-              source={
-                newProfilePicture
-                  ? { uri: newProfilePicture.uri }
-                  : require("../../../../assets/images/profile-pictures/profile-picture.png")
-              }
-              contentFit="cover"
-              style={{
-                flex: 1,
-              }}
-            />
+            size="medium"
+            imageBase64={
+              newProfilePicture
+                ? `data:image/jpeg;base64,${newProfilePicture.base64}`
+                : undefined
+            }
+          />
 
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: "rgba(0,0,0,0.5)",
-                height: "25%",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ textAlign: "center", color: "#fff" }}>Change</Text>
-            </View>
-          </Pressable>
-
-          <Text style={{ fontSize: 24 }}>{ORIGINAL_NAME}</Text>
+          <Text style={{ fontSize: 24 }}>{fullName}</Text>
         </View>
 
         {/* PROFILE EDIT FORM */}
@@ -135,52 +125,80 @@ const MyAccount = () => {
             gap: spacing.medium,
           }}
         >
-          {/* NAME */}
+          {/* first name */}
           <View style={{ gap: spacing.small }}>
-            <Text style={{ color: "gray" }}>Full name</Text>
-            <TextInput
-              value={profile.name}
-              onChangeText={(text) => changeProfileData(text, "name")}
+            <Text style={{ color: "gray" }}>First Name</Text>
+            <Controller
+              name="firstName"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="First name is required"
+                  autoComplete="given-name"
+                  maxLength={50}
+                  error={errors.firstName?.message}
+                />
+              )}
+            />
+          </View>
+
+          {/* last name */}
+          <View style={{ gap: spacing.small }}>
+            <Text style={{ color: "gray" }}>Last name</Text>
+            <Controller
+              name="lastName"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="Last name is required"
+                  autoComplete="family-name"
+                  maxLength={50}
+                  error={errors.lastName?.message}
+                />
+              )}
             />
           </View>
 
           {/* Birth Date */}
           <View style={{ gap: spacing.small }}>
             <Text style={{ color: "gray" }}>Birth Date</Text>
-            <TextInput
-              value={profile.birthDate}
-              onChangeText={(text) => changeProfileData(text, "birthDate")}
+            <Controller
+              name="birthDate"
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value || ""}
+                  // placeholder="Last name is required"
+                  maxLength={50}
+                  error={errors.birthDate?.message}
+                />
+              )}
             />
           </View>
 
-          {/* Height */}
-          <View style={{ gap: spacing.small }}>
-            <Text style={{ color: "gray" }}>Height (cm)</Text>
-            <TextInput
-              value={profile.height}
-              onChangeText={(text) => changeProfileData(text, "height")}
-              keyboardType="number-pad"
-            />
-          </View>
-
-          {/* Height */}
+          {/* Email */}
           <View style={{ gap: spacing.small }}>
             <Text style={{ color: "gray" }}>Email</Text>
-            <TextInput
-              value={profile.email}
-              onChangeText={(text) => changeProfileData(text, "email")}
-              keyboardType="email-address"
-            />
+            <TextInput value={profile.email} editable={false} />
           </View>
 
           <Button
             text="Update Account"
-            onPress={updateAccountHandler}
+            onPress={handleSubmit(updateProfileHandler)}
             isLoading={isLoading}
+            disabled={!isValid}
           />
         </View>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 

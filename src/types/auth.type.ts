@@ -67,3 +67,11 @@ export interface DecodedAccessToken {
   iss: string;
   nbf: number;
 }
+
+export interface UpdateProfileRequest {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  profilePicture: string | null;
+}

@@ -94,9 +94,9 @@ export const restoreProfileAction = createAsyncThunk(
     const token = await AsyncStorage.getItem("token");
 
     if (token) {
-      const user = await getProfile(token);
+      const profile = await getProfile(token);
 
-      return user;
+      return { profile, token };
     }
   },
 );
@@ -135,7 +135,8 @@ export const authSlice = createSlice({
       })
       .addCase(restoreProfileAction.fulfilled, (state, action) => {
         if (action.payload) {
-          state.profile = action.payload;
+          state.profile = action.payload.profile;
+          state.accessToken = action.payload.token;
         }
       });
   },
@@ -152,6 +153,7 @@ export const { setUser, resetState, setIsLoggedIn } = authSlice.actions;
 export const selectProfile = (state: RootState) => state.auth.profile;
 export const selectIsLoading = (state: RootState) => state.auth.isLoading;
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
+export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 
 // export const selectTokens = (state: RootState) => state.auth.tokens;
 
