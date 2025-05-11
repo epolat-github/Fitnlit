@@ -33,7 +33,7 @@ const Register = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid, isValidating },
+    formState: { errors, isValid },
   } = useForm<Schema>({
     resolver: yupResolver(schema),
   });
@@ -167,7 +167,7 @@ const Register = () => {
       >
         <Button
           text="Next"
-          disabled={!isValid && !isValidating}
+          disabled={!isValid}
           onPress={handleSubmit(navigateToSetupPassword)}
         />
 
