@@ -75,3 +75,8 @@ export interface UpdateProfileRequest {
   birthDate: string | null;
   profilePicture: string | null;
 }
+
+export interface DeleteAccountRequest {
+  phoneNotifToken: string;
+  userId: string;
+}

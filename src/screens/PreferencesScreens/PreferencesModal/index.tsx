@@ -1,14 +1,14 @@
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Image } from "expo-image";
 import React from "react";
 import { Alert, Pressable, ScrollView, Text, View } from "react-native";
 
 import Avatar from "../../../components/Avatar";
 import Divider from "../../../components/Divider";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import useProfile from "../../../hooks/useProfile";
 import { PreferencesStackNavigationType } from "../../../navigation/PreferencesStackNavigator";
-import { logoutAction } from "../../../slices/authSlice";
+import { deleteAccountAction, logoutAction } from "../../../slices/authSlice";
 import { spacing } from "../../../theme";
 
 interface MenuItemType {
@@ -38,7 +38,6 @@ const MenuItem: React.FC<MenuItemType> = (props) => {
           alignItems: "center",
         }}
       >
-        {/* <Ionicons name="person-outline" size={24} color="black" /> */}
         {icon}
         <View style={{ gap: spacing.tiny }}>
           <Text>{title}</Text>
@@ -57,6 +56,8 @@ const PreferencesModal = () => {
   const navigation =
     useNavigation<PreferencesStackNavigationType<"PreferencesModal">>();
 
+  const profile = useProfile();
+
   const logoutHandler = () => {
     Alert.alert("Log out", "You will log out from the Fit&Lit", [
       {
@@ -69,6 +70,24 @@ const PreferencesModal = () => {
         onPress: () => dispatch(logoutAction({})),
       },
     ]);
+  };
+
+  const deleteAccountHandler = async () => {
+    Alert.alert(
+      "Hesabı Sil",
+      "Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri döndürülemez.",
+      [
+        {
+          text: "İptal",
+          style: "cancel",
+        },
+        {
+          text: "Sil",
+          style: "destructive",
+          onPress: () => dispatch(deleteAccountAction("")),
+        },
+      ],
+    );
   };
 
   return (
@@ -84,17 +103,10 @@ const PreferencesModal = () => {
             gap: spacing.medium,
           }}
         >
-          {/* <Image
-            source={require("../../../../assets/images/profile-pictures/profile-picture.png")}
-            contentFit="cover"
-            style={{
-              borderRadius: 60,
-              width: 120,
-              height: 120,
-            }}
-          /> */}
           <Avatar size="large" />
-          <Text style={{ fontSize: 24 }}>John Doe</Text>
+          <Text
+            style={{ fontSize: 24 }}
+          >{`${profile.firstName} ${profile.lastName}`}</Text>
         </View>
 
         {/* list */}
@@ -147,7 +159,7 @@ const PreferencesModal = () => {
           <MenuItem
             title="Delete Account"
             subtitle="Delete your data and records"
-            onPress={() => navigation.navigate("DeleteAccount")}
+            onPress={deleteAccountHandler}
             icon={<Ionicons name="trash-outline" size={24} color="black" />}
           />
 

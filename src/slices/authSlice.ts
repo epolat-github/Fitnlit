@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
+  deleteAccount,
   getProfile,
   login,
   logout,
@@ -14,7 +15,6 @@ import {
   UpdateProfileRequest,
 } from "../types/auth.type";
 import { Profile } from "../types/user.type";
-// import { removeItem, setItem } from "../utils/localStorage";
 import { RootState } from "../utils/store";
 
 export interface AuthState {
@@ -124,6 +124,24 @@ export const restoreProfileAction = createAsyncThunk(
       const profile = await getProfile(token);
 
       return { profile, token };
+    }
+  },
+);
+
+export const deleteAccountAction = createAsyncThunk(
+  "auth/deleteAccountAction",
+  async (notificationToken: string, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+
+    const { accessToken } = state.auth;
+
+    if (accessToken) {
+      const result = await deleteAccount(notificationToken, accessToken);
+
+      AsyncStorage.removeItem("token");
+      thunkAPI.dispatch(resetState());
+
+      return result;
     }
   },
 );

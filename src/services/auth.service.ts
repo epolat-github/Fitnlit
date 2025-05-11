@@ -1,5 +1,6 @@
 import {
   CheckForgotPasswordKeyBody,
+  DeleteAccountRequest,
   GenerateForgotPasswordKeyBody,
   LoginBody,
   LoginResponse,
@@ -204,4 +205,37 @@ export const updateProfile = async (
   }
 
   return data as Profile;
+};
+
+export const deleteAccount = async (
+  notificationToken: string,
+  token: string,
+) => {
+  const url = `${API_URL}/AuthMobile/DeleteUserMobile`;
+
+  const { id } = decodeAccessToken(token);
+
+  const body: DeleteAccountRequest = {
+    phoneNotifToken: notificationToken,
+    userId: id,
+  };
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      (data as ApiError).message || "Unknown error when deleting account.",
+    );
+  }
+
+  return data;
 };
