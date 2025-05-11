@@ -20,7 +20,8 @@ const Avatar: React.FC<AvatarProps> = (props) => {
   const profile = useProfile();
 
   const width = size === "small" ? 60 : size === "medium" ? 100 : 120;
-  const avatar = imageBase64 || profile.profilePicture;
+  const avatar =
+    imageBase64 || `data:image/jpeg;base64,${profile.profilePicture}`;
   const gender = GENDER.MALE; // TODO get real gender from api
 
   const renderAvatar = useCallback(() => {
@@ -28,7 +29,7 @@ const Avatar: React.FC<AvatarProps> = (props) => {
       return (
         <Image
           source={{
-            uri: imageBase64,
+            uri: avatar,
           }}
           contentFit="cover"
           style={{
@@ -48,7 +49,7 @@ const Avatar: React.FC<AvatarProps> = (props) => {
         />
       );
     }
-  }, [avatar, gender, imageBase64, width]);
+  }, [avatar, gender, width]);
 
   return (
     <Pressable

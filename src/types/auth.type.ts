@@ -72,6 +72,6 @@ export interface UpdateProfileRequest {
   userId: string;
   firstName: string;
   lastName: string;
-  birthDate: string;
+  birthDate: string | null;
   profilePicture: string | null;
 }

@@ -10,8 +10,10 @@ import Avatar from "../../../components/Avatar";
 import Button from "../../../components/Button";
 import TextInput from "../../../components/TextInput";
 import { useSnackbarContext } from "../../../context/SnackbarContext";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import useProfile from "../../../hooks/useProfile";
 import useToken from "../../../hooks/useToken";
+import { updateProfileAction } from "../../../slices/authSlice";
 import { spacing } from "../../../theme";
 import { decodeAccessToken } from "../../../utils/auth";
 
@@ -21,6 +23,7 @@ const schema = yup
     firstName: yup.string().max(50).required("İsim zorunlu bir alandır"),
     lastName: yup.string().max(30).required("Soyisim zorunlu bir alandır"),
     birthDate: yup.string().required().nullable(),
+    profilePicture: yup.string().required().nullable(),
   })
   .required();
 
@@ -32,12 +35,16 @@ const MyAccount = () => {
   const profile = useProfile();
   const token = useToken();
 
+  const dispatch = useAppDispatch();
+
   const fullName = [profile.firstName, profile.lastName].join(" ");
 
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
+    setValue,
+    watch,
   } = useForm<Schema>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -45,13 +52,13 @@ const MyAccount = () => {
       lastName: profile.lastName,
       birthDate: null,
       userId: decodeAccessToken(token || "").id,
+      profilePicture: profile.profilePicture,
     },
   });
 
-  const [newProfilePicture, setNewProfilePicture] =
-    useState<ImagePicker.ImagePickerAsset>();
-
   const [isLoading, setIsLoading] = useState(false);
+
+  const watchProfilePicture = watch("profilePicture");
 
   const changeProfilePicture = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -64,21 +71,29 @@ const MyAccount = () => {
     });
 
     if (!result.canceled) {
-      setNewProfilePicture(result.assets[0]);
+      setValue("profilePicture", result.assets[0].base64 || null);
     }
   };
 
-  const updateProfileHandler = (data: Schema) => {
-    setIsLoading(true);
+  const updateProfileHandler = async (data: Schema) => {
+    try {
+      setIsLoading(true);
 
-    setTimeout(() => {
+      await dispatch(updateProfileAction(data)).unwrap();
+
       showSnackbar("Profile updated.", {
         variant: "success",
         duration: 5000,
       });
 
       setIsLoading(false);
-    }, 1000);
+    } catch (err: any) {
+      setIsLoading(false);
+
+      showSnackbar(err?.message, {
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -109,8 +124,8 @@ const MyAccount = () => {
             onPress={changeProfilePicture}
             size="medium"
             imageBase64={
-              newProfilePicture
-                ? `data:image/jpeg;base64,${newProfilePicture.base64}`
+              watchProfilePicture
+                ? `data:image/jpeg;base64,${watchProfilePicture}`
                 : undefined
             }
           />

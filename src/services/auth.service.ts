@@ -6,6 +6,7 @@ import {
   LogoutBody,
   RegisterBody,
   ResetPasswordByEmailBody,
+  UpdateProfileRequest,
 } from "../types/auth.type";
 import { ApiError } from "../types/general.type";
 import { Profile } from "../types/user.type";
@@ -156,7 +157,6 @@ export const resetPasswordByEmail = async (body: ResetPasswordByEmailBody) => {
   return data;
 };
 
-// make token parameter required after the real backend connection
 export const getProfile = async (token: string) => {
   const { id } = decodeAccessToken(token);
 
@@ -171,11 +171,35 @@ export const getProfile = async (token: string) => {
 
   const data = await response.json();
 
-  console.log("profile: ", data);
-
   if (!response.ok) {
     throw new Error(
       (data as ApiError).message || "Unknown error when fetching profile.",
+    );
+  }
+
+  return data as Profile;
+};
+
+export const updateProfile = async (
+  body: UpdateProfileRequest,
+  token: string,
+) => {
+  const url = `${API_URL}/AuthMobile/UpdateProfileDetails`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      (data as ApiError).message || "Unknown error when updating profile.",
     );
   }
 

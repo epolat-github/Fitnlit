@@ -1,8 +1,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { getProfile, login, logout, register } from "../services/auth.service";
-import { LoginBody, RegisterBody } from "../types/auth.type";
+import {
+  getProfile,
+  login,
+  logout,
+  register,
+  updateProfile,
+} from "../services/auth.service";
+import {
+  LoginBody,
+  RegisterBody,
+  UpdateProfileRequest,
+} from "../types/auth.type";
 import { Profile } from "../types/user.type";
 // import { removeItem, setItem } from "../utils/localStorage";
 import { RootState } from "../utils/store";
@@ -85,6 +95,23 @@ export const getProfileAction = createAsyncThunk(
     const profile = await getProfile(token);
 
     return profile;
+  },
+);
+
+export const updateProfileAction = createAsyncThunk(
+  "auth/updateProfileAction",
+  async (body: UpdateProfileRequest, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+
+    const { accessToken } = state.auth;
+
+    if (accessToken) {
+      const updateResponse = await updateProfile(body, accessToken);
+
+      await thunkAPI.dispatch(getProfileAction(accessToken)).unwrap();
+
+      return updateResponse;
+    }
   },
 );
 
