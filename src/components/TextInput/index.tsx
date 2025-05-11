@@ -4,8 +4,8 @@ import {
   StyleSheet,
   TextInputProps as BaseTextInputProps,
   View,
-  Text,
 } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 import { spacing } from "../../theme";
 
@@ -30,7 +30,15 @@ const TextInput = forwardRef<TextInputRef, TextInputProps>((props, ref) => {
         />
         {typeof rightIcon === "function" ? rightIcon() : rightIcon}
       </View>
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && (
+        <Animated.Text
+          style={styles.errorText}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          {error}
+        </Animated.Text>
+      )}
     </View>
   );
 });
