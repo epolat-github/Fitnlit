@@ -22,13 +22,13 @@ export const login = async (body: LoginBody) => {
     },
   });
 
-  if (!response.ok) {
-    return Promise.reject({
-      message: "Login error",
-    });
-  }
-
   const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      (data as ApiError).message || "Unknown error when logging in.",
+    );
+  }
 
   return data as LoginResponse;
 };
