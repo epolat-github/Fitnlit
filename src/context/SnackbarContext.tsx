@@ -1,5 +1,4 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { Portal } from "@gorhom/portal";
 import * as Haptics from "expo-haptics";
 import {
   ReactNode,
@@ -9,11 +8,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import { FullWindowOverlay } from "react-native-screens";
 
 import { spacing } from "../theme";
 
@@ -132,7 +132,10 @@ export const SnackbarContextProvider = ({
     return {
       transform: [
         {
-          translateY: isShown ? withSpring(-50) : withSpring(60),
+          translateY: withSpring(isShown ? -50 : 60, {
+            damping: 15, // Daha büyük → daha az zıplama
+            stiffness: 120, // Daha küçük → daha yumuşak ve yavaş
+          }),
         },
       ],
     };
@@ -144,57 +147,59 @@ export const SnackbarContextProvider = ({
         showSnackbar,
       }}
     >
-      <Portal>
+      <FullWindowOverlay>
         <Animated.View
           style={[
+            styles.container,
             {
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 5,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 6,
-              elevation: 5,
               backgroundColor,
-              justifyContent: "center",
-              alignItems: "flex-start",
-              paddingHorizontal: spacing.large,
-              paddingVertical: spacing.medium,
-              width: "90%",
-              alignSelf: "center",
-              minHeight: 50,
-              position: "absolute",
-              bottom: 0,
-              left: "5%",
-              right: "5%",
-              borderRadius: 10,
             },
             animatedStyle,
           ]}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              gap: spacing.medium,
-              alignItems: "center",
-            }}
-          >
+          <View style={styles.iconContainer}>
             {icon}
-            <Text
-              style={{
-                textAlign: "left",
-                color: "#fff",
-                fontWeight: "400",
-                flexShrink: 1,
-              }}
-            >
-              {text}
-            </Text>
+            <Text style={styles.text}>{text}</Text>
           </View>
         </Animated.View>
-      </Portal>
+      </FullWindowOverlay>
       {children}
     </SnackbarContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingHorizontal: spacing.large,
+    paddingVertical: spacing.medium,
+    width: "90%",
+    alignSelf: "center",
+    minHeight: 50,
+    position: "absolute",
+    bottom: 0,
+    left: "5%",
+    right: "5%",
+    borderRadius: 10,
+  },
+  iconContainer: {
+    flexDirection: "row",
+    gap: spacing.medium,
+    alignItems: "center",
+  },
+  text: {
+    textAlign: "left",
+    color: "#fff",
+    fontWeight: "400",
+    flexShrink: 1,
+  },
+});
