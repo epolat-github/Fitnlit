@@ -1,7 +1,11 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as yup from "yup";
 
 import Acknowledgement from "../../../components/Acknowledgement";
 import Button from "../../../components/Button";
@@ -10,20 +14,29 @@ import { useHaptics } from "../../../hooks/useHaptics";
 import { AuthStackNavigationType } from "../../../navigation/AuthNavigator";
 import { spacing } from "../../../theme";
 
+const schema = yup
+  .object({
+    email: yup.string().email().min(3).max(320).required(),
+    firstName: yup.string().min(1).max(30).required(),
+    lastName: yup.string().min(1).max(30).required(),
+  })
+  .required();
+
+type Schema = yup.InferType<typeof schema>;
+
 const Register = () => {
   const haptics = useHaptics();
   const navigation = useNavigation<AuthStackNavigationType<"Register">>();
 
   const firstNameRef = useRef<TextInputRef>(null);
 
-  const [emailValue, setEmailValue] = useState("");
-  const [firstNameValue, setFirstNameValue] = useState("");
-  const [lastNameValue, setLastNameValue] = useState("");
-
-  const isFormValid = useMemo(
-    () => emailValue !== "" && firstNameValue !== "" && lastNameValue !== "",
-    [emailValue, firstNameValue, lastNameValue],
-  );
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid, isValidating },
+  } = useForm<Schema>({
+    resolver: yupResolver(schema),
+  });
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("transitionEnd", () => {
@@ -35,21 +48,26 @@ const Register = () => {
     return unsubscribe;
   }, [navigation]);
 
-  const navigateToSetupPassword = () => {
+  const navigateToSetupPassword = (data: Schema) => {
+    const { email, firstName, lastName } = data;
+
     haptics.runNavigateHaptic();
 
     navigation.navigate("SetupPassword", {
-      email: emailValue,
-      firstName: firstNameValue,
-      lastName: lastNameValue,
+      email,
+      firstName,
+      lastName,
     });
   };
 
   return (
-    <View
+    <KeyboardAwareScrollView
       style={{
         flex: 1,
+      }}
+      contentContainerStyle={{
         justifyContent: "center",
+        flex: 1,
       }}
     >
       <StatusBar style="dark" />
@@ -76,61 +94,86 @@ const Register = () => {
         </Text>
       </View>
 
-      {/* LOGIN FORM */}
+      {/* REGISTER FORM */}
       <View
         style={{
-          flex: 0.3,
+          flex: 0.4,
           padding: spacing.medium,
           gap: spacing.medium,
         }}
       >
         {/* first name */}
-        <TextInput
-          ref={firstNameRef}
-          onChangeText={setFirstNameValue}
-          value={firstNameValue}
-          placeholder="Enter your first name"
-          // autoComplete="name"
-          maxLength={50}
+        <Controller
+          name="firstName"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              ref={firstNameRef}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              placeholder="Enter your first name"
+              autoComplete="given-name"
+              maxLength={50}
+              error={errors.firstName?.message}
+            />
+          )}
         />
 
         {/* last name */}
-        <TextInput
-          onChangeText={setLastNameValue}
-          value={lastNameValue}
-          placeholder="Enter your last name"
-          // autoComplete="name-family"
-          maxLength={50}
+        <Controller
+          name="lastName"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={value}
+              onBlur={onBlur}
+              placeholder="Enter your last name"
+              autoComplete="name-family"
+              maxLength={50}
+              error={errors.lastName?.message}
+            />
+          )}
         />
 
         {/* email */}
-        <TextInput
-          onChangeText={setEmailValue}
-          value={emailValue}
-          placeholder="Enter email address"
-          // autoComplete="email"
-          keyboardType="email-address"
-          maxLength={50}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={value}
+              onBlur={onBlur}
+              autoCapitalize="none"
+              placeholder="Enter email address"
+              keyboardType="email-address"
+              autoComplete="email"
+              maxLength={50}
+              error={errors.email?.message}
+            />
+          )}
         />
       </View>
 
       {/* BUTTONS */}
       <View
         style={{
-          flex: 0.5,
+          flex: 0.4,
           padding: spacing.medium,
           gap: spacing.huge,
         }}
       >
         <Button
           text="Next"
-          disabled={!isFormValid}
-          onPress={navigateToSetupPassword}
+          disabled={!isValid && !isValidating}
+          onPress={handleSubmit(navigateToSetupPassword)}
         />
 
         <Acknowledgement />
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

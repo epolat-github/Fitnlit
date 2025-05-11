@@ -18,11 +18,22 @@ export interface LoginResponse {
   message: string;
 }
 
+export enum GENDER {
+  MALE = 1,
+  FEMALE = 2,
+}
+
 export interface RegisterBody {
-  firstName: string;
-  lastName: string;
+  userName: string;
   email: string;
   password: string;
+  passwordConfirm: string;
+  birthDate: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  gender: GENDER;
+  profilePicture: string;
 }
 
 export interface LogoutBody {

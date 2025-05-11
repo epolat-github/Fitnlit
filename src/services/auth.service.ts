@@ -7,6 +7,7 @@ import {
   RegisterBody,
   ResetPasswordByEmailBody,
 } from "../types/auth.type";
+import { ApiError } from "../types/general.type";
 import { User } from "../types/user.type";
 import { API_URL } from "../utils/config";
 
@@ -33,11 +34,26 @@ export const login = async (body: LoginBody) => {
 };
 
 export const register = async (body: RegisterBody) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 1000);
+  const url = `${API_URL}/AuthMobile/RegisterMobile`;
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
+
+  const data = await response.json();
+
+  console.log(data);
+  if (!response.ok) {
+    throw new Error(
+      (data as ApiError).message || "Unknown error when registering.",
+    );
+  }
+
+  return data;
 };
 
 export const logout = async (body: LogoutBody, token: string) => {
