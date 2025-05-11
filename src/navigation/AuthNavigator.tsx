@@ -16,6 +16,7 @@ import Register from "../screens/AuthScreens/Register";
 import SetupNewPassword from "../screens/AuthScreens/SetupNewPassword";
 import SetupPassword from "../screens/AuthScreens/SetupPassword";
 import SuccessfulRegistration from "../screens/AuthScreens/SuccessfulRegistration";
+import { colors } from "../theme";
 
 export type AuthStackParamList = {
   Onboarding: undefined;
@@ -49,13 +50,15 @@ const AuthNavigator = () => {
     <AuthStack.Navigator
       initialRouteName="Onboarding"
       screenOptions={{
-        // headerShown: false,
         animation: "fade",
         customAnimationOnGesture: true,
         headerShadowVisible: false,
         contentStyle: {
           backgroundColor: "#fff",
         },
+        headerBackTitleVisible: false,
+        headerTintColor: colors.secondary,
+        headerBackButtonMenuEnabled: false,
       }}
     >
       <AuthStack.Screen
