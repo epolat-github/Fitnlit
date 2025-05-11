@@ -28,7 +28,7 @@ export interface RegisterBody {
   email: string;
   password: string;
   passwordConfirm: string;
-  birthDate: string;
+  birthDate: string | null;
   firstName: string;
   lastName: string;
   phoneNumber: string;
