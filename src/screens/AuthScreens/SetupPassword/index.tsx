@@ -84,7 +84,7 @@ const SetupPassword = () => {
           password: passwordValue,
           passwordConfirm: confirmPasswordValue,
           userName: "",
-          birthDate: "",
+          birthDate: null,
           phoneNumber: "",
           gender: GENDER.FEMALE,
           profilePicture: "",
