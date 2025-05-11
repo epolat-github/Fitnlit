@@ -65,7 +65,7 @@ const PreferencesModal = () => {
       {
         text: "Log out",
         style: "destructive",
-        onPress: () => dispatch(logoutAction()),
+        onPress: () => dispatch(logoutAction({})),
       },
     ]);
   };

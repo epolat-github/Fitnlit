@@ -12,7 +12,7 @@ import TabNavigator from "./TabNavigator";
 import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { selectIsLoading } from "../slices/appStateSlice";
-import { restoreUserAction, selectUser } from "../slices/authSlice";
+import { restoreProfileAction, selectProfile } from "../slices/authSlice";
 // import { BASE_WEBSITE_URL } from "../config";
 // import type { IRootState } from "../reducers";
 // import { Profile } from "../services/authService.types";
@@ -25,7 +25,7 @@ import { restoreUserAction, selectUser } from "../slices/authSlice";
 
 const MainNavigationContainer = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
+  const profile = useAppSelector(selectProfile);
   const isLoading = useAppSelector(selectIsLoading);
 
   const [fontsLoaded, error] = useFonts({
@@ -36,7 +36,7 @@ const MainNavigationContainer = () => {
   const initApp = useCallback(async () => {
     // first, wait for the fonts to be loaded
     if (fontsLoaded) {
-      await dispatch(restoreUserAction()).unwrap();
+      await dispatch(restoreProfileAction()).unwrap();
 
       // TODO find better way
       setTimeout(() => {
@@ -76,7 +76,7 @@ const MainNavigationContainer = () => {
     //   linking={linking}
     // fallback={<Text>Loading...</Text>}
     >
-      {!user ? <TabNavigator /> : <AuthNavigator />}
+      {profile ? <TabNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };

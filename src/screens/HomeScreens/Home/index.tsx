@@ -10,11 +10,11 @@ import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { NUTRITION_GOALS_DATA } from "../../../mockupData";
 import { HomeStackNavigationType } from "../../../navigation/HomeStackNavigator";
-import { selectUser } from "../../../slices/authSlice";
+import { selectProfile } from "../../../slices/authSlice";
 import { spacing } from "../../../theme";
 
 const Home = () => {
-  const user = useAppSelector(selectUser);
+  const user = useAppSelector(selectProfile);
   const navigation = useNavigation<HomeStackNavigationType<"Home">>();
 
   useEffect(() => {

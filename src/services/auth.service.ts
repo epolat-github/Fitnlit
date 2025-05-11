@@ -8,7 +8,8 @@ import {
   ResetPasswordByEmailBody,
 } from "../types/auth.type";
 import { ApiError } from "../types/general.type";
-import { User } from "../types/user.type";
+import { Profile } from "../types/user.type";
+import { decodeAccessToken } from "../utils/auth";
 import { API_URL } from "../utils/config";
 
 export const login = async (body: LoginBody) => {
@@ -46,7 +47,6 @@ export const register = async (body: RegisterBody) => {
 
   const data = await response.json();
 
-  console.log(data);
   if (!response.ok) {
     throw new Error(
       (data as ApiError).message || "Unknown error when registering.",
@@ -56,8 +56,15 @@ export const register = async (body: RegisterBody) => {
   return data;
 };
 
-export const logout = async (body: LogoutBody, token: string) => {
+export const logout = async (token: string, pushNotificationToken?: string) => {
   const url = `${API_URL}/AuthMobile/LogoutMobile`;
+
+  const { id } = decodeAccessToken(token);
+
+  const body: LogoutBody = {
+    phoneNotifToken: pushNotificationToken,
+    userId: id,
+  };
 
   const response = await fetch(url, {
     method: "POST",
@@ -68,13 +75,13 @@ export const logout = async (body: LogoutBody, token: string) => {
     },
   });
 
-  if (!response.ok) {
-    return Promise.reject({
-      message: "Logout error",
-    });
-  }
-
   const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      (data as ApiError).message || "Unknown error when logging out.",
+    );
+  }
 
   return data;
 };
@@ -150,16 +157,27 @@ export const resetPasswordByEmail = async (body: ResetPasswordByEmailBody) => {
 };
 
 // make token parameter required after the real backend connection
-export const getUser = async (token?: string): Promise<User> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        email: "email@email.com",
-        firstName: "John",
-        lastName: "Doe",
-        isPremium: true,
-        username: "johndoe",
-      });
-    }, 600);
+export const getProfile = async (token: string) => {
+  const { id } = decodeAccessToken(token);
+
+  const url = `${API_URL}/AuthMobile/GetProfileDetails?UserId=${id}`;
+
+  const response = await fetch(url, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
+
+  const data = await response.json();
+
+  console.log("profile: ", data);
+
+  if (!response.ok) {
+    throw new Error(
+      (data as ApiError).message || "Unknown error when fetching profile.",
+    );
+  }
+
+  return data as Profile;
 };

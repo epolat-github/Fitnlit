@@ -1,35 +1,28 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { getUser, login, logout, register } from "../services/auth.service";
+import { getProfile, login, logout, register } from "../services/auth.service";
 import { LoginBody, RegisterBody } from "../types/auth.type";
-import { User } from "../types/user.type";
+import { Profile } from "../types/user.type";
 // import { removeItem, setItem } from "../utils/localStorage";
 import { RootState } from "../utils/store";
 
 export interface AuthState {
-  user: User | null;
+  profile: Profile | null;
   isLoading: boolean;
   isLoggedIn: boolean | null;
-  token?: string;
-  errors: {
-    loginError: string;
-  };
+  accessToken?: string;
   // tokens: Tokens | null;
 }
 
 const initialState: AuthState = {
-  user: null,
+  profile: null,
   isLoading: true,
   isLoggedIn: null,
-  token: undefined,
-  errors: {
-    loginError: "",
-  },
+  accessToken: undefined,
   // tokens: null
 };
 
-// TODO handle unauth login
 export const loginAction = createAsyncThunk(
   "auth/loginAction",
   async (body: LoginBody, thunkAPI) => {
@@ -41,12 +34,13 @@ export const loginAction = createAsyncThunk(
       },
     } = response;
 
-    thunkAPI.dispatch(getUserAction());
+    await thunkAPI.dispatch(getProfileAction(acessToken)).unwrap();
 
-    // AsyncStorage.setItem("user", JSON.stringify(user));
     AsyncStorage.setItem("token", acessToken);
 
-    return response;
+    return {
+      accessToken: acessToken,
+    };
   },
 );
 
@@ -61,34 +55,46 @@ export const registerAction = createAsyncThunk(
 
 export const logoutAction = createAsyncThunk(
   "auth/logout",
-  async (_, thunkAPI) => {
-    // await logout();
+  async (
+    body: {
+      notificationToken?: string;
+    },
+    thunkAPI,
+  ) => {
+    const { notificationToken } = body;
+
+    const state = thunkAPI.getState() as RootState;
+
+    const { accessToken } = state.auth;
+
+    if (accessToken) {
+      await logout(accessToken, notificationToken);
+    }
 
     thunkAPI.dispatch(resetState());
 
-    AsyncStorage.removeItem("user");
     AsyncStorage.removeItem("token");
 
     return true;
   },
 );
 
-export const getUserAction = createAsyncThunk(
-  "auth/getUserAction",
-  async (_, thunkAPI) => {
-    const user = await getUser();
+export const getProfileAction = createAsyncThunk(
+  "auth/getProfileAction",
+  async (token: string, thunkAPI) => {
+    const profile = await getProfile(token);
 
-    return user;
+    return profile;
   },
 );
 
-export const restoreUserAction = createAsyncThunk(
-  "auth/restoreUserAction",
+export const restoreProfileAction = createAsyncThunk(
+  "auth/restoreProfileAction",
   async (_, thunkAPI) => {
     const token = await AsyncStorage.getItem("token");
 
     if (token) {
-      const user = await getUser(token);
+      const user = await getProfile(token);
 
       return user;
     }
@@ -100,15 +106,12 @@ export const authSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
-      state.user = action.payload;
+    setUser: (state, action: PayloadAction<Profile>) => {
+      state.profile = action.payload;
       state.isLoading = false;
     },
     setIsLoggedIn: (state, action: PayloadAction<boolean>) => {
       state.isLoggedIn = action.payload;
-    },
-    resetLoginError: (state) => {
-      state.errors.loginError = "";
     },
     resetState: () => initialState,
   },
@@ -117,27 +120,22 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginAction.fulfilled, (state, action) => {
-        const { token, user } = action.payload;
-        state.user = user;
-        state.token = token;
+        const { accessToken } = action.payload;
+        state.accessToken = accessToken;
       })
       .addCase(loginAction.rejected, (state, action) => {
         const error = action.error;
         console.log("Login error: ", error);
-
-        const { message } = error;
-
-        state.errors.loginError = message ?? "Unknown error";
       })
       .addCase(logoutAction.fulfilled, (state, action) => {
-        state.user = null;
+        state.profile = null;
       })
-      .addCase(getUserAction.fulfilled, (state, action) => {
-        state.user = action.payload;
+      .addCase(getProfileAction.fulfilled, (state, action) => {
+        state.profile = action.payload;
       })
-      .addCase(restoreUserAction.fulfilled, (state, action) => {
+      .addCase(restoreProfileAction.fulfilled, (state, action) => {
         if (action.payload) {
-          state.user = action.payload;
+          state.profile = action.payload;
         }
       });
   },
@@ -146,17 +144,15 @@ export const authSlice = createSlice({
 /**
  * Action exports
  */
-export const { setUser, resetLoginError, resetState, setIsLoggedIn } =
-  authSlice.actions;
+export const { setUser, resetState, setIsLoggedIn } = authSlice.actions;
 
 /**
  * Selectors
  */
-export const selectUser = (state: RootState) => state.auth.user;
+export const selectProfile = (state: RootState) => state.auth.profile;
 export const selectIsLoading = (state: RootState) => state.auth.isLoading;
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
-export const selectLoginError = (state: RootState) =>
-  state.auth.errors.loginError;
+
 // export const selectTokens = (state: RootState) => state.auth.tokens;
 
 /**

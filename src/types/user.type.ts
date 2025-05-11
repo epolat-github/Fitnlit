@@ -1,7 +1,8 @@
-export interface User {
-  username: string;
+export interface Profile {
+  birthDate?: string;
   email: string;
-  isPremium: boolean;
   firstName: string;
   lastName: string;
+  profilePicture: string;
+  // isPremium: boolean;
 }

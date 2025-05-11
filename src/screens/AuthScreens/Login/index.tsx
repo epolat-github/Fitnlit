@@ -1,8 +1,11 @@
+import Entypo from "@expo/vector-icons/Entypo";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import base64 from "react-native-base64";
+import { Controller, useForm } from "react-hook-form";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import * as yup from "yup";
 
 import Button from "../../../components/Button";
 import TextInput, { TextInputRef } from "../../../components/TextInput";
@@ -11,6 +14,19 @@ import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useHaptics } from "../../../hooks/useHaptics";
 import { AuthStackNavigationType } from "../../../navigation/AuthNavigator";
 import { loginAction } from "../../../slices/authSlice";
+import { spacing } from "../../../theme";
+
+const schema = yup
+  .object({
+    email: yup
+      .string()
+      .email("Please enter a valid email")
+      .required("Please enter your email first"),
+    password: yup.string().required("Please enter your password first"),
+  })
+  .required();
+
+type Schema = yup.InferType<typeof schema>;
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -20,10 +36,18 @@ const Login = () => {
 
   const emailRef = useRef<TextInputRef>(null);
 
-  const [email, setEmail] = useState("account@fitnlit.com");
-  const [password, setPassword] = useState("123456");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<Schema>({
+    resolver: yupResolver(schema),
+    mode: "onSubmit",
+  });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("transitionEnd", () => {
@@ -35,33 +59,39 @@ const Login = () => {
     return unsubscribe;
   }, [navigation]);
 
-  const login = async () => {
-    if (email === "") {
-      showSnackbar("Please enter your email first.", {
-        variant: "error",
-      });
-      return;
-    }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("blur", () => {
+      setTimeout(() => {
+        reset();
+      }, 1000);
+    });
 
-    if (password === "") {
-      showSnackbar("Please enter your password first.", {
-        variant: "error",
-      });
-      return;
-    }
+    return unsubscribe;
+  }, [navigation, reset]);
+
+  const login = async (data: Schema) => {
+    const { email, password } = data;
 
     setIsLoading(true);
-    await dispatch(
-      loginAction({
-        userNameOrEmail: "bkulle@kullerian.net",
-        password: base64.encode(password),
-        rememberMe: true,
-      }),
-    ).unwrap();
 
-    haptics.runNavigateHaptic();
+    try {
+      await dispatch(
+        loginAction({
+          userNameOrEmail: email,
+          password,
+          rememberMe: true,
+        }),
+      ).unwrap();
 
-    setIsLoading(false);
+      haptics.runNavigateHaptic();
+
+      setIsLoading(false);
+    } catch (err: any) {
+      showSnackbar(err?.message, {
+        variant: "error",
+      });
+      setIsLoading(false);
+    }
   };
 
   const navigateToRegister = () => {
@@ -109,26 +139,54 @@ const Login = () => {
           flex: 0.3,
           paddingHorizontal: 20,
           paddingVertical: 20,
-          gap: 20,
+          gap: spacing.medium,
         }}
       >
-        <TextInput
-          ref={emailRef}
-          onChangeText={setEmail}
-          value={email}
-          placeholder="Enter email address"
-          autoComplete="email"
-          keyboardType="email-address"
-          maxLength={50}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              ref={emailRef}
+              onChangeText={onChange}
+              value={value}
+              onBlur={onBlur}
+              placeholder="Enter email address"
+              autoComplete="email"
+              keyboardType="email-address"
+              maxLength={320}
+              error={errors.email?.message}
+              autoCapitalize="none"
+            />
+          )}
         />
 
-        <TextInput
-          onChangeText={setPassword}
-          value={password}
-          placeholder="Enter password"
-          autoComplete="password"
-          secureTextEntry
-          maxLength={50}
+        <Controller
+          name="password"
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onChangeText={onChange}
+              value={value}
+              onBlur={onBlur}
+              placeholder="Enter password"
+              autoComplete="password"
+              maxLength={50}
+              error={errors.password?.message}
+              secureTextEntry={!isPasswordVisible}
+              rightIcon={() => (
+                <TouchableOpacity
+                  onPress={() => setIsPasswordVisible((prev) => !prev)}
+                >
+                  <Entypo
+                    name={isPasswordVisible ? "eye" : "eye-with-line"}
+                    size={20}
+                    color="gray"
+                  />
+                </TouchableOpacity>
+              )}
+            />
+          )}
         />
 
         <Pressable
@@ -148,7 +206,11 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <Button text="Login" onPress={login} isLoading={isLoading} />
+        <Button
+          text="Login"
+          onPress={handleSubmit(login)}
+          isLoading={isLoading}
+        />
 
         <View style={{ flexDirection: "row", gap: 4 }}>
           <Text>No account?</Text>
