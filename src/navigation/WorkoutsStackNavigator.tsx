@@ -24,6 +24,7 @@ export type WorkoutsStackParamList = {
     dayDetails: Exercise[];
   };
   ExerciseList: undefined;
+  ProgramCategories: undefined;
 };
 
 export type WorkoutsStackNavigationType<
@@ -45,7 +46,6 @@ const WorkoutsStackNavigator = () => {
           backgroundColor: "#fff",
         },
         headerShadowVisible: false,
-        // headerTransparent: true,
       }}
     >
       <WorkoutsStack.Screen

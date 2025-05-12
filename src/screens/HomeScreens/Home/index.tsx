@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
+import Button from "../../../components/Button";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import ActiveWorkoutCard from "../../../components/Home/ActiveWorkoutCard";
 import GoalTrackingSection from "../../../components/Home/GoalTrackingSection";
@@ -37,6 +38,10 @@ const Home = () => {
       <FocusAwareStatusBar style="dark" />
       <NumberOverviewSection />
       <ActiveWorkoutCard />
+      <Button
+        text="Programs"
+        onPress={() => navigation.navigate("ProgramsStack")}
+      />
 
       {/* Nutrition Goals Section */}
       <View

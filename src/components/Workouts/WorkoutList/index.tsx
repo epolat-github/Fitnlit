@@ -31,27 +31,27 @@ const WorkoutList = () => {
     setIsEditEnabled((prev) => !prev);
   };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: isEditEnabled
-        ? () => (
-            <Pressable onPress={toggleEditState}>
-              <Feather name="x" size={20} color="#fff" />
-            </Pressable>
-          )
-        : undefined,
-      headerRight: () =>
-        isEditEnabled ? (
-          <Pressable onPress={toggleEditState}>
-            <Feather name="check" size={20} color="#fff" />
-          </Pressable>
-        ) : (
-          <Pressable onPress={toggleEditState}>
-            <Feather name="edit-2" size={18} color="#fff" />
-          </Pressable>
-        ),
-    });
-  }, [isEditEnabled, navigation]);
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerLeft: isEditEnabled
+  //       ? () => (
+  //           <Pressable onPress={toggleEditState}>
+  //             <Feather name="x" size={20} color="#fff" />
+  //           </Pressable>
+  //         )
+  //       : undefined,
+  //     headerRight: () =>
+  //       isEditEnabled ? (
+  //         <Pressable onPress={toggleEditState}>
+  //           <Feather name="check" size={20} color="#fff" />
+  //         </Pressable>
+  //       ) : (
+  //         <Pressable onPress={toggleEditState}>
+  //           <Feather name="edit-2" size={18} color="#fff" />
+  //         </Pressable>
+  //       ),
+  //   });
+  // }, [isEditEnabled, navigation]);
 
   return (
     <View

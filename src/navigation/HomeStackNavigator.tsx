@@ -5,12 +5,14 @@ import {
 } from "@react-navigation/native-stack";
 
 import PreferencesStackNavigator from "./PreferencesStackNavigator";
+import ProgramsStackNavigator from "./ProgramsStackNavigator";
 import HomeHeader from "../components/HomeHeader";
 import Home from "../screens/HomeScreens/Home";
 
 export type HomeStackParamList = {
   Home: undefined;
   PreferencesStack: undefined;
+  ProgramsStack: undefined;
 };
 
 export type HomeStackNavigationType<T extends keyof HomeStackParamList> =
@@ -40,6 +42,14 @@ const HomeStackNavigator = () => {
         options={{
           headerShown: false,
           presentation: "fullScreenModal",
+        }}
+      />
+      <HomeStack.Screen
+        name="ProgramsStack"
+        component={ProgramsStackNavigator}
+        options={{
+          headerShown: false,
+          presentation: "modal",
         }}
       />
     </HomeStack.Navigator>

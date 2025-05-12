@@ -16,10 +16,10 @@ const Workouts = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const headerHeight = useHeaderHeight();
 
-  // moment starts from sunday
-  const [selectedDayIndex, setSelectedDayIndex] = useState(
-    (moment().day() + 6) % 7,
-  );
+  const todayIndex = (moment().day() + 6) % 7;
+
+  // moment starts from sunday, ours starts from 0
+  const [selectedDayIndex, setSelectedDayIndex] = useState(todayIndex);
 
   useEffect(() => {
     if (

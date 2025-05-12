@@ -198,7 +198,7 @@ const MealDetails = () => {
               <Text>{`${meal.calorie} Calories`}</Text>
             </View>
 
-            <NutritionGoalsSection data={NUTRITION_GOALS_DATA} />
+            {/* <NutritionGoalsSection data={NUTRITION_GOALS_DATA} /> */}
 
             {showAddButton && (
               <Button

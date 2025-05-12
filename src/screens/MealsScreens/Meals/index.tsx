@@ -77,7 +77,7 @@ const Meals = () => {
             backgroundColor: "#fff",
           }}
         >
-          <NutritionGoalsSection data={NUTRITION_GOALS_DATA} />
+          {/* <NutritionGoalsSection data={NUTRITION_GOALS_DATA} /> */}
         </View>
 
         <View style={{ gap: spacing.large, paddingHorizontal: spacing.medium }}>
