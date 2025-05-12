@@ -6,16 +6,57 @@ import { Text, View } from "react-native";
 import DaySelector from "../../../components/DaySelector";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
-import { NUTRITION_GOALS_DATA } from "../../../mockupData";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { selectGoals } from "../../../slices/goalsSlice";
 import { colors, spacing } from "../../../theme";
+import { GoalsResponse } from "../../../types/goals.type";
+import { NutritionGoalData } from "../../../types/nutrition.type";
 
 const NutritionGoalDetail = () => {
   const headerHeight = useHeaderHeight();
 
-  // moment starts from sunday
-  const [selectedDayIndex, setSelectedDayIndex] = useState(
-    (moment().day() + 6) % 7,
-  );
+  const goals = useAppSelector(selectGoals);
+
+  const { nutrition } = goals as GoalsResponse;
+
+  const todayIndex = (moment().day() + 6) % 7;
+
+  // moment starts from sunday, our index starts from 0
+  const [selectedDayIndex, setSelectedDayIndex] = useState(todayIndex);
+
+  const percentageOfCalorieOfWeek =
+    (nutrition.tkcal[todayIndex] / nutrition.totalCal) * 100;
+
+  const nutritionGoalData: NutritionGoalData = {
+    calorieGoal: nutrition.totalCal,
+    currentCalorie: nutrition.tkcal[todayIndex],
+    nutritionGoals: [
+      {
+        title: "Karbonhidrat",
+        color: colors.goals.carbohydrate,
+        value: nutrition.carbonhydrate[todayIndex],
+        target: nutrition.totalCarbonhydrate,
+      },
+      {
+        title: "Yağ",
+        color: colors.goals.fat,
+        value: nutrition.fat[todayIndex],
+        target: nutrition.totalFat,
+      },
+      {
+        title: "Protein",
+        color: colors.goals.protein,
+        value: nutrition.protein[todayIndex],
+        target: nutrition.totalProtein,
+      },
+      {
+        title: "Lif",
+        color: colors.goals.fibre,
+        value: nutrition.fibre[todayIndex],
+        target: nutrition.totalFibre,
+      },
+    ],
+  };
 
   return (
     <View
@@ -62,7 +103,7 @@ const NutritionGoalDetail = () => {
               gap: spacing.huge,
             }}
           >
-            <NutritionGoalsSection data={NUTRITION_GOALS_DATA} />
+            <NutritionGoalsSection data={nutritionGoalData} />
 
             <View
               style={{
@@ -71,7 +112,7 @@ const NutritionGoalDetail = () => {
               }}
             >
               <Text style={{ textAlign: "center", width: "70%" }}>
-                Your average calorie compliance percentage in this week is:
+                Your average calorie compliance percentage in this day is:
               </Text>
               <Text
                 style={{
@@ -79,7 +120,7 @@ const NutritionGoalDetail = () => {
                   fontWeight: "bold",
                 }}
               >
-                30%
+                %{percentageOfCalorieOfWeek}
               </Text>
             </View>
           </View>

@@ -55,7 +55,7 @@ const Home = () => {
           Nutrition Goals
         </Text>
 
-        <NutritionGoalsSection data={NUTRITION_GOALS_DATA} />
+        {/* <NutritionGoalsSection data={NUTRITION_GOALS_DATA} /> */}
       </View>
 
       <View

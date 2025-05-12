@@ -1,17 +1,20 @@
 import { Text, View, useWindowDimensions } from "react-native";
 
 import { spacing } from "../../theme";
+import { NutritionGoalData } from "../../types/nutrition.type";
 import DonutChart from "../DonutChart";
 import ProgressBar from "../ProgressBar";
 
 interface NutritionGoalsSectionType {
-  data: any[];
+  data: NutritionGoalData;
 }
 
 const NutritionGoalsSection: React.FC<NutritionGoalsSectionType> = ({
   data,
 }) => {
   const { width } = useWindowDimensions();
+
+  const { calorieGoal, currentCalorie, nutritionGoals } = data;
 
   return (
     <View
@@ -20,8 +23,8 @@ const NutritionGoalsSection: React.FC<NutritionGoalsSectionType> = ({
       }}
     >
       <ProgressBar
-        value={70}
-        maxValue={100}
+        value={currentCalorie}
+        maxValue={calorieGoal}
         containerStyle={{
           width: "100%",
         }}
@@ -35,20 +38,22 @@ const NutritionGoalsSection: React.FC<NutritionGoalsSectionType> = ({
           rowGap: spacing.large,
         }}
       >
-        {data.map((data, index) => (
+        {nutritionGoals.map((nutritionGoal, index) => (
           <View
-            key={`nutrition-data-${index}`}
+            key={`nutrition-goal-${index}`}
             style={{
               alignItems: "center",
               gap: spacing.medium,
             }}
           >
-            <Text style={{ color: data.color }}>{data.title}</Text>
+            <Text style={{ color: nutritionGoal.color }}>
+              {nutritionGoal.title}
+            </Text>
             <DonutChart
               radius={width * 0.1}
-              value={data.value}
-              maxValue={data.target}
-              color={data.color}
+              value={nutritionGoal.value}
+              maxValue={nutritionGoal.target}
+              color={nutritionGoal.color}
               strokeWidth={6}
             >
               <View
@@ -64,14 +69,14 @@ const NutritionGoalsSection: React.FC<NutritionGoalsSectionType> = ({
                     fontSize: 14,
                   }}
                 >
-                  {data.value}
+                  {nutritionGoal.value}
                 </Text>
                 <View
                   style={{
                     width: 35,
                     height: 1,
                     opacity: 0.5,
-                    backgroundColor: data.color,
+                    backgroundColor: nutritionGoal.color,
                   }}
                 />
                 <Text
@@ -81,7 +86,7 @@ const NutritionGoalsSection: React.FC<NutritionGoalsSectionType> = ({
                     fontSize: 14,
                   }}
                 >
-                  {`${data.target}g`}
+                  {`${nutritionGoal.target}g`}
                 </Text>
               </View>
             </DonutChart>
