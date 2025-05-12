@@ -1,6 +1,6 @@
 import { useHeaderHeight } from "@react-navigation/elements";
 import moment from "moment";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Text, View } from "react-native";
 
 import Button from "../../../components/Button";
@@ -8,38 +8,66 @@ import DaySelector from "../../../components/DaySelector";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import ProgressBar from "../../../components/ProgressBar";
 import TextInput from "../../../components/TextInput";
-import {
-  WEEKLY_STEP_COUNT,
-  WEEKLY_WATER_CONSUMPTION,
-} from "../../../mockupData";
+import { useSnackbarContext } from "../../../context/SnackbarContext";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { selectGoals, updateGoalsAction } from "../../../slices/goalsSlice";
 import { colors, spacing } from "../../../theme";
-
-const TARGET_STEP_COUNT = 30000;
+import { GOAL, GoalsResponse } from "../../../types/goals.type";
 
 const StepGoalDetail = () => {
   const headerHeight = useHeaderHeight();
+  const { showSnackbar } = useSnackbarContext();
+
+  const goals = useAppSelector(selectGoals);
+  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // moment starts from sunday
+  const { totalStep, step } = goals as GoalsResponse;
+
+  const todayIndex = (moment().day() + 6) % 7;
+
+  // moment starts from sunday, our index starts from 0
   const [selectedDayIndex, setSelectedDayIndex] = useState(
     (moment().day() + 6) % 7,
   );
 
-  const [stepOfTheDay, setStepOfTheDay] = useState("");
+  const isTodaySelected = todayIndex === selectedDayIndex;
 
-  useEffect(() => {
-    setStepOfTheDay(String(WEEKLY_STEP_COUNT[selectedDayIndex] || 0));
-  }, [selectedDayIndex]);
+  const [newSteps, setNewSteps] = useState("");
+
+  const stepsOfCurrentDay = step[selectedDayIndex];
 
   const averageStepCountOfTheWeek = useMemo(() => {
-    const total = WEEKLY_WATER_CONSUMPTION.reduce(
-      (prev, curr) => prev + (curr || 0),
-      0,
-    );
+    const total = step.reduce((prev, curr) => prev + (curr || 0), 0);
 
     return Math.round(total / 7);
-  }, []);
+  }, [step]);
+
+  const updateStepGoalHandler = async () => {
+    try {
+      setIsLoading(true);
+
+      await dispatch(
+        updateGoalsAction({
+          dailyGoal: GOAL.STEP,
+          value: Number(newSteps),
+        }),
+      ).unwrap();
+
+      setNewSteps("");
+      showSnackbar("Çaban için tebrik ederiz!", {
+        variant: "success",
+      });
+      setIsLoading(false);
+    } catch (err: any) {
+      setIsLoading(false);
+      showSnackbar(err?.message, {
+        variant: "error",
+      });
+    }
+  };
 
   return (
     <View
@@ -81,8 +109,8 @@ const StepGoalDetail = () => {
           }}
         >
           <ProgressBar
-            value={Number(stepOfTheDay)}
-            maxValue={TARGET_STEP_COUNT}
+            value={stepsOfCurrentDay}
+            maxValue={totalStep}
             progressHeight={25}
             title="Daily target"
           />
@@ -106,26 +134,39 @@ const StepGoalDetail = () => {
                   gap: spacing.small,
                 }}
               >
-                <TextInput
-                  onChangeText={setStepOfTheDay}
-                  value={stepOfTheDay}
-                  placeholder="steps"
-                  keyboardType="numeric"
-                  returnKeyType="done"
-                  returnKeyLabel="Done"
-                  maxLength={5}
-                  style={{
-                    width: 200,
-                    textAlign: "center",
-                    fontSize: 22,
-                    fontWeight: "500",
-                  }}
-                />
+                {isTodaySelected ? (
+                  <TextInput
+                    onChangeText={setNewSteps}
+                    value={newSteps}
+                    placeholder="Add Steps"
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                    returnKeyLabel="Done"
+                    maxLength={5}
+                    containerStyle={{
+                      width: 200,
+                    }}
+                    style={{
+                      textAlign: "center",
+                      fontSize: 22,
+                      fontWeight: "500",
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 20,
+                    }}
+                  >
+                    Bugün {stepsOfCurrentDay} adım atıldı
+                  </Text>
+                )}
+
                 <Text
                   style={{
                     fontWeight: "bold",
                   }}
-                >{`of ${TARGET_STEP_COUNT} steps`}</Text>
+                >{`of ${totalStep} steps`}</Text>
               </View>
 
               <View
@@ -152,14 +193,9 @@ const StepGoalDetail = () => {
 
           <Button
             text="Submit"
-            disabled={stepOfTheDay.length === 0}
+            disabled={newSteps.length === 0}
             isLoading={isLoading}
-            onPress={() => {
-              setIsLoading(true);
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 3000);
-            }}
+            onPress={updateStepGoalHandler}
           />
         </View>
       </View>
