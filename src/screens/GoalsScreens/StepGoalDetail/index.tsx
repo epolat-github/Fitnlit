@@ -29,9 +29,7 @@ const StepGoalDetail = () => {
   const todayIndex = (moment().day() + 6) % 7;
 
   // moment starts from sunday, our index starts from 0
-  const [selectedDayIndex, setSelectedDayIndex] = useState(
-    (moment().day() + 6) % 7,
-  );
+  const [selectedDayIndex, setSelectedDayIndex] = useState(todayIndex);
 
   const isTodaySelected = todayIndex === selectedDayIndex;
 
