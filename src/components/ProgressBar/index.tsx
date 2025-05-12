@@ -15,6 +15,7 @@ import { spacing } from "../../theme";
 interface ProgressBarType {
   progressHeight?: number;
   maxValue?: number;
+  minValue?: number;
   value: number;
   containerStyle?: ViewStyle;
   title?: string;
@@ -26,6 +27,7 @@ const ProgressBar: React.FC<ProgressBarType> = (props) => {
   const {
     title,
     maxValue = 100,
+    minValue = 0,
     value = 0,
     progressHeight = 10,
     containerStyle,
@@ -70,7 +72,7 @@ const ProgressBar: React.FC<ProgressBarType> = (props) => {
   return (
     <View style={[{ gap: spacing.small }, containerStyle]}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Text style={{ width: 50, color: "gray" }}>{value}</Text>
+        <Text style={{ width: 50, color: "gray" }}>{minValue}</Text>
         <Text style={{ fontWeight: "500" }}>{title}</Text>
         <Text style={{ width: 50, textAlign: "right", color: "gray" }}>
           {maxValue}

@@ -1,34 +1,58 @@
-import { useHeaderHeight } from "@react-navigation/elements";
 import { useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { Dimensions, ScrollView, Text, View } from "react-native";
-import {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from "react-native-reanimated";
 
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import GoalItem from "../../../components/GoalItem";
-import { GoalsStackNavigationType } from "../../../navigation/GoalsStackNavigator";
+import { useSnackbarContext } from "../../../context/SnackbarContext";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import useToken from "../../../hooks/useToken";
+import {
+  GoalsStackNavigationType,
+  GoalsStackParamList,
+} from "../../../navigation/GoalsStackNavigator";
+import { getGoalsAction } from "../../../slices/goalsSlice";
 import { spacing } from "../../../theme";
-
-const { width } = Dimensions.get("window");
 
 const Goals = () => {
   const navigation = useNavigation<GoalsStackNavigationType<"Goals">>();
-  const headerHeight = useHeaderHeight();
 
-  const translationX = useSharedValue(0);
+  const token = useToken();
+  const { showSnackbar } = useSnackbarContext();
+  const dispatch = useAppDispatch();
 
-  const scrollHandler = useAnimatedScrollHandler((event) => {
-    translationX.value = event.contentOffset.x;
-  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getGoalsHandler = useCallback(async () => {
+    try {
+      if (!token) return;
+
+      setIsLoading(true);
+
+      dispatch(getGoalsAction());
+
+      setIsLoading(false);
+    } catch (err: any) {
+      setIsLoading(true);
+      showSnackbar(err?.message, {
+        variant: "error",
+      });
+    }
+  }, [dispatch, showSnackbar, token]);
+
+  useEffect(() => {
+    getGoalsHandler();
+  }, [getGoalsHandler]);
+
+  const onCardPress = (to: Exclude<keyof GoalsStackParamList, "Goals">) => {
+    navigation.navigate(to);
+  };
 
   return (
     <View
       style={{
         flex: 1,
         paddingHorizontal: spacing.medium,
-        // backgroundColor: colors.secondary,
       }}
     >
       <FocusAwareStatusBar style="dark" animated />
@@ -58,7 +82,7 @@ const Goals = () => {
           index={0}
           title="Water Consumption"
           image={require("../../../../assets/images/shared/water-with-lemon.png")}
-          onPress={() => navigation.navigate("WaterGoalDetail")}
+          onPress={() => onCardPress("WaterGoalDetail")}
           titleStyle={{
             fontSize: 20,
             fontWeight: "500",
@@ -68,7 +92,7 @@ const Goals = () => {
           index={1}
           title="Step Count Monitor"
           image={require("../../../../assets/images/shared/step-count.png")}
-          onPress={() => navigation.navigate("StepGoalDetail")}
+          onPress={() => onCardPress("StepGoalDetail")}
           titleStyle={{
             fontSize: 20,
             fontWeight: "500",
@@ -78,7 +102,7 @@ const Goals = () => {
           index={2}
           title="Sleep Tracker"
           image={require("../../../../assets/images/shared/bed.png")}
-          onPress={() => navigation.navigate("SleepGoalDetail")}
+          onPress={() => onCardPress("SleepGoalDetail")}
           titleStyle={{
             fontSize: 20,
             fontWeight: "500",
@@ -88,17 +112,12 @@ const Goals = () => {
           index={3}
           title="Nutrition Data"
           image={require("../../../../assets/images/shared/nutrition.png")}
-          onPress={() => navigation.navigate("NutritionGoalDetail")}
+          onPress={() => onCardPress("NutritionGoalDetail")}
           titleStyle={{
             fontSize: 20,
             fontWeight: "500",
           }}
         />
-        {/* <GoalItem
-          index={4}
-          title="Daily Goals"
-          image={require("../../../../assets/images/shared/bed.png")}
-        /> */}
       </ScrollView>
     </View>
   );

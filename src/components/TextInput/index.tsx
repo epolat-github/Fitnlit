@@ -4,6 +4,7 @@ import {
   StyleSheet,
   TextInputProps as BaseTextInputProps,
   View,
+  ViewStyle,
 } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
@@ -12,15 +13,16 @@ import { spacing } from "../../theme";
 interface TextInputProps extends BaseTextInputProps {
   rightIcon?: React.ReactNode | (() => React.ReactNode);
   error?: string;
+  containerStyle?: ViewStyle;
 }
 
 export type TextInputRef = BaseTextInput;
 
 const TextInput = forwardRef<TextInputRef, TextInputProps>((props, ref) => {
-  const { style, rightIcon, error, ...restProps } = props;
+  const { style, rightIcon, error, containerStyle, ...restProps } = props;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       <View style={styles.textInputContainer}>
         <BaseTextInput
           ref={ref}
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     height: 55,
+    width: "100%",
   },
   input: {
     flex: 1,

@@ -1,6 +1,6 @@
 import { useHeaderHeight } from "@react-navigation/elements";
 import moment from "moment";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Text, View } from "react-native";
 
 import Button from "../../../components/Button";
@@ -8,37 +8,64 @@ import DaySelector from "../../../components/DaySelector";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import ProgressBar from "../../../components/ProgressBar";
 import TextInput from "../../../components/TextInput";
-import { WEEKLY_WATER_CONSUMPTION } from "../../../mockupData";
+import { useSnackbarContext } from "../../../context/SnackbarContext";
+import { useAppDispatch } from "../../../hooks/useAppDispatch";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { selectGoals, updateGoalsAction } from "../../../slices/goalsSlice";
 import { colors, spacing } from "../../../theme";
-
-const TARGET_WATER_CONSUMPTION = 3000;
+import { GOAL, GoalsResponse } from "../../../types/goals.type";
 
 const WaterGoalDetail = () => {
   const headerHeight = useHeaderHeight();
+  const { showSnackbar } = useSnackbarContext();
+
+  const goals = useAppSelector(selectGoals);
+  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const { totalWater, water } = goals as GoalsResponse;
+
+  const todayIndex = (moment().day() + 6) % 7;
+
   // moment starts from sunday
-  const [selectedDayIndex, setSelectedDayIndex] = useState(
-    (moment().day() + 6) % 7,
-  );
+  const [selectedDayIndex, setSelectedDayIndex] = useState(todayIndex);
 
-  const [consumptionOfTheDay, setConsumptionOfTheDay] = useState("");
+  const isTodaySelected = todayIndex === selectedDayIndex;
 
-  useEffect(() => {
-    setConsumptionOfTheDay(
-      String(WEEKLY_WATER_CONSUMPTION[selectedDayIndex] || 0),
-    );
-  }, [selectedDayIndex]);
+  const [newConsumption, setNewConsumption] = useState("");
+
+  const consumptionOfCurrentDay = water[selectedDayIndex];
 
   const averageWaterConsumptionOfTheWeek = useMemo(() => {
-    const total = WEEKLY_WATER_CONSUMPTION.reduce(
-      (prev, curr) => prev + (curr || 0),
-      0,
-    );
+    const total = water.reduce((prev, curr) => prev + (curr || 0), 0);
 
     return Math.round(total / 7);
-  }, []);
+  }, [water]);
+
+  const updateWaterGoalHandler = async () => {
+    try {
+      setIsLoading(true);
+
+      await dispatch(
+        updateGoalsAction({
+          dailyGoal: GOAL.WATER,
+          value: Number(newConsumption),
+        }),
+      ).unwrap();
+
+      setNewConsumption("");
+      showSnackbar("Çaban için tebrik ederiz!", {
+        variant: "success",
+      });
+      setIsLoading(false);
+    } catch (err: any) {
+      setIsLoading(false);
+      showSnackbar(err?.message, {
+        variant: "error",
+      });
+    }
+  };
 
   return (
     <View
@@ -75,13 +102,13 @@ const WaterGoalDetail = () => {
           style={{
             paddingHorizontal: spacing.medium,
             flex: 1,
-            gap: spacing.huge,
+            gap: spacing.large,
             paddingBottom: spacing.medium,
           }}
         >
           <ProgressBar
-            value={Number(consumptionOfTheDay)}
-            maxValue={TARGET_WATER_CONSUMPTION}
+            value={consumptionOfCurrentDay}
+            maxValue={totalWater}
             progressHeight={25}
             title="Daily target"
           />
@@ -105,26 +132,40 @@ const WaterGoalDetail = () => {
                   gap: spacing.small,
                 }}
               >
-                <TextInput
-                  onChangeText={setConsumptionOfTheDay}
-                  value={consumptionOfTheDay}
-                  placeholder="ml"
-                  keyboardType="numeric"
-                  returnKeyType="done"
-                  returnKeyLabel="Done"
-                  maxLength={4}
-                  style={{
-                    width: 200,
-                    textAlign: "center",
-                    fontSize: 22,
-                    fontWeight: "500",
-                  }}
-                />
+                {isTodaySelected ? (
+                  <TextInput
+                    onChangeText={setNewConsumption}
+                    value={newConsumption}
+                    placeholder="Add Water"
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                    returnKeyLabel="Done"
+                    maxLength={4}
+                    containerStyle={{
+                      width: 200,
+                    }}
+                    style={{
+                      textAlign: "center",
+                      fontSize: 22,
+                      fontWeight: "500",
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 20,
+                    }}
+                  >
+                    Bugün {consumptionOfCurrentDay}mL su içildi
+                  </Text>
+                )}
+
                 <Text
                   style={{
                     fontWeight: "bold",
+                    fontSize: 20,
                   }}
-                >{`of ${TARGET_WATER_CONSUMPTION} ML`}</Text>
+                >{`of ${totalWater} ML`}</Text>
               </View>
 
               <View
@@ -134,7 +175,9 @@ const WaterGoalDetail = () => {
                   width: "70%",
                 }}
               >
-                <Text style={{ textAlign: "center" }}>
+                <Text
+                  style={{ textAlign: "center", fontSize: 16, lineHeight: 22 }}
+                >
                   You average daily water consumption in this week is:
                 </Text>
                 <Text
@@ -151,14 +194,9 @@ const WaterGoalDetail = () => {
 
           <Button
             text="Submit"
-            disabled={consumptionOfTheDay.length === 0}
+            disabled={newConsumption.length === 0}
             isLoading={isLoading}
-            onPress={() => {
-              setIsLoading(true);
-              setTimeout(() => {
-                setIsLoading(false);
-              }, 3000);
-            }}
+            onPress={updateWaterGoalHandler}
           />
         </View>
       </View>
