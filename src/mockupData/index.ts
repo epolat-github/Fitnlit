@@ -1,6 +1,6 @@
 import { colors } from "../theme";
 import { Exercise } from "../types/exercise.type";
-import { Meal, WeeklyMealProgram } from "../types/meals.type";
+import { MealOld, WeeklyMealProgram } from "../types/meals.type";
 
 export const WORKOUT = [
   {
@@ -196,7 +196,7 @@ export const NUTRITION_GOALS_DATA = [
   },
 ];
 
-export const MEALS: Meal[] = [
+export const MEALS: MealOld[] = [
   {
     id: "f8d0a688-0dc5-4d50-82dc-c609e88739c7",
     name: "Schnitzel, Salad&Fries",

@@ -1,39 +1,37 @@
 import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 
 import ListItemWithImage from "../../../components/ListItemWithImage";
 import SkeletonList from "../../../components/SkeletonList";
+import SkeletonLoader from "../../../components/SkeletonLoader";
 import { useSnackbarContext } from "../../../context/SnackbarContext";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import { useAppSelector } from "../../../hooks/useAppSelector";
-import { ProgramsStackNavigationType } from "../../../navigation/ProgramsStackNavigator";
+import { RecipesStackNavigationType } from "../../../navigation/RecipesStackNavigator";
 import {
-  getAllProgramCategoryAction,
-  selectProgramCategories,
-} from "../../../slices/programsSlice";
+  getMealCategoriesAction,
+  selectMealCategories,
+} from "../../../slices/mealsSlice";
 import { spacing } from "../../../theme";
 
-const ProgramCategories = () => {
+const MealCategories = () => {
   const navigation =
-    useNavigation<ProgramsStackNavigationType<"ProgramCategories">>();
+    useNavigation<RecipesStackNavigationType<"MealCategories">>();
 
   const dispatch = useAppDispatch();
-  const programCategories = useAppSelector(selectProgramCategories);
+  const mealCategories = useAppSelector(selectMealCategories);
   const { showSnackbar } = useSnackbarContext();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const getAllProgramCategoryHandler = useCallback(async () => {
+  const getMealCategoriesHandler = useCallback(async () => {
     try {
       setIsLoading(true);
-
-      await dispatch(getAllProgramCategoryAction()).unwrap();
-
+      await dispatch(getMealCategoriesAction()).unwrap();
       setIsLoading(false);
     } catch (err: any) {
       setIsLoading(false);
-
       showSnackbar(err?.message, {
         variant: "error",
       });
@@ -41,12 +39,12 @@ const ProgramCategories = () => {
   }, [dispatch, showSnackbar]);
 
   useEffect(() => {
-    getAllProgramCategoryHandler();
-  }, [getAllProgramCategoryHandler]);
+    getMealCategoriesHandler();
+  }, [getMealCategoriesHandler]);
 
-  const navigateToProgramList = useCallback(
+  const navigateToMealList = useCallback(
     (categoryId: number) => {
-      navigation.navigate("ProgramList", {
+      navigation.navigate("MealList", {
         categoryId,
       });
     },
@@ -59,15 +57,15 @@ const ProgramCategories = () => {
 
   return (
     <FlatList
-      data={programCategories}
+      data={mealCategories}
       renderItem={({ item }) => (
         <ListItemWithImage
           image={item.image}
           title={item.name}
-          onPress={() => navigateToProgramList(item.id)}
+          onPress={() => navigateToMealList(item.id)}
         />
       )}
-      keyExtractor={(item) => `program-category-item-${item.id}`}
+      keyExtractor={(item) => `meal-category-item-${item.id}`}
       initialNumToRender={3}
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={{
@@ -78,4 +76,4 @@ const ProgramCategories = () => {
   );
 };
 
-export default ProgramCategories;
+export default MealCategories;

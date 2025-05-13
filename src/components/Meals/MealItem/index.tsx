@@ -4,13 +4,13 @@ import { Pressable, Text, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { spacing } from "../../../theme";
-import { Meal } from "../../../types/meals.type";
+import { MealOld } from "../../../types/meals.type";
 import Checkbox from "../../Checkbox";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface MealItemType {
-  meal: Meal;
+  meal: MealOld;
   index: number;
   showIsEatenCheckbox?: boolean;
   onPress: () => void;

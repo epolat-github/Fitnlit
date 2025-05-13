@@ -1,3 +1,4 @@
+import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { RouteProp } from "@react-navigation/native";
 import {
@@ -6,18 +7,18 @@ import {
 } from "@react-navigation/native-stack";
 import { Platform, Pressable } from "react-native";
 
+import RecipesStackNavigator from "./RecipesStackNavigator";
 import MealDetails from "../screens/MealsScreens/MealDetails";
-import MealList from "../screens/MealsScreens/MealList";
 import Meals from "../screens/MealsScreens/Meals";
-import { Meal } from "../types/meals.type";
+import { MealOld } from "../types/meals.type";
 
 export type MealsStackParamList = {
   Meals: undefined;
   MealList: undefined;
   MealDetails: {
-    meal: Meal;
-    showAddButton?: boolean;
+    mealId: number;
   };
+  RecipesStackNavigator: undefined;
 };
 
 export type MealsStackNavigationType<T extends keyof MealsStackParamList> =
@@ -47,9 +48,17 @@ const MealsStackNavigator = () => {
           headerTintColor: "#fff",
           headerRight: () => (
             <Pressable>
-              <Ionicons name="add" color="#fff" size={24} />
+              <Entypo name="list" size={24} color="#fff" />
             </Pressable>
           ),
+        }}
+      />
+      <MealsStack.Screen
+        name="RecipesStackNavigator"
+        component={RecipesStackNavigator}
+        options={{
+          presentation: "modal",
+          headerShown: false,
         }}
       />
       <MealsStack.Screen
@@ -62,17 +71,6 @@ const MealsStackNavigator = () => {
           headerBlurEffect: "light",
           headerTransparent: Platform.OS !== "android",
           headerShown: false,
-        }}
-      />
-      <MealsStack.Screen
-        name="MealList"
-        component={MealList}
-        options={{
-          presentation: "modal",
-          title: "Meal List",
-          headerBackTitleVisible: false,
-          headerBlurEffect: "light",
-          headerTransparent: Platform.OS !== "android",
         }}
       />
     </MealsStack.Navigator>

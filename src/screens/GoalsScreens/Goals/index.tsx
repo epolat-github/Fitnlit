@@ -4,6 +4,7 @@ import { Dimensions, ScrollView, Text, View } from "react-native";
 
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import GoalItem from "../../../components/GoalItem";
+import SkeletonList from "../../../components/SkeletonList";
 import { useSnackbarContext } from "../../../context/SnackbarContext";
 import { useAppDispatch } from "../../../hooks/useAppDispatch";
 import useToken from "../../../hooks/useToken";
@@ -29,9 +30,11 @@ const Goals = () => {
 
       setIsLoading(true);
 
-      dispatch(getGoalsAction());
+      await dispatch(getGoalsAction()).unwrap();
 
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 400);
     } catch (err: any) {
       setIsLoading(true);
       showSnackbar(err?.message, {
@@ -66,59 +69,73 @@ const Goals = () => {
         Here is your goals. You can track what you have accomplished!
       </Text>
 
-      <ScrollView
-        style={{
-          flex: 1,
-          flexDirection: "column",
-        }}
-        contentContainerStyle={{
-          justifyContent: "center",
-          gap: spacing.medium,
-          paddingVertical: spacing.medium,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <GoalItem
-          index={0}
-          title="Water Consumption"
-          image={require("../../../../assets/images/shared/water-with-lemon.png")}
-          onPress={() => onCardPress("WaterGoalDetail")}
-          titleStyle={{
-            fontSize: 20,
-            fontWeight: "500",
+      {isLoading ? (
+        <SkeletonList
+          count={4}
+          style={{
+            height: 120,
+          }}
+          contentContainerStyle={{
+            gap: spacing.medium,
+            paddingVertical: spacing.medium,
+            paddingHorizontal: 0,
           }}
         />
-        <GoalItem
-          index={1}
-          title="Step Count Monitor"
-          image={require("../../../../assets/images/shared/step-count.png")}
-          onPress={() => onCardPress("StepGoalDetail")}
-          titleStyle={{
-            fontSize: 20,
-            fontWeight: "500",
+      ) : (
+        <ScrollView
+          style={{
+            flex: 1,
+            flexDirection: "column",
           }}
-        />
-        <GoalItem
-          index={2}
-          title="Sleep Tracker"
-          image={require("../../../../assets/images/shared/bed.png")}
-          onPress={() => onCardPress("SleepGoalDetail")}
-          titleStyle={{
-            fontSize: 20,
-            fontWeight: "500",
+          contentContainerStyle={{
+            justifyContent: "center",
+            gap: spacing.medium,
+            paddingVertical: spacing.medium,
           }}
-        />
-        <GoalItem
-          index={3}
-          title="Nutrition Data"
-          image={require("../../../../assets/images/shared/nutrition.png")}
-          onPress={() => onCardPress("NutritionGoalDetail")}
-          titleStyle={{
-            fontSize: 20,
-            fontWeight: "500",
-          }}
-        />
-      </ScrollView>
+          showsVerticalScrollIndicator={false}
+        >
+          <GoalItem
+            index={0}
+            title="Water Consumption"
+            image={require("../../../../assets/images/shared/water-with-lemon.png")}
+            onPress={() => onCardPress("WaterGoalDetail")}
+            titleStyle={{
+              fontSize: 20,
+              fontWeight: "500",
+            }}
+          />
+          <GoalItem
+            index={1}
+            title="Step Count Monitor"
+            image={require("../../../../assets/images/shared/step-count.png")}
+            onPress={() => onCardPress("StepGoalDetail")}
+            titleStyle={{
+              fontSize: 20,
+              fontWeight: "500",
+            }}
+          />
+          <GoalItem
+            index={2}
+            title="Sleep Tracker"
+            image={require("../../../../assets/images/shared/bed.png")}
+            onPress={() => onCardPress("SleepGoalDetail")}
+            titleStyle={{
+              fontSize: 20,
+              fontWeight: "500",
+            }}
+          />
+          <GoalItem
+            index={3}
+            title="Nutrition Data"
+            image={require("../../../../assets/images/shared/nutrition.png")}
+            onPress={() => onCardPress("NutritionGoalDetail")}
+            titleStyle={{
+              fontSize: 20,
+              fontWeight: "500",
+            }}
+          />
+        </ScrollView>
+      )}
     </View>
   );
 };

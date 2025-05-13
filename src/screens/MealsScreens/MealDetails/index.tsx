@@ -2,7 +2,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image } from "expo-image";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dimensions,
   Pressable,
@@ -12,8 +12,6 @@ import {
 } from "react-native";
 import Animated, {
   Extrapolation,
-  FadeInDown,
-  FadeOutUp,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -21,19 +19,19 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import AnimatedBottomSheet from "../../../components/AnimatedBottomSheet";
-import Button from "../../../components/Button";
-import Checkbox from "../../../components/Checkbox";
 import FocusAwareStatusBar from "../../../components/FocusAwareStatusBar";
 import NutritionGoalsSection from "../../../components/NutritionGoalsSection";
-import { NUTRITION_GOALS_DATA } from "../../../mockupData";
+import { useSnackbarContext } from "../../../context/SnackbarContext";
+import useToken from "../../../hooks/useToken";
 import {
-  MealsStackNavigationRouteProp,
-  MealsStackNavigationType,
-} from "../../../navigation/MealsStackNavigator";
+  RecipesStackNavigationRouteProp,
+  RecipesStackNavigationType,
+} from "../../../navigation/RecipesStackNavigator";
+import { getMealById } from "../../../services/meals.service";
 import { colors, spacing } from "../../../theme";
-import { DAYS_LONG_EN } from "../../../utils/date";
-import { toFirstLetterCapital } from "../../../utils/text";
+import { Meal } from "../../../types/meals.type";
+import { NutritionGoalData } from "../../../types/nutrition.type";
+import { generateNutritionGoalData } from "../../../utils/nutrition";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -41,21 +39,45 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const IMAGE_HEIGHT = Dimensions.get("window").height * 0.4;
 
 const MealDetails = () => {
-  const {
-    params: { meal, showAddButton },
-  } = useRoute<MealsStackNavigationRouteProp<"MealDetails">>();
-  const navigation = useNavigation<MealsStackNavigationType<"MealDetails">>();
+  const route = useRoute<RecipesStackNavigationRouteProp<"MealDetailsStack">>();
+  const navigation =
+    useNavigation<RecipesStackNavigationType<"MealDetailsStack">>();
 
+  const isModal = route.name !== "MealDetailsStack";
+
+  const { mealId } = route.params;
+
+  const token = useToken();
   const { width } = useWindowDimensions();
   const { bottom } = useSafeAreaInsets();
+  const { showSnackbar } = useSnackbarContext();
 
   const translateY = useSharedValue(0);
 
-  const [servingCount, setServingCount] = useState(1);
-  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
-  const [selectedDaysToAddMeal, setSelectedDaysToAddMeal] = useState<number[]>(
-    [],
-  );
+  // const [servingCount, setServingCount] = useState(1);
+  // const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+  // const [selectedDaysToAddMeal, setSelectedDaysToAddMeal] = useState<number[]>(
+  //   [],
+  // );
+  const [meal, setMeal] = useState<Meal>();
+
+  const getMealByIdHandler = useCallback(async () => {
+    try {
+      if (!token) return;
+
+      const result = await getMealById(token, mealId);
+
+      setMeal(result);
+    } catch (err: any) {
+      showSnackbar(err?.message, {
+        variant: "error",
+      });
+    }
+  }, [mealId, showSnackbar, token]);
+
+  useEffect(() => {
+    getMealByIdHandler();
+  }, [getMealByIdHandler]);
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -101,24 +123,39 @@ const MealDetails = () => {
     navigation.goBack();
   };
 
-  const closeBottomSheet = () => {
-    setIsBottomSheetVisible(false);
-    setSelectedDaysToAddMeal([]);
-  };
+  // const closeBottomSheet = () => {
+  //   setIsBottomSheetVisible(false);
+  //   setSelectedDaysToAddMeal([]);
+  // };
 
-  const toggleDayToAddMeal = (dayIndex: number) => {
-    setSelectedDaysToAddMeal((prev) => {
-      const newPrev = [...prev];
+  // const toggleDayToAddMeal = (dayIndex: number) => {
+  //   setSelectedDaysToAddMeal((prev) => {
+  //     const newPrev = [...prev];
 
-      const index = newPrev.findIndex((day) => day === dayIndex);
+  //     const index = newPrev.findIndex((day) => day === dayIndex);
 
-      // not selected, select
-      if (index === -1) newPrev.push(dayIndex);
-      else newPrev.splice(index, 1);
+  //     // not selected, select
+  //     if (index === -1) newPrev.push(dayIndex);
+  //     else newPrev.splice(index, 1);
 
-      return newPrev;
-    });
-  };
+  //     return newPrev;
+  //   });
+  // };
+
+  if (!meal) return null;
+
+  const nutritionGoalData: NutritionGoalData = generateNutritionGoalData({
+    calorieGoal: 3000,
+    currentCalorie: meal.totalKcal,
+    carbGoal: 300,
+    currentCarb: meal.carbohydrate,
+    fatGoal: 250,
+    currentFat: meal.fat,
+    proteinGoal: 150,
+    currentProtein: meal.protein,
+    fibreGoal: 400,
+    currentFibre: meal.fibre,
+  });
 
   return (
     <BottomSheetModalProvider>
@@ -142,10 +179,12 @@ const MealDetails = () => {
             closeButtonStyle,
           ]}
         >
-          <AntDesign name="close" size={22} color="#000" />
+          <AntDesign name={isModal ? "close" : "left"} size={22} color="#000" />
         </AnimatedPressable>
         <AnimatedImage
-          source={meal.image}
+          source={{
+            uri: meal.fileBase64,
+          }}
           style={[
             {
               position: "absolute",
@@ -195,22 +234,22 @@ const MealDetails = () => {
               <Text style={{ fontSize: 24, fontWeight: "bold" }}>
                 {meal.name}
               </Text>
-              <Text>{`${meal.calorie} Calories`}</Text>
+              <Text>{`${meal.totalKcal} Calories`}</Text>
             </View>
 
-            {/* <NutritionGoalsSection data={NUTRITION_GOALS_DATA} /> */}
+            <NutritionGoalsSection data={nutritionGoalData} />
 
-            {showAddButton && (
+            {/* {showAddButton && (
               <Button
                 text="Add to my Meals"
                 onPress={() => {
                   setIsBottomSheetVisible(true);
                 }}
               />
-            )}
+            )} */}
 
             {/* SERVINGS */}
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -259,7 +298,7 @@ const MealDetails = () => {
                   <AntDesign name="pluscircle" color="gray" size={18} />
                 </Pressable>
               </View>
-            </View>
+            </View> */}
 
             <View
               style={{ backgroundColor: "lightgray", width: "100%", height: 1 }}
@@ -290,7 +329,7 @@ const MealDetails = () => {
                     color: "gray",
                   }}
                 >
-                  {meal.ingredients.length} ingredients needed
+                  {meal.mealIngredientRequestDTO.length} ingredients needed
                 </Text>
               </View>
               <View
@@ -313,7 +352,7 @@ const MealDetails = () => {
                   paddingVertical: spacing.medium,
                 }}
               >
-                {meal.ingredients.map((ingredient, index) => (
+                {meal.mealIngredientRequestDTO.map((ingredient, index) => (
                   <View
                     key={`ingredient-${index}`}
                     style={{
@@ -360,7 +399,7 @@ const MealDetails = () => {
                     color: "gray",
                   }}
                 >
-                  {meal.recipe.length} steps to prepare
+                  CHANGE THIS steps to prepare
                 </Text>
               </View>
 
@@ -384,7 +423,7 @@ const MealDetails = () => {
                   paddingVertical: spacing.medium,
                 }}
               >
-                {meal.recipe.map((recipeStep, index) => (
+                {[meal.recepie].map((recipeStep, index) => (
                   <View
                     key={`recipe-step-${index}`}
                     style={{
@@ -407,7 +446,7 @@ const MealDetails = () => {
           </View>
         </Animated.ScrollView>
 
-        <AnimatedBottomSheet
+        {/* <AnimatedBottomSheet
           closeModal={closeBottomSheet}
           open={isBottomSheetVisible}
         >
@@ -485,7 +524,7 @@ const MealDetails = () => {
               onPress={closeBottomSheet}
             />
           </View>
-        </AnimatedBottomSheet>
+        </AnimatedBottomSheet> */}
       </View>
     </BottomSheetModalProvider>
   );

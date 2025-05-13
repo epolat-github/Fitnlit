@@ -11,6 +11,7 @@ import { selectGoals } from "../../../slices/goalsSlice";
 import { colors, spacing } from "../../../theme";
 import { GoalsResponse } from "../../../types/goals.type";
 import { NutritionGoalData } from "../../../types/nutrition.type";
+import { generateNutritionGoalData } from "../../../utils/nutrition";
 
 const NutritionGoalDetail = () => {
   const headerHeight = useHeaderHeight();
@@ -27,36 +28,18 @@ const NutritionGoalDetail = () => {
   const percentageOfCalorieOfWeek =
     (nutrition.tkcal[todayIndex] / nutrition.totalCal) * 100;
 
-  const nutritionGoalData: NutritionGoalData = {
+  const nutritionGoalData: NutritionGoalData = generateNutritionGoalData({
     calorieGoal: nutrition.totalCal,
     currentCalorie: nutrition.tkcal[todayIndex],
-    nutritionGoals: [
-      {
-        title: "Karbonhidrat",
-        color: colors.goals.carbohydrate,
-        value: nutrition.carbonhydrate[todayIndex],
-        target: nutrition.totalCarbonhydrate,
-      },
-      {
-        title: "Yağ",
-        color: colors.goals.fat,
-        value: nutrition.fat[todayIndex],
-        target: nutrition.totalFat,
-      },
-      {
-        title: "Protein",
-        color: colors.goals.protein,
-        value: nutrition.protein[todayIndex],
-        target: nutrition.totalProtein,
-      },
-      {
-        title: "Lif",
-        color: colors.goals.fibre,
-        value: nutrition.fibre[todayIndex],
-        target: nutrition.totalFibre,
-      },
-    ],
-  };
+    carbGoal: nutrition.totalCarbonhydrate,
+    currentCarb: nutrition.carbonhydrate[todayIndex],
+    fatGoal: nutrition.totalFat,
+    currentFat: nutrition.fat[todayIndex],
+    proteinGoal: nutrition.totalProtein,
+    currentProtein: nutrition.protein[todayIndex],
+    fibreGoal: nutrition.totalFibre,
+    currentFibre: nutrition.fibre[todayIndex],
+  });
 
   return (
     <View

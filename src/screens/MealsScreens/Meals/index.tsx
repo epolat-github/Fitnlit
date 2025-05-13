@@ -1,3 +1,4 @@
+import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useNavigation } from "@react-navigation/native";
@@ -27,8 +28,8 @@ const Meals = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Pressable onPress={() => navigation.navigate("MealList")}>
-          <Ionicons name="add" color="#fff" size={24} />
+        <Pressable onPress={() => navigation.navigate("RecipesStackNavigator")}>
+          <Entypo name="list" size={24} color="#fff" />
         </Pressable>
       ),
     });
@@ -90,7 +91,7 @@ const Meals = () => {
               showIsEatenCheckbox
               onPress={() =>
                 navigation.navigate("MealDetails", {
-                  meal,
+                  mealId: 10,
                 })
               }
             />

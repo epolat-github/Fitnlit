@@ -7,36 +7,35 @@ import SkeletonList from "../../../components/SkeletonList";
 import { useSnackbarContext } from "../../../context/SnackbarContext";
 import useToken from "../../../hooks/useToken";
 import {
-  ProgramsStackNavigationRouteProp,
-  ProgramsStackNavigationType,
-} from "../../../navigation/ProgramsStackNavigator";
-import { getProgramsByCategory } from "../../../services/programs.service";
+  RecipesStackNavigationRouteProp,
+  RecipesStackNavigationType,
+} from "../../../navigation/RecipesStackNavigator";
+import { getMealsByCategory } from "../../../services/meals.service";
 import { spacing } from "../../../theme";
-import { ProgramListItem } from "../../../types/programs.type";
+import { MealListItem } from "../../../types/meals.type";
 
-const ProgramList = () => {
-  const token = useToken();
-  const navigation =
-    useNavigation<ProgramsStackNavigationType<"ProgramList">>();
-  const route = useRoute<ProgramsStackNavigationRouteProp<"ProgramList">>();
+const MealList = () => {
+  const route = useRoute<RecipesStackNavigationRouteProp<"MealList">>();
+  const navigation = useNavigation<RecipesStackNavigationType<"MealList">>();
 
   const { categoryId } = route.params;
 
+  const token = useToken();
   const { showSnackbar } = useSnackbarContext();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [programList, setProgramList] = useState<ProgramListItem[]>([]);
+  const [mealList, setMealList] = useState<MealListItem[]>([]);
 
-  const getProgramListHandler = useCallback(async () => {
+  const getMealListHandler = useCallback(async () => {
     try {
       if (!token) return;
 
       setIsLoading(true);
 
-      const result = await getProgramsByCategory(token, categoryId);
+      const response = await getMealsByCategory(token, categoryId);
 
       setIsLoading(false);
-      setProgramList(result);
+      setMealList(response);
     } catch (err: any) {
       setIsLoading(false);
 
@@ -47,13 +46,13 @@ const ProgramList = () => {
   }, [categoryId, showSnackbar, token]);
 
   useEffect(() => {
-    getProgramListHandler();
-  }, [getProgramListHandler]);
+    getMealListHandler();
+  }, [getMealListHandler]);
 
-  const navigateToProgramDetails = useCallback(
-    (programId: number) => {
-      navigation.navigate("ProgramDetails", {
-        programId,
+  const navigateToMealDetails = useCallback(
+    (mealId: number) => {
+      navigation.navigate("MealDetailsStack", {
+        mealId,
       });
     },
     [navigation],
@@ -65,15 +64,15 @@ const ProgramList = () => {
 
   return (
     <FlatList
-      data={programList}
+      data={mealList}
       renderItem={({ item }) => (
         <ListItemWithImage
           image={item.image}
           title={item.name}
-          onPress={() => navigateToProgramDetails(item.id)}
+          onPress={() => navigateToMealDetails(item.id)}
         />
       )}
-      keyExtractor={(item) => `program-list-item-${item.id}`}
+      keyExtractor={(item) => `meal-list-item-${item.id}`}
       initialNumToRender={3}
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={{
@@ -84,4 +83,4 @@ const ProgramList = () => {
   );
 };
 
-export default ProgramList;
+export default MealList;

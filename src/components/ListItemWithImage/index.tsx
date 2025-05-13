@@ -1,8 +1,11 @@
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, Text, View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 
 import { spacing } from "../../theme";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 interface ListItemWithImageProps {
   onPress: () => void;
@@ -16,7 +19,8 @@ const ListItemWithImage: React.FC<ListItemWithImageProps> = ({
   onPress,
 }) => {
   return (
-    <Pressable
+    <AnimatedPressable
+      // entering={FadeIn}
       onPress={onPress}
       style={{
         gap: spacing.medium,
@@ -32,6 +36,7 @@ const ListItemWithImage: React.FC<ListItemWithImageProps> = ({
         }}
       >
         <Image
+          transition={600}
           style={{
             flex: 1,
           }}
@@ -64,7 +69,7 @@ const ListItemWithImage: React.FC<ListItemWithImageProps> = ({
           {title}
         </Text>
       </View>
-    </Pressable>
+    </AnimatedPressable>
   );
 };
 
